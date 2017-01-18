@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Partially Refund a Job</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting More Advanced"
+HREF="c750.htm"><LINK
+REL="PREVIOUS"
+TITLE="Charge for a Quoted Job"
+HREF="x961.htm"><LINK
+REL="NEXT"
+TITLE="Examine Account Statement"
+HREF="x999.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x961.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Getting More Advanced</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x999.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PARTIALREFUND"
+>Partially Refund a Job</A
+></H1
+><P
+>      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN988"
+></A
+><P
+><B
+>Example 5-17. Suppose you want to issue a partial refund.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+grefund -j 1 -z 10000
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully refunded 10000 credits for job PBS.1234.0
+        </PRE
+><P
+>Notice that the Job Charge is now 10000 credits lower as a result. Gold will not let your refunds total more than the total charge for the job.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsjob 1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id JobId      User Project   Machine Queue QualityOfService Stage  Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ---------- ---- --------- ------- ----- ---------------- ------ ------ ---------- ----- ------------ --------- ------- ----------- 
+3  PBS.1234.0 amy  chemistry colony        Premium          Charge  34542 16               1234                       
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x961.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x999.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Charge for a Quoted Job</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c750.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Examine Account Statement</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,73 @@
+  <chapter id="Transactions">
+    <title>Managing Transactions</title>
+    <para>
+Gold logs all modifying transactions in a detailed transaction journal (queries are not recorded). Previous transactions can be queried but not modified or deleted.
+    </para>
+
+    <sect1 id="TransactionQuery">
+      <title>Querying Transactions</title>
+      <para>
+To display transaction information, use the command <command>glstxn</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glstxn</command>
+          <arg>-O <replaceable>object</replaceable></arg>
+          <arg>-A <replaceable>action</replaceable></arg>
+          <arg>-n <replaceable>name_or_id</replaceable></arg>
+          <arg>-U <replaceable>actor</replaceable></arg>
+          <arg>-a <replaceable>account_id</replaceable></arg>
+          <arg>-i <replaceable>allocation_id</replaceable></arg>
+          <arg>-u <replaceable>user_name</replaceable></arg>
+          <arg>-p <replaceable>project_name</replaceable></arg>
+          <arg>-m <replaceable>machine_name</replaceable></arg>
+          <arg>-J <replaceable>job_id</replaceable></arg>
+          <arg>-s <replaceable>start_time</replaceable></arg>
+          <arg>-e <replaceable>end_time</replaceable></arg>
+          <arg>-T <replaceable>transaction_id</replaceable></arg>
+          <arg>-R <replaceable>request_id</replaceable></arg>
+          <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable>[,<replaceable>attribute_name</replaceable>...]</arg>
+          <arg>&mdash;showHidden</arg>
+          <arg>&mdash;raw</arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+      </cmdsynopsis>
+      <example>
+        <title>List all deposits made in 2004</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -A Deposit -s 2004-01-01 -e 2005-01-01
+          </userinput>
+        </para>
+      </example>
+      <example>
+        <title>List everything done by amy since the beginning of 2004</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -U amy -s 2004-01-01
+          </userinput>
+        </para>
+      </example>
+      <example>
+        <title>List all transactions affecting Job Id PBS.1234.0</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -J PBS.1234.0
+          </userinput>
+        </para>
+      </example>
+      <example>
+        <title>List all transactions affecting charge rates</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -O ChargeRate
+          </userinput>
+        </para>
+      </example>
+    </sect1>
+
+  </chapter>

@@ -1,0 +1,394 @@
+#! /usr/bin/perl -wT
+################################################################################
+#
+# Gold Global constants
+#
+# File   :  Global.pm
+# History:  9 JUL 2003 [Scott Jackson] first implementation
+#           14 JUL 2004 [Scott Jackson] perl alpha
+#           25 OCT 2004 [Scott Jackson] beta mods
+#
+################################################################################
+#                                                                              #
+#                           Copyright (c) 2003, 2004                           #
+#                  Pacific Northwest National Laboratory,                      #
+#                         Battelle Memorial Institute.                         #
+#                             All rights reserved.                             #
+#                                                                              #
+################################################################################
+#                                                                              #
+#     Redistribution and use in source and binary forms, with or without       #
+#     modification, are permitted provided that the following conditions       #
+#     are met:                                                                 #
+#                                                                              #
+#     · Redistributions of source code must retain the above copyright         #
+#     notice, this list of conditions and the following disclaimer.            #
+#                                                                              #
+#     · Redistributions in binary form must reproduce the above copyright      #
+#     notice, this list of conditions and the following disclaimer in the      #
+#     documentation and/or other materials provided with the distribution.     #
+#                                                                              #
+#     · Neither the name of Battelle nor the names of its contributors         #
+#     may be used to endorse or promote products derived from this software    #
+#     without specific prior written permission.                               #
+#                                                                              #
+#     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      #
+#     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        #
+#     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS        #
+#     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE           #
+#     COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,      #
+#     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,     #
+#     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;         #
+#     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER         #
+#     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT       #
+#     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN        #
+#     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          #
+#     POSSIBILITY OF SUCH DAMAGE.                                              #
+#                                                                              #
+################################################################################
+use strict;
+
+=head1 NAME
+
+Gold::Global - defines global constants for Gold
+
+=head1 DESCRIPTION
+
+The B<Gold::Global> module defines constants used as default values for config parameters
+
+=head1 EXAMPLES
+
+use Gold::Global;
+
+print "$SERVER_PORT\n";
+
+=head1 REQUIRES
+
+Perl 5.6
+
+=head1 AUTHOR
+
+Scott Jackson, Scott.Jackson@pnl.gov
+
+=cut
+
+##############################################################################
+
+package Gold::Global;
+
+use Exporter;
+use Time::Local;
+@Gold::Global::ISA = qw(Exporter);
+@Gold::Global::EXPORT = qw(
+  $config
+  $log
+  $quiet
+  $raw
+  $time_division
+  $verbose
+  $ACCOUNT_AUTOGEN
+  $ALLOCATION_AUTOGEN
+  $AUTH_KEY
+  $CLIENT
+  $DB_DATASOURCE
+  $MACHINE_AUTOGEN
+  $MACHINE_DEFAULT
+  $PROJECT_AUTOGEN
+  $PROJECT_DEFAULT
+  $RESPONSE_CHUNKING
+  $RESPONSE_CHUNKSIZE
+  $SECURITY_AUTHENTICATION
+  $SECURITY_ENCRYPTION
+  $SERVER
+  $SERVER_HOST
+  $SERVER_PORT
+  $SUPER_USER
+  $TOKEN_NONE
+  $TOKEN_PASSWORD
+  $TOKEN_SYMMETRIC
+  $USER_AUTOGEN
+  $USER_DEFAULT
+  $VERSION
+  $WIRE_PROTOCOL
+  &generality
+  &min
+  &toDBC
+  &toUCC
+  &toHRT
+  &toMFT
+  );
+use vars qw(
+  $config
+  $log
+  $quiet
+  $raw
+  $time_division
+  $verbose
+  $ACCOUNT_AUTOGEN
+  $ALLOCATION_AUTOGEN
+  $AUTH_KEY
+  $CLIENT
+  $DB_DATASOURCE
+  $MACHINE_AUTOGEN
+  $MACHINE_DEFAULT
+  $PROJECT_AUTOGEN
+  $PROJECT_DEFAULT
+  $RESPONSE_CHUNKING
+  $RESPONSE_CHUNKSIZE
+  $SECURITY_AUTHENTICATION
+  $SECURITY_ENCRYPTION
+  $SERVER
+  $SERVER_HOST
+  $SERVER_PORT
+  $SUPER_USER
+  $TOKEN_NONE
+  $TOKEN_PASSWORD
+  $TOKEN_SYMMETRIC
+  $USER_AUTOGEN
+  $USER_DEFAULT
+  $VERSION
+  $WIRE_PROTOCOL
+  &generality
+  &min
+  &toDBC
+  &toUCC
+  &toHRT
+  &toMFT
+  );
+
+# $config is a global for manipulating config file parameters
+# $quiet, $raw, $time_division and $verbose are global variables for output formatting
+
+# Time division defaults to 1 unless overridden with --hours flag
+$time_division = 1; 
+
+# Auto-Create Accounts
+$ACCOUNT_AUTOGEN = "true";
+
+# Auto-Create Allocations
+$ALLOCATION_AUTOGEN = "true";
+
+# Client
+$CLIENT = "client";
+
+# Database Type
+my $DB_TYPE = "@DB_TYPE@";
+
+# Database Datasource
+my $DB_DATASOURCE = "DBI:Pg:dbname=gold;host=localhost";
+
+# Auto-Create Machines
+$MACHINE_AUTOGEN = "false";
+
+# Default Machine
+$MACHINE_DEFAULT = "NONE";
+
+# Auto-Create Projects
+$PROJECT_AUTOGEN = "false";
+
+# Default Project
+$PROJECT_DEFAULT = "NONE";
+
+# Whether chunking should be performed
+$RESPONSE_CHUNKING = "false";
+
+# Response Chunk Size
+$RESPONSE_CHUNKSIZE = "1000";
+
+# Whether authentication is performed by default
+$SECURITY_AUTHENTICATION = "true";
+
+# Whether encryption is performed by default
+$SECURITY_ENCRYPTION = "false";
+
+# Server
+$SERVER = "server";
+
+# Server Host
+$SERVER_HOST = "localhost";
+
+# Server Port
+$SERVER_PORT = "7112";
+
+# Super User
+$SUPER_USER = "root";
+
+# Asymmetric Security Token Type
+my $TOKEN_ASYMMETRIC = "Asymmetric";
+
+# ClearText Password Security Token Type
+my $TOKEN_CLEARTEXT = "Cleartext";
+
+# GSI Security Token Type
+my $TOKEN_GSI = "X509v3";
+
+# Kerberos Security Token Type
+my $TOKEN_KERBEROS = "Kerberos5";
+
+# No Security Token Type
+$TOKEN_NONE = "None";
+
+# Known Password Security Token Type
+$TOKEN_PASSWORD = "Password";
+
+# Symmetric Security Token Type
+$TOKEN_SYMMETRIC = "Symmetric";
+
+# Auto-Create Users
+$USER_AUTOGEN = "false";
+
+# Default User
+$USER_DEFAULT = "NONE";
+
+# Package Version
+$VERSION = "@PACKAGE_VERSION@";
+
+# Wire Protocol [SSSRMAP, SOAP]
+$WIRE_PROTOCOL = "SSSRMAP";
+
+# ----------------------------------------------------------------------------
+# $dbname = toDBC($name)
+# ----------------------------------------------------------------------------
+
+# To Data Base Case
+# Converts from the form CompoundName to g_compound_name
+sub toDBC
+{
+  my ($name) = @_;
+
+  $name =~ s/\b([A-Z])/g_\L$1/g;    # Replace all {word boundary}A with g_a
+  $name =~ s/([A-Z])/_\L$1/g;       # Replace all A with _a
+
+  return $name;
+}
+
+# ----------------------------------------------------------------------------
+# $name = toUCC($dbname)
+# ----------------------------------------------------------------------------
+
+# To Upper Camel Case
+# Converts from the form g_compound_name to CompoundName
+sub toUCC
+{
+  my ($name) = @_;
+
+  $name =~ s/^g//;                  # Remove leading g
+  $name =~ s/_([a-z])/\U$1/g;       # Replace all _a with A
+  return $name;
+}
+
+# ----------------------------------------------------------------------------
+# $dateTime = toHRT($epoch)
+# ----------------------------------------------------------------------------
+
+# To Human Readable Time
+# Converts from epoch time to Human readable time format
+sub toHRT
+{ 
+  my ($epoch) = @_;
+  my $dateTime;
+
+  if ($epoch =~ /^\d+$/)
+  {
+    if ($epoch == 0)
+    {
+      $dateTime = "-infinity";
+    }
+    elsif ($epoch == 2147483647)
+    {
+      $dateTime = "infinity";
+    }
+    else
+    {
+      my ($sec,$min,$hour,$day,$month,$year) = (localtime($epoch))[0..5];
+      $dateTime = sprintf("%04d-%02d-%02d", $year+1900, $month+1, $day);
+      if ($hour || $min || $sec)
+      {
+        $dateTime .= sprintf(" %02d:%02d:%02d", $hour, $min, $sec);
+      }
+    }
+  }
+  else
+  {
+    $dateTime = $epoch;
+  }
+  return $dateTime;
+} 
+
+# ----------------------------------------------------------------------------
+# $epoch = toMFT($dateTime)
+# ----------------------------------------------------------------------------
+
+# To Message Format Time
+# Converts from human readable time to epoch time
+sub toMFT
+{ 
+  my ($dateTime) = @_;
+  my ($epoch);
+
+  if ($dateTime eq "-infinity")
+  {
+    $epoch = 0;
+  }
+  elsif ($dateTime eq "infinity")
+  {
+    $epoch = 2147483647;
+  }
+  elsif ($dateTime eq "now")
+  {
+    $epoch = time;
+  }
+  elsif ($dateTime =~ /(\d{4})-(\d{2})-(\d{2})( (\d{2}):(\d{2}):(\d{2}))?/)
+  {
+    my ($sec,$min,$hour,$day,$month,$year);
+    ($year,$month,$day) = ($1,$2,$3);
+    if ($4) { ($hour,$min,$sec) = ($5,$6,$7) }
+    else { ($hour,$min,$sec) = (0,0,0) }
+    $epoch = timelocal($sec,$min,$hour,$day,$month-1,$year-1900);
+  }
+  else 
+  {
+    $epoch = $dateTime;
+  }
+  return $epoch;
+} 
+
+
+# ----------------------------------------------------------------------------
+# $generality = generality($entity)
+# ----------------------------------------------------------------------------
+
+# Get generality
+sub generality
+{ 
+  my ($entity) = @_;
+
+  if ($entity eq "ANY") { return 3; }
+  elsif ($entity eq "MEMBERS") { return 2; }
+  else { return 1; }
+}
+
+# ----------------------------------------------------------------------------
+# $lowball = min(@numbers)
+# ----------------------------------------------------------------------------
+
+# Return minimum from a list of numbers
+sub min
+{ 
+  my (@numbers) = @_;
+
+  my ($min);
+
+  $min = $numbers[0];
+  foreach my $i (@numbers)
+  {
+    if ($i < $min)
+    {
+      $min = $i;
+    }
+  }
+
+  return $min;
+}
+
+1;

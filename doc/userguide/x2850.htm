@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Issuing Job Refunds</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Jobs"
+HREF="c2396.htm"><LINK
+REL="PREVIOUS"
+TITLE="Charging Jobs"
+HREF="x2771.htm"><LINK
+REL="NEXT"
+TITLE="Managing Charge Rates"
+HREF="c2890.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2771.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 13. Managing Jobs</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c2890.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="JOBREFUND"
+>Issuing Job Refunds</A
+></H1
+><P
+>A job can be refunded in part or in whole by issuing a job refund. This action attempts to lookup the referenced job to ensure that the refund does not exceed the original charge and so that the charge entry can be updated. If multiple matches are found (such as the case when job ids are non-unique), this command will return the list of matched jobs with unique ids so that the correct job can be specified for the refund.
+      </P
+><P
+>To issue a refund for a job, use the command <B
+CLASS="COMMAND"
+>grefund</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>grefund</B
+>  [-z <TT
+CLASS="REPLACEABLE"
+><I
+>amount</I
+></TT
+>] [-a <TT
+CLASS="REPLACEABLE"
+><I
+>account_id</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [-h | &mdash;hours] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] [-V | &mdash;version] [-J <TT
+CLASS="REPLACEABLE"
+><I
+>job_id</I
+></TT
+> | [-j] <TT
+CLASS="REPLACEABLE"
+><I
+>gold_job_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2884"
+></A
+><P
+><B
+>Example 13-9. Issuing a job refund</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+grefund -J PBS.1234.0
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully refunded 19744 credits for job PBS.1234.0
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2771.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c2890.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Charging Jobs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2396.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Managing Charge Rates</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

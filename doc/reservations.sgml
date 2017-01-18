@@ -1,0 +1,183 @@
+  <chapter id="Reservations">
+    <title>Managing Reservations</title>
+    <para>
+A reservation is a hold placed against an account. Before a job runs, a reservation (or hold) is made against one or more of the requesting user's applicable account(s). Subsequent jobs will also post reservations while the available balance (active allocations minus reservations) allows. When a job completes, the reservation is removed and the actual charge is made to the account(s). This procedure ensures that jobs will only run so long as they have sufficient reserves.
+    </para>
+    <para>
+Associated with a reservation is the name of the reservation (often the job id requiring the reservation), the user, project, and machine as applicable, an expiration time, and an amount. Operations include creating, querying, modifying and deleting reservations.
+    </para>
+
+    <sect1 id="ReservationCreate">
+      <title>Creating Reservations</title>
+      <para>
+Reservations are created by the resource management system with the <link linkend="JobReserve">greserve</link> command (See <link linkend="JobReserve">Making Job Reservations</link>).
+      </para>
+    </sect1>
+
+    <sect1 id="ReservationQuery">
+      <title>Querying Reservations</title>
+      <para>
+To display reservation information, use the command <command>glsres</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsres</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-n <replaceable>reservation_name | job_id_pattern</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable><arg rep="repeat">,<replaceable>attribute_name</replaceable></arg></arg>
+        <arg>&mdash;showHidden</arg>
+        <group>
+          <arg>-l</arg>
+          <arg>&mdash;long</arg>
+        </group>
+        <group>
+          <arg>-w</arg>
+          <arg>&mdash;wide</arg>
+        </group>
+        <arg>&mdash;raw</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <arg choice="opt"><arg>-r</arg> <replaceable>reservation_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all info about all reservations for bob</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsres -u bob
+          </userinput>
+        </para>
+        <screen>
+Id Name               Amount StartTime           EndTime             Job User Project   Machine Accounts Description 
+-- ------------------ ------ ------------------- ------------------- --- ---- --------- ------- -------- -----------
+1  Interactive.789654   3600 2005-01-13 16:48:15 2005-01-13 17:48:15 1   bob  chemistry blue    1
+        </screen>
+      </example>
+      <example>
+        <title>Listing all info about all reservations that impinge against amy's balance</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsres -u amy &mdash;option name=UseRules value=True
+          </userinput>
+        </para>
+        <screen>
+Id Name               Amount StartTime           EndTime             Job User Project   Machine Accounts Description 
+-- ------------------ ------ ------------------- ------------------- --- ---- --------- ------- -------- ----------- 
+1  Interactive.789654   3600 2005-01-13 16:48:15 2005-01-13 17:48:15 1   bob  chemistry blue    1
+2  PBS.1234.0           7200 2005-01-13 17:59:09 2005-01-14 02:28:41 2   amy  chemistry colony  2
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ReservationModify">
+      <title>Modifying Reservations</title>
+      <para>
+To modify a reservation, use the command <command>gchres</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchres</command>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-r</arg> <replaceable>reservation_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Changing the expiration time of a reservation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchres -e "2004-08-07 14:43:02" 1
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Reservation
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ReservationDelete">
+      <title>Deleting Reservations</title>
+      <para>
+To delete a reservation, use the command <command>grmres</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmres</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <group>
+          <arg>-q</arg>
+          <arg>&mdash;quiet</arg>
+        </group>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group choice="req">
+          <arg choice="plain">-I</arg>
+          <arg choice="req">-n <replaceable>reservation_name | job_id</replaceable></arg>
+          <arg choice="req"><arg>-r</arg> <replaceable>reservation_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting a reservation by name (JobId)</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmres -n PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Reservation
+        </screen>
+      </example>
+      <example>
+        <title>Deleting a reservation by ReservationId</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmres 1
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Reservation
+        </screen>
+      </example>
+      <example>
+        <title>Purging stale reservations</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmres -I
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 2 Reservations
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

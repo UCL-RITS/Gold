@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Using the Gold Shell (goldsh)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Deleting Passwords"
+HREF="x3394.htm"><LINK
+REL="NEXT"
+TITLE="Command Syntax"
+HREF="x3459.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3394.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3459.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="GOLDSH"
+></A
+>Chapter 18. Using the Gold Shell (goldsh)</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c3410.htm#GOLDSHUSAGE"
+>Usage</A
+></DT
+><DT
+><A
+HREF="x3459.htm"
+>Command Syntax</A
+></DT
+><DT
+><A
+HREF="x3559.htm"
+>Valid Objects</A
+></DT
+><DT
+><A
+HREF="x3568.htm"
+>Valid Actions for an Object</A
+></DT
+><DT
+><A
+HREF="x3577.htm"
+>Valid Predicates for an Object and Action</A
+></DT
+><DT
+><A
+HREF="x3586.htm"
+>Common Options</A
+></DT
+><DT
+><A
+HREF="x3594.htm"
+>Common Actions Available for most Objects</A
+></DT
+><DT
+><A
+HREF="x3693.htm"
+>Multi-Object Queries</A
+></DT
+></DL
+></DIV
+><P
+><B
+CLASS="COMMAND"
+>goldsh</B
+> is an interactive control program that can access all of the advanced functionality in Gold.
+    </P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>The goldsh control program allows you to make powerful and sweeping modifications to many objects with a single command. Inadvertant mistakes could result in modifications that are very difficult to reverse.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="GOLDSHUSAGE"
+>Usage</A
+></H1
+><P
+>Gold commands can be invoked directly from the command line as arguments, or read from stdin (interactively or redirected from a file).
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh</B
+>  [&mdash;debug] [-? | &mdash;help] [--man] [&mdash;raw] [&mdash;quiet] [-v | &mdash;verbose] [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Command&gt;</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3433"
+></A
+><P
+><B
+>Example 18-1. Specifying the command as direct arguments</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh System Query
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name Version  Organization Description  
+---- -------- ------------ ------------
+Gold 2.0.b1.0              Beta Release 
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3439"
+></A
+><P
+><B
+>Example 18-2. Using the interactive prompt</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh
+          </KBD
+>
+        </P
+><P
+><SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> System Query 
+        </P
+><PRE
+CLASS="SCREEN"
+>Name Version  Organization Description  
+---- -------- ------------ ------------ 
+Gold 2.0.b1.0              Beta Release 
+        </PRE
+><P
+><SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> quit
+        </P
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3449"
+></A
+><P
+><B
+>Example 18-3. Reading commands from a file</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+cat &gt;commands.gold &lt;&lt;EOF
+          </KBD
+>
+          <P
+CLASS="LITERALLAYOUT"
+>System&nbsp;Query<br>
+quit<br>
+EOF<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+>
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh &lt;commands.gold
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name Version  Organization Description  
+---- -------- ------------ ------------
+Gold 2.0.b1.0              Beta Release 
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3394.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3459.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deleting Passwords</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Command Syntax</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

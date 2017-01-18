@@ -1,0 +1,179 @@
+<sect1 id="Migration">
+  <title>Migration Procedures</title>
+  <para>
+The following recommendations should assist you in migrating from an existing Gold 2.1 installation to a new Gold 2.2 installation.
+  </para>
+
+  <important>
+    <para>
+It is important that you read this entire section before proceding with the migration upgrade steps.
+    </para>
+  </important>
+
+  <sect2>
+    <title>Database Migration</title>
+    <para>
+If you have an existing Gold 2.1 installation, you will need to develop a strategy for redefining/migrating your essential data into the new Gold 2.2 database and object format.
+    </para>
+    <para>
+Since all of the database changes are concentrated in the ChargeRate (and QuotationChargeRate) table, most of the database fields can remain unchanged and a database migration would be possible in most cases.
+    </para>
+    <para>
+For those willing to risk it, we have made a best-effort attempt to create a database migration script which will attempt to convert an existing Gold 2.1 database into a Gold 2.2 database. It is NOT guaranteed to work correctly on your database.
+    </para>
+    <note>
+      <para>
+SQLite databases cannot yet be migrated in most circumstances since current versions do not support the ALTER TABLE ADD COLUMN syntax.
+      </para>
+    </note>
+    <caution>
+      <title>
+USE AT YOUR OWN RISK!!!
+      </title>
+      <para>
+You should MAKE A BACKUP of your gold databases before running this script. If you proceed without a backup, a failure in this script could irreveribly corrupt the integrity and data of your gold database.
+      </para>
+      <para>
+Any part of this script should only be run once. If it fails, you are going to need to carve it up and just run the parts that did not run successfully the first time. I would recommend running this under script so that you can capture and examine the output for progress and errors.
+      </para>
+    </caution>
+    <para>
+Run the test/bank_2.1_to_2.2.pl script to migrate your Gold 2.1 database to the new Gold 2.2 format. It will perform the following steps:
+      <itemizedlist>
+        <listitem>
+          <para>
+Add a Job Stage Value of Create and add Job Create as a Scheduler Role Action
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+Create new ChargeRate and QuotationChargeRate Instance Attributes
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+Translate Existing ChargeRates to new format (VBR, NBU, etc.)
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </sect2>
+
+  <sect2 id="MigrationInstall">
+    <title>Migration Upgrade Steps</title>
+    <para>
+&PRODUCT; uses the standard configure, make and make install steps for upgrades. This document assumes that you are updating &PRODUCT; to a new major or minor release from an existing installation. Instructions for migrating to a new maintenance or fix release can be found in the &PRODUCT; User's Guide. This document provides a number of sample steps referenced to a particular installation on a Linux platform using the bash shell. These steps indicate the userid in brackets performing the step. The exact commands to be performed and the user that issues them will vary based on the platform, shell, installation preferences, etc. These steps are very similar to the steps for performing a maintenance or fix upgrade install with the exception that the migration script should be run before shutting down the server for the make install.
+    </para>
+    <para>
+To build and update &PRODUCT;, you first need to unpack the tar archive and change directory into the top directory of the distribution.
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+cd ~/src
+      </userinput>
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+tar -zxvf @PACKAGE_TARNAME@-@PACKAGE_VERSION@.tar.gz
+      </userinput>
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+cd @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+      </userinput>
+    </para>
+    <para>
+To configure &PRODUCT;, run the "configure" script provided with the distribution with the desired options.
+    </para>
+    <note> 
+      <para>
+In Gold 2.2, the default Gold installation location has been changed to /opt/gold (from /usr/local/gold). Thus, if you were previously running ./configure without the &mdash;prefix option to install Gold into /usr/local/gold, when upgrading to Gold 2.2 you will need to explicitly specify your location now with ./configure &mdash;prefix=/usr/local/gold in order to have Gold installed in the same place.
+      </para>
+    </note>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+./configure
+      </userinput>
+    </para>
+    <para>
+To compile the program, type make:
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+make
+      </userinput>
+    </para>
+    <para>
+If you would like to install the web gui, type make gui:
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+make gui
+      </userinput>
+    </para>
+    <para>
+Run the migration script. The prior version of goldd 2.2 must be running in order for this script to function. See the previous section for more details on the migration script.
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+src/bank_2.1_to_2.2.pl --I-understand-the-risks
+      </userinput>
+    </para>
+    <para>
+Stop the server daemon.
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+goldd -k
+      </userinput>
+    </para>
+    <para>
+Use `make install' to install &PRODUCT;. You may need to do this as root if any of the installation or log directories do not already have write permission as the gold admin user.
+    </para>
+    <para>
+      <userinput><prompt>[root]# </prompt>
+make install
+      </userinput>
+    </para>
+    <para>
+If you would like to install the web gui, type make install-gui (as root).
+  </para>
+    <para>
+      <userinput><prompt>[root]# </prompt>
+make install-gui
+      </userinput>
+    </para>
+    <para>
+Start the server daemon up.
+    </para>
+    <para>
+      <userinput><prompt>[gold]$ </prompt>
+goldd
+      </userinput>
+    </para>
+  </sect2>
+
+  <sect2>
+    <title>Differences</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <guilabel>Default prefix changed to /opt/gold</guilabel> &mdash;
+In Gold 2.2, the default Gold installation location has been changed to /opt/gold (from /usr/local/gold). Thus, if you were previously running ./configure without the &mdash;prefix option to install Gold into /usr/local/gold, when upgrading to Gold 2.2 you will need to explicitly specify your location now with ./configure &mdash;prefix=/usr/local/gold in order to have Gold installed in the same place.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <guilabel>Scheduler action commands now use gold_job_id as default argument</guilabel> &mdash;
+The optionless argument in gquote, greserve and gcharge has been changed to Id ([-j] &lt;gold_job_id&gt;) instead of JobId (-J &lt;job_id&gt;) which now must be use an explicit -J flag. In Gold 2.1 and earlier, gcharge 123 has been interpreted to mean a charge against the resource manager job id 123. As of Gold 2.2, gcharge 123 will be interpreted to mean a charge against the gold job id 123. Any scripts (such as a prolog or epilog) which make use of these commands should be modified accordingly.
+        </para>
+      </listitem>
+      <listitem> 
+        <para>
+          <guilabel>Disambiguation of charge and job properties in scheduler action commands</guilabel> &mdash;
+In Gold 2.2, in order to better support incremental charging, the duration, starttime, endtime and description for the charge will be passed via the standard options (-t, -s, -e, -d) while the same properties for the job (duration, starttime, endtime and description) may be passed in separately using the extension option (i.e. -X WallDuration=1234). If you are are using prolog and epilog scripts to invoke greserve and gcharge, and you are charging for the entire job (not incremental charging), then if you were using gcharge -t 1234 -s "2010-07-01 12:00:00" -e "2010-07-01 12:20:34", in Gold 2.2 you would have to use gcharge -t 1234 -X WallDuration=1234 -X StartTime="2010-07-01 12:00:00" -X EndTime="2010-07-01 12:20:34" to accomplish similar results (the -t option would be used in the charge calculation to determine cost, while the -X options would be sent in as job metadata for the job accounting records).
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect2>
+</sect1>

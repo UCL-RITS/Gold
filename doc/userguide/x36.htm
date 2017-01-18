@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Features</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Overview"
+HREF="c27.htm"><LINK
+REL="PREVIOUS"
+TITLE="Overview"
+HREF="c27.htm"><LINK
+REL="NEXT"
+TITLE="Interfaces"
+HREF="x91.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c27.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 1. Overview</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x91.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="FEATURES"
+>Features</A
+></H1
+><P
+>        <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Dynamic Charging</SPAN
+> &mdash;
+Rather than post-processing resource usage records on a periodic basis to rectify project balances, acounts are updated immediately at job completion.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Reservations</SPAN
+> &mdash;
+A hold is placed against the account for the estimated number of resource credits before the job runs, followed by an appropriate charge at the moment the job completes, thereby preventing projects from using more resources than were allocated to them.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Flexible Accounts</SPAN
+> &mdash;
+A uniquely flexible account design allows resource credits to be allocated to specific projects, users and machines.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Expiring Allocations</SPAN
+> &mdash;
+Resource credits may be restricted for use within a designated time period allowing sites to implement a use-it-or-lose-it policy to prevent year-end resource exhaustion and establishing a project cycle.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Flexible Charging</SPAN
+> &mdash;
+The system can track and charge for composite resource usage (memory, disk, CPU, etc) and custom charge multipliers can be applied (Quality of Service, Node Type, Time of Day, etc).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Guaranteed Quotes</SPAN
+> &mdash; 
+Users and resource brokers can determine ahead of time the cost of using resources. 
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Credit and Debit Accounts</SPAN
+> &mdash; 
+Accounts feature an optional credit limit allowing support for both debit and credit models. This feature can also be used to enable overdraft protection for specific accounts.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Nested Accounts</SPAN
+> &mdash; 
+A hierarchical relationship may be created between accounts. This allows for the delegation of management responsibilities, the establishment of automatic rules for the distribution of downstream resource credits, and the option of making higher level credits available to lower level accounts.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Powerful Querying</SPAN
+> &mdash; 
+Gold supports a powerful querying and update mechanism that facilitates flexible reporting and streamlines administrative tasks.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Transparency</SPAN
+> &mdash; 
+Gold allows the establishment of default projects, machines and users. Additionally Gold can allow user, machines and projects to be automatically created the first time they are seen by the resource management system. These features allow job submitters to use the system without even knowing it.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Security</SPAN
+> &mdash; 
+Gold supports multiple security mechanisms for strong authentication and encryption. 
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Role Based Authorization</SPAN
+> &mdash; 
+Gold provides fine-grained (instance-level) Role Based Access Control for all operations. 
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Dynamic Customization</SPAN
+> &mdash; 
+Sites can create or modify record types on the fly enabling them to meet their custom accounting needs. Dynamic object creation allows sites to customize the types of accounting data they collect without modifying the code. This capability turns this system into a generalized information service. This capability is extremely powerful and can be used to manage all varieties of custom configuration data, to provide meta-scheduling resource mapping, or to function as a persistence interface for other components.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Multi-Site Exchange</SPAN
+> &mdash; 
+A traceback mechanism will allows all parties of a transaction (resource requestor and provider) to have a first-hand record of the resource utilization and to have a say as to whether or not the job should be permitted to run, based on their independent policies and priorities. A job will only run if all parties are agreeable to the idea that the target resources can be used in the manner and amount requested. Support for traceback debits will facilitate the establishment of trust and exchange relationships between administrative domains.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Web Interface</SPAN
+> &mdash; 
+Gold will implement a powerful dynamic web-based GUI for easy remote access for users, managers and administrators.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Journaling</SPAN
+> &mdash; 
+Gold implements a journaling mechanism that preserves the indefinite historical state of all objects and records. This powerful mechanism allows historical bank statements to be generated, provides an undo/redo capability and allows commands to be run as if it were any arbitrary time in the past.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Open Source</SPAN
+> &mdash; 
+Being open source allows for site self-sufficiency, customizability and promotes community development and interoperability.
+            </P
+></LI
+></UL
+>
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c27.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x91.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Overview</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c27.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Interfaces</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Make Deposits</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting More Advanced"
+HREF="c750.htm"><LINK
+REL="PREVIOUS"
+TITLE="Define Accounts"
+HREF="x782.htm"><LINK
+REL="NEXT"
+TITLE="Check The Balance"
+HREF="x859.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x782.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Getting More Advanced</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x859.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ADVANCEDDEPOSITS"
+>Make Deposits</A
+></H1
+><P
+>Now you can make some deposits (see <A
+HREF="x1754.htm"
+>Making Deposits</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN813"
+></A
+><P
+><B
+>Example 5-3. Let's deposit 100 million credits for use by the biology project. We are going to establish a use-it-or-lose-it policy here in which one fourth of the credits expire each quarter. Since there is only one account for the biology project, we can specify the project name in the deposit.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-01-01 -e 2005-04-01 -z 25000000 -p biology
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 25000000 credits into account 1
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-04-01 -e 2005-07-01 -z 25000000 -p biology
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 25000000 credits into account 1
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-07-01 -e 2005-10-01 -z 25000000 -p biology
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 25000000 credits into account 1
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-10-01 -e 2006-01-01 -z 25000000 -p biology
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 25000000 credits into account 1
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN831"
+></A
+><P
+><B
+>Example 5-4. Next we will make some deposits valid toward the chemistry project for the entire year. Since there are multiple accounts for the chemistry project, we must specify the appropriate account id in the deposit.</B
+></P
+><P
+>First, we'll dedicate 50 million credits for use on colony.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 50000000 -a 2
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 50000000 credits into account 2
+        </PRE
+><P
+>Then we'll give amy special access to 10 million credits that she can use anywhere &mdash; with 9 million credits prepaid, and a million credits of overdraft.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 9000000 -L 1000000 -a 3
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 9000000 credits into account 3
+        </PRE
+><P
+>Finally, we'll give all the other members except amy access to the remaining 40 million credits.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 40000000 -a 4
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deposited 40000000 credits into account 4
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN848"
+></A
+><P
+><B
+>Example 5-5. We can now take a closer look at the accounts and the allocations that we have created.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsaccount
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name                Amount   Projects  Users        Machines Description 
+-- ------------------- -------- --------- ------------ -------- ----------- 
+1  biology             25000000 biology   MEMBERS      MEMBERS              
+2  chemistry on colony 50000000 chemistry MEMBERS      colony               
+3  chemistry for amy    9000000 chemistry amy          ANY                  
+4  chemistry not amy   40000000 chemistry MEMBERS,-amy ANY     
+        </PRE
+><P
+>Let's examine the allocations we just created with the time period information.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsalloc
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Account StartTime  EndTime    Amount   CreditLimit Deposited Description 
+-- ------- ---------- ---------- -------- ----------- --------- ----------- 
+1  1       2005-01-01 2005-04-01 25000000           0  25000000             
+2  1       2005-04-01 2005-07-01 25000000           0  25000000             
+3  1       2005-07-01 2005-10-01 25000000           0  25000000             
+4  1       2005-10-01 2006-01-01 25000000           0  25000000             
+5  2       2005-01-01 2006-01-01 50000000           0  50000000             
+6  3       2005-01-01 2006-01-01  9000000     1000000   9000000             
+7  4       2005-01-01 2006-01-01 40000000           0  40000000       
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x782.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x859.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Define Accounts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c750.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Check The Balance</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

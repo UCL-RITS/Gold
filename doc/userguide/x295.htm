@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Perl Module Dependencies</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="PREVIOUS"
+TITLE="Compilation"
+HREF="x285.htm"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="x304.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x285.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x304.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="DEPENDENCIES"
+>Perl Module Dependencies</A
+></H1
+><P
+>Gold requires the use of a number of Perl modules. These modules are included
+in tarball form in the Gold distribution and they can be installed by typing
+'make deps':
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+make deps
+        </KBD
+>
+      </P
+><P
+>This will install the following Perl modules as necessary. By default, these will be installed under gold's lib/perl5 directory. To install these in the system site-perl directory, use the configure parameter with-perl-libs as described in the configuration section.
+      </P
+><P
+CLASS="LITERALLAYOUT"
+>&nbsp;&nbsp;&nbsp;&nbsp;CGI.pm<br>
+&nbsp;&nbsp;&nbsp;&nbsp;CGI::Session<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Compress::Zlib<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Crypt::CBC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Crypt::DES<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Crypt::DES_EDE3<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Data::Properties<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Date::Manip<br>
+&nbsp;&nbsp;&nbsp;&nbsp;DBI<br>
+&nbsp;&nbsp;&nbsp;&nbsp;DBD::Pg&nbsp;or&nbsp;DBD::SQLite<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Digest<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Digest::HMAC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Digest::MD5<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Digest::SHA1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Log::Dispatch<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Log::Dispatch::FileRotate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Log::Log4perl<br>
+&nbsp;&nbsp;&nbsp;&nbsp;MIME::Base64<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Module::Build<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Params::Validate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SOAP<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Term::ReadLine::Gnu<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Time::HiRes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;XML::SAX<br>
+&nbsp;&nbsp;&nbsp;&nbsp;XML::LibXML::Common<br>
+&nbsp;&nbsp;&nbsp;&nbsp;XML::LibXML<br>
+&nbsp;&nbsp;&nbsp;&nbsp;XML::NamespaceSupport<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+>If you would prefer to do so, you could install these modules via other sources, such as from rpm, or from CPAN using 'cpan'.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x285.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x304.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Compilation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

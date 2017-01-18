@@ -1,0 +1,31 @@
+<!--
+  This is the sgml source document for the UPGRADE file.
+  For text use `db2html -u -d none upgradefile.sgml; links -dump upgradefile/upgradefile.html > ../UPGRADE`
+-->
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!ENTITY PRODUCT "@PACKAGE_NAME@"> <!-- change product name here -->
+<!ENTITY VERSION "@PACKAGE_VERSION@"> <!-- change product version here -->
+<!ENTITY copyright SYSTEM "adaptivecopyright.sgml">
+<!ENTITY upgrade SYSTEM "upgrade.sgml">
+]>
+
+<article>
+
+<!-- Metadata -->
+
+  <articleinfo>
+    <title>UPGRADE NOTES</title>
+    <subtitle>&PRODUCT; &VERSION;</subtitle>
+    &copyright;
+
+  </articleinfo>
+
+<!-- Sections -->
+
+  &upgrade;
+
+<!-- End of Article -->
+
+</article>
+

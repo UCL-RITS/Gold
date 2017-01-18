@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Interaction Points</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Integration with the Resource Management System"
+HREF="c3976.htm"><LINK
+REL="PREVIOUS"
+TITLE="Integration with the Resource Management System"
+HREF="c3976.htm"><LINK
+REL="NEXT"
+TITLE="Methods of interacting with Gold"
+HREF="x4022.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c3976.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. Integration with the Resource Management System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x4022.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INTERACTIONPOINTS"
+>Interaction Points</A
+></H1
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="SUBMISSIONTIME"
+>Job Quotation @ Job Submission Time [Optional &mdash; Recommended]</A
+></H2
+><P
+>When a job is submitted to a grid scheduler or resource broker, it may be useful to determine how much it will cost to run on a particular resource by requesting a job quote. If the quote succeeds, it will return a quote id along with the quoted amount for the job. This quote id may be used later to guarantee that the same charge rates used to form the quote will also be used in the final job charge calculation.
+        </P
+><P
+>Even when a job is exclusively scheduled locally, it is useful to obtain a quote at the time of submission to the local resource manager to ensure the user has sufficient funds to run the job and that it meets the access policies necessary for the charge to succeed. A warning can be issued if funds are low or the job might be rejected with an informative message in the case of insufficient funds or any other problems with the account. Without this interaction, the job might wait in the queue for days only to fail when it tries to start.
+        </P
+><P
+>To make a job quotation with Gold at this phase requires that:
+          <P
+></P
+><UL
+><LI
+><P
+>the grid scheduler has built-in Gold allocation manager support {Silver}, or
+              </P
+></LI
+><LI
+><P
+>the resource manager supports a submit filter {LoadLeveler(SUBMIT_FILTER), LSF(esub)}, or
+              </P
+></LI
+><LI
+><P
+>a wrapper could be created for the submit command {PBS(qsub)}.
+              </P
+></LI
+></UL
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="STARTTIME"
+>Job Reservation @ Job Start Time [Optional &mdash; Highly Recommended]</A
+></H2
+><P
+>Just before a job starts, a hold (reservation) is made against the appropriate account(s), temporarily reducing the user's available balance by an amount based on the resources requested and the estimated wallclock limit. If this step is ommitted, it would be possible for users to start more jobs than they have funds to support.
+        </P
+><P
+>If the reservation succeeds, it will return a message indicating the amount reserved for the job. In the case where there are insufficient resources to run the job or some other problem with the reservation, the command will fail with an informative message. Depending on site policy, this may or may not prevent the job from starting. 
+        </P
+><P
+>To make a job reservation with Gold at this phase requires that:
+          <P
+></P
+><UL
+><LI
+><P
+>the scheduler or resource manager has built-in Gold allocation manager support {Maui(AMCFG)}, or
+              </P
+></LI
+><LI
+><P
+>the resource manager is able to run a script at job start time {LoadLeveler(prolog), PBS(prologue), LSF(pre_exec)}.
+              </P
+></LI
+></UL
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="ENDTIME"
+>Job Charge @ Job End Time [Required]</A
+></H2
+><P
+>When a job ends, a charge is made to the user's account(s). Any associated reservations are automatically removed as a side-effect. Depending on site policy, a charge can be elicited only in the case of a successful completion, or for all or specific failure cases as well. Ideally, this step will occur immediately after the job completes (dynamic accounting). This has the added benefit that job run times can often be reconstructed from Gold job reservation and charge timestamps in case the resource management job accounting data becomes corrupt. 
+        </P
+><P
+>If the charge succeeds, it will return a message indicating the amount charged for the job.
+        </P
+><P
+>To make a job charge with Gold at this phase requires that:
+          <P
+></P
+><UL
+><LI
+><P
+>the scheduler or resource manager has built-in Gold allocation manager support {Maui(AMCFG)}, or
+              </P
+></LI
+><LI
+><P
+>the resource manager is able to run a script at job start time {LoadLeveler(epilog), PBS(epilogue), LSF(post_exec)}, or
+              </P
+></LI
+><LI
+><P
+>the resource manament system supports some kind of feedback or notification machanism occurring at the end of a job (an email can be parsed by a mail filter).
+              </P
+></LI
+></UL
+>
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c3976.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x4022.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Integration with the Resource Management System</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3976.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Methods of interacting with Gold</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

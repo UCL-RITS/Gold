@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Modifying Allocations</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Allocations"
+HREF="c2027.htm"><LINK
+REL="PREVIOUS"
+TITLE="Querying Allocations"
+HREF="x2036.htm"><LINK
+REL="NEXT"
+TITLE="Deleting Allocations"
+HREF="x2114.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2036.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Managing Allocations</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2114.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ALLOCATIONMODIFY"
+>Modifying Allocations</A
+></H1
+><P
+>To modify an allocation, use the command <B
+CLASS="COMMAND"
+>gchalloc</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gchalloc</B
+>  [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [-L <TT
+CLASS="REPLACEABLE"
+><I
+>credit_limit</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [-h | &mdash;hours] [&mdash;debug] [-? | &mdash;help] [--man] [&mdash;quiet] [-v | &mdash;verbose] {[-i] <TT
+CLASS="REPLACEABLE"
+><I
+>allocation_id</I
+></TT
+>}</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2102"
+></A
+><P
+><B
+>Example 10-2. Changing the end time for an allocation</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchalloc -e "2005-01-01" 4
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully modified 1 Allocation
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2108"
+></A
+><P
+><B
+>Example 10-3. Changing the credit limit for an allocation</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchalloc -L 500000000000 -i 2
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully modified 1 Allocation
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2036.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2114.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Querying Allocations</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2027.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Deleting Allocations</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

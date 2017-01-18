@@ -1,0 +1,399 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Methods of interacting with Gold</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Integration with the Resource Management System"
+HREF="c3976.htm"><LINK
+REL="PREVIOUS"
+TITLE="Interaction Points"
+HREF="x3986.htm"><LINK
+REL="NEXT"
+TITLE="Configuration Files"
+HREF="c4076.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3986.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 20. Integration with the Resource Management System</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c4076.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INTERACTIONMETHODS"
+>Methods of interacting with Gold</A
+></H1
+><P
+>There are essentially six ways of programatically interacting with Gold. Let's consider a simple job charge in each of the different ways.
+      </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="RMINTERFACE"
+>Configuring an application that already has hooks for Gold</A
+></H2
+><P
+>The easiest way to use Gold is to use a resource management system with built-in support for Gold. For example, the Maui Scheduler and Silver Grid Scheduler can be configured to directly interact with Gold to perform the quotes, reservations and charges by setting the appropriate parameters in their config files.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN4028"
+></A
+><P
+><B
+>Example 20-1. Configuring Maui to use Gold</B
+></P
+><P
+>Add an appropriate AMCFG line into maui.cfg to tell Maui how to talk to Gold
+          </P
+><P
+>            <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+vi /usr/local/maui/maui.cfg
+            </KBD
+>
+          </P
+><PRE
+CLASS="SCREEN"
+>AMCFG[bank] TYPE=GOLD HOST=control_node1 PORT=7112 SOCKETPROTOCOL=HTTP WIREPROTOCOL=XML CHARGEPOLICY=DEBITALLWC JOBFAILUREACTION=IGNORE TIMEOUT=15
+          </PRE
+><P
+>Add a CLIENTCFG line into maui-private.cfg to specify the shared secret key. This secret key will be the same secret key specified in the "make auth_key" step.
+          </P
+><P
+>            <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+vi /usr/local/maui/maui-private.cfg
+            </KBD
+>
+          </P
+><PRE
+CLASS="SCREEN"
+>CLIENTCFG[AM:bank] KEY=mysecret AUTHTYPE=HMAC64
+          </PRE
+><P
+>Gold will need to allow the the user id that maui runs under to perform scheduler related commands (Job Charge, Reserve, Quote, etc).
+          </P
+><P
+>            <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkuser -d "Maui Scheduler" maui
+            </KBD
+>
+          </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 User
+          </PRE
+><P
+>            <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh RoleUser Create Role=Scheduler Name=maui
+            </KBD
+>
+          </P
+><PRE
+CLASS="SCREEN"
+>Role      Name
+--------- ----
+Scheduler maui
+Successfully created 1 RoleUser
+          </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="COMMANDINTERFACE"
+>Using the appropriate command-line client</A
+></H2
+><P
+>From inside a script, or by invoking a system command, you can use a command line client (one of the "g" commands in gold's bin directory).
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN4052"
+></A
+><P
+><B
+>Example 20-2. To issue a charge at the completion of a job, you would use gcharge:</B
+></P
+><P
+>            <KBD
+CLASS="USERINPUT"
+>gcharge -J PBS.1234.0 -p chemistry -u amy -m colony -P 2 -t 1234 -X WallDuration=1234
+            </KBD
+>
+          </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CONTROLINTERFACE"
+>Using the Gold control program</A
+></H2
+><P
+>The Gold control program, goldsh, will issue a charge for a job expressed in xml (SSS Job Object).
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN4059"
+></A
+><P
+><B
+>Example 20-3. To issue a charge you must invoke the Charge action on the Job object:</B
+></P
+><PRE
+CLASS="SCREEN"
+>goldsh Data:="&lt;Job&gt;&lt;JobId&gt;PBS.1234.0&lt;/JobId&gt;&lt;ProjectId&gt;chemistry&lt;/ProjectId&gt;
+&lt;UserId&gt;amy&lt;/UserId&gt;&lt;MachineName&gt;colony&lt;/MachineName&gt;
+&lt;Processors&gt;2&lt;/Processors&gt;&lt;WallDuration&gt;1234&lt;/WallDuration&gt;"
+          </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="PERLINTERFACE"
+>Use the Perl API</A
+></H2
+><P
+>If your resource management system is written in Perl or if it can invoke a Perl script, you can access the full Gold functionality via the Perl API.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN4065"
+></A
+><P
+><B
+>Example 20-4. To make a charge via this interface you might do something like:</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>use Gold;
+
+my $request = new Gold::Request(object =&#62; "Job", action =&#62; "Charge");
+my $job = new Gold::Datum("Job");
+$job-&#62;setValue("JobId", "PBS.1234.0");
+$job-&#62;setValue("ProjectId", "chemistry");
+$job-&#62;setValue("UserId", "amy");
+$job-&#62;setValue("MachineName", "colony");
+$job-&#62;setValue("Processors", "2");
+$job-&#62;setValue("WallDuration", "1234");
+$request-&#62;setDatum($job);
+my $response = $request-&#62;getResponse();
+print $response-&#62;getStatus(), ": ", $response-&#62;getMessage(), "\n";
+          </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="SSSRMAPINTERFACE"
+>Communicating via the SSSRMAP Protocol</A
+></H2
+><P
+>Finally, it is possible to interact with Gold by directly using the SSSRMAP Wire Protocol and Message Format over the network (see <A
+HREF="http://www.clusterresources.com/products/gold/docs/"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>SSS Resource Management and Accounting Documentation</I
+></A
+>). This will entail building the request body in XML, appending an XML digital signature, combining these in an XML envelope framed in an HTTP POST, sending it to the server, and parsing the similarly formed response. The Maui Scheduler communicates with Gold via this method. 
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN4073"
+></A
+><P
+><B
+>Example 20-5. The message might look something like:</B
+></P
+><P
+CLASS="LITERALLAYOUT"
+>POST&nbsp;/SSSRMAP&nbsp;HTTP/1.1<br>
+Content-Type:&nbsp;text/xml;&nbsp;charset="utf-8"<br>
+Transfer-Encoding:&nbsp;chunked<br>
+<br>
+190<br>
+&lt;?xml&nbsp;version="1.0"&nbsp;encoding="UTF-8"?&gt;<br>
+&lt;Envelope&gt;<br>
+&nbsp;&nbsp;&lt;Body&nbsp;actor="scottmo"&nbsp;chunking="True"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Request&nbsp;action="Charge"&nbsp;object="Job"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Data&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Job&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;JobId&gt;PBS.1234.0&lt;/JobId&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ProjectId&gt;chemistry&lt;/ProjectId&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;UserId&gt;amyh&lt;/UserId&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MachineName&gt;colony&lt;/MachineName&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;Processors&gt;2&lt;/Processors&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;WallDuration&gt;1234&lt;/WallDuration&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Job&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Data&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/Request&gt;<br>
+&nbsp;&nbsp;&lt;//Body&gt;<br>
+&nbsp;&nbsp;&lt;Signature&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;DigestValue&gt;azu4obZswzBt89OgATukBeLyt6Y=&lt;/DigestValue&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;SignatureValue&gt;YXE/C08XX3RX4PMU1bWju+5/E5M=&lt;/SignatureValue&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;SecurityToken&nbsp;type="Symmetric"&gt;&lt;/SecurityToken&gt;<br>
+&nbsp;&nbsp;&lt;/Signature&gt;<br>
+&lt;/Envelope&gt;<br>
+0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3986.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c4076.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Interaction Points</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3976.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Configuration Files</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

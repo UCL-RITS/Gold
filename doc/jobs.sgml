@@ -1,0 +1,486 @@
+  <chapter id="Jobs">
+    <title>Managing Jobs</title>
+    <para>
+Gold can track the jobs that run on your system, recording the charges and resources used for each job. Typically, a job record is created when the resource manager charges for a job. Job quotes, reservations, charges and refunds can be issued.
+    </para>
+
+    <sect1 id="JobCreate">
+      <title>Creating Jobs</title>
+      <para>
+In most cases, jobs will be created by the resource management system with the <link linkend="JobReserve">greserve</link> or the <link linkend="JobCharge">gcharge</link> command.
+      </para>
+      <para>
+However, it is also possible to create job records using the <command>gmkjob</command> command:
+      </para>
+      <cmdsynopsis>
+        <command>gmkjob</command>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-o <replaceable>organization</replaceable></arg>
+        <arg>-C <replaceable>queue_name</replaceable></arg>
+        <arg>-Q <replaceable>quality_of_service</replaceable></arg>
+        <arg>-P <replaceable>processors</replaceable></arg>
+        <arg>-N <replaceable>nodes</replaceable></arg>
+        <arg>-M <replaceable>memory</replaceable></arg>
+        <arg>-D <replaceable>disk</replaceable></arg>
+        <arg>-n <replaceable>job_name</replaceable></arg>
+        <arg>&mdash;application<replaceable>application</replaceable></arg>
+        <arg>&mdash;executable<replaceable>executable</replaceable></arg>
+        <arg>-t <replaceable>wallclock_duration</replaceable></arg>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>-T <replaceable>job_type</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg rep="repeat">-X | &mdash;extension <replaceable>property</replaceable>=<replaceable>value</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <arg><arg>-J</arg> <replaceable>job_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Creating a job record</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkjob -u jsmith -p chem -m cluster -X Charge=2468 -P 2 -t 1234 -J PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully created Job 102
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="JobQuery">
+      <title>Querying Jobs</title>
+      <para>
+To display job information, use the command <command>glsjob</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsjob</command>
+          <arg><arg>-J</arg> <replaceable>job_id_pattern</replaceable></arg>
+          <arg>-p <replaceable>project_name</replaceable></arg>
+          <arg>-u <replaceable>user_name</replaceable></arg>
+          <arg>-m <replaceable>machine_name</replaceable></arg>
+          <arg>-C <replaceable>queue</replaceable></arg>
+          <arg>-T <replaceable>type</replaceable></arg>
+          <arg>&mdash;stage <replaceable>stage</replaceable></arg>
+          <arg>-s <replaceable>start_time</replaceable></arg>
+          <arg>-e <replaceable>end_time</replaceable></arg>
+          <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable>[,<replaceable>attribute_name</replaceable>...]</arg>
+          <arg>&mdash;showHidden</arg>
+          <arg>&mdash;raw</arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <group>
+            <arg>-V</arg>
+            <arg>&mdash;version</arg>
+          </group>
+          <arg choice="opt"><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Show specific info about jobs run by amy</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob &mdash;show=JobId,Project,Machine,Charge -u amy
+          </userinput>
+        </para>
+        <screen>
+JobId      Project   Machine Charge 
+---------- --------- ------- ------ 
+PBS.1234.0 chemistry colony  0      
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="JobModify">
+      <title>Modifying Jobs</title>
+      <para>
+It is possible to modify a job record by using the command <command>gchjob</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchjob</command>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-o <replaceable>organization</replaceable></arg>
+        <arg>-C <replaceable>queue_name</replaceable></arg>
+        <arg>-Q <replaceable>quality_of_service</replaceable></arg>
+        <arg>-P <replaceable>processors</replaceable></arg>
+        <arg>-N <replaceable>nodes</replaceable></arg>
+        <arg>-M <replaceable>memory</replaceable></arg>
+        <arg>-D <replaceable>disk</replaceable></arg>
+        <arg>-n <replaceable>job_name</replaceable></arg>
+        <arg>&mdash;application<replaceable>application</replaceable></arg>
+        <arg>&mdash;executable<replaceable>executable</replaceable></arg>
+        <arg>-t <replaceable>wallclock_duration</replaceable></arg>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>-T <replaceable>job_type</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg rep="repeat">-X | &mdash;extension <replaceable>property</replaceable>=<replaceable>value</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <group>
+          <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+          <arg>-J <replaceable>job_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Changing a job</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchjob -Q HalfPrice --application=NwChem -X Charge=1234 -d "Benchmark" -J PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Job
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="JobDelete">
+      <title>Deleting Jobs</title>
+      <para>
+To delete a job, use the command <command>grmjob</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmjob</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <group>
+          <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+          <arg>-J <replaceable>job_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting a job</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmjob -J PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Job
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="JobQuote">
+      <title>Obtaining Job Quotes</title>
+      <para>
+Job quotes can be used to determine how much it will cost to run a job. This step verifies that the submitter has sufficient funds for, and meets all the allocation policy requirements for running the job and can be used at job submission as an early filter to prevent jobs from getting in and waiting in the job queue just to be blocked from running later. If a guaranteed quote is requested, a quote id is returned and can be used in the subsequent charge to guarantee the rates that were used to form the original quote. A guaranteed quote has the side effect of creating a quotation record and a permanent job record.
+      </para>
+      <para>
+To request a job quote, use the command <command>gquote</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gquote</command>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-o <replaceable>organization</replaceable></arg>
+        <arg>-C <replaceable>queue_name</replaceable></arg>
+        <arg>-Q <replaceable>quality_of_service</replaceable></arg>
+        <arg>-N <replaceable>nodes</replaceable></arg>
+        <arg>-P <replaceable>processors</replaceable></arg>
+        <arg>-M <replaceable>memory</replaceable></arg>
+        <arg>-D <replaceable>disk</replaceable></arg>
+        <arg>-n <replaceable>job_name</replaceable></arg>
+        <arg>&mdash;application <replaceable>application</replaceable></arg>
+        <arg>-t <replaceable>quote_duration</replaceable></arg>
+        <arg>-s <replaceable>quote_start_time</replaceable></arg>
+        <arg>-e <replaceable>quote_end_time</replaceable></arg>
+        <arg>-T <replaceable>job_type</replaceable></arg>
+        <arg>-d <replaceable>quote_description</replaceable></arg>
+        <arg rep="repeat">-X | &mdash;extension <replaceable>property</replaceable>=<replaceable>value</replaceable></arg>
+        <group>
+          <arg>&mdash;costOnly</arg>
+          <arg>&mdash;guarantee</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+        <arg>-J <replaceable>job_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Requesting a quotation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gquote -p chemistry -u amy -m colony -P 2 -t 3600
+          </userinput>
+        </para>
+        <screen>
+Successfully quoted 7200 credits
+        </screen>
+      </example>
+      <example>
+        <title>Requesting a guaranteed quote</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gquote -p chemistry -u amy -m colony -P 16 -t 3600 --guarantee
+          </userinput>
+        </para>
+        <screen>
+Successfully quoted 57600 credits with quote id 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsquote
+          </userinput>
+        </para>
+        <screen>
+Id Amount Job Project   User Machine StartTime           EndTime             WallDuration Type   Used ChargeRates           Description
+-- ------ --- --------- ---- ------- ------------------- ------------------- ------------ ------ ---- --------------------- -----------
+1  57600  1   chemistry amy  colony  2005-01-14 10:09:58 2005-08-10 15:27:07 3600         Normal 0    VBR:Processors:1
+        </screen>
+      </example>
+      <note>
+        <para>
+It is possible to establish a system default machine, project or user to be used in job functions (charge, reserve or quote) when left unspecified (see <link linkend="ServerConfig">Server Configuration</link>).
+        </para>
+      </note>
+    </sect1>
+
+    <sect1 id="JobReserve">
+      <title>Making Job Reservations</title>
+      <para>
+A job reservation can be used to place a hold on the user's account before a job starts to ensure that the credits will be there when it completes.
+      </para>
+      <para>
+To create a job reservation use the command <command>greserve</command>:
+      </para>
+      <cmdsynopsis>
+        <command>greserve</command>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-o <replaceable>organization</replaceable></arg>
+        <arg>-C <replaceable>queue_name</replaceable></arg>
+        <arg>-Q <replaceable>quality_of_service</replaceable></arg>
+        <arg>-P <replaceable>processors</replaceable></arg>
+        <arg>-N <replaceable>nodes</replaceable></arg>
+        <arg>-M <replaceable>memory</replaceable></arg>
+        <arg>-D <replaceable>disk</replaceable></arg>
+        <arg>-n <replaceable>job_name</replaceable></arg>
+        <arg>&mdash;application <replaceable>application</replaceable></arg>
+        <arg>-t <replaceable>reservation_duration</replaceable></arg>
+        <arg>-s <replaceable>reservation_start_time</replaceable></arg>
+        <arg>-e <replaceable>reservation_end_time</replaceable></arg>
+        <arg>-d <replaceable>reservation_description</replaceable></arg>
+        <arg>-T <replaceable>job_type</replaceable></arg>
+        <arg rep="repeat">-X | &mdash;extension <replaceable>property</replaceable>=<replaceable>value</replaceable></arg>
+        <arg>&mdash;replace</arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <arg>-q <replaceable>quote_id</replaceable></arg>
+        <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+        <arg choice="req">-J <replaceable>job_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Creating a reservation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+greserve -J PBS.1234.0 -p chemistry -u amy -m colony -P 2 -t 3600
+          </userinput>
+        </para>
+        <screen>
+Successfully reserved 7200 credits for job PBS.1234.0
+        </screen>
+      </example>
+      <note>
+        <para>
+It is possible to establish a system default machine, project or user to be used in job functions (charge, reserve or quote) when left unspecified (see <link linkend="ServerConfig">Server Configuration</link>).
+        </para>
+      </note>
+    </sect1>
+
+    <sect1 id="JobCharge">
+      <title>Charging Jobs</title>
+      <para>
+A job charge debits the appropriate allocations based on the user, project and machine associated with the job. The charge is calculated based on factors including the resources used, the job run time, and other quality-based factors (See <link linkend="ChargeRates">Managing Charge Rates</link>).
+      </para>
+      <para>
+To charge for a job use the command <command>gcharge</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gcharge</command>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-o <replaceable>organization</replaceable></arg>
+        <arg>-C <replaceable>queue_name</replaceable></arg>
+        <arg>-Q <replaceable>quality_of_service</replaceable></arg>
+        <arg>-P <replaceable>processors</replaceable></arg>
+        <arg>-N <replaceable>nodes</replaceable></arg>
+        <arg>-M <replaceable>memory</replaceable></arg>
+        <arg>-D <replaceable>disk</replaceable></arg>
+        <arg>-S <replaceable>job_state</replaceable></arg>
+        <arg>-n <replaceable>job_name</replaceable></arg>
+        <arg>-T <replaceable>job_type</replaceable></arg>
+        <arg>&mdash;application <replaceable>application</replaceable></arg>
+        <arg>&mdash;executable <replaceable>executable</replaceable></arg>
+        <arg>-t <replaceable>charge_duration</replaceable></arg>
+        <arg>-s <replaceable>charge_start_time</replaceable></arg>
+        <arg>-e <replaceable>charge_end_time</replaceable></arg>
+        <arg>-d <replaceable>reservation_description</replaceable></arg>
+        <arg rep="repeat">-X | &mdash;extension <replaceable>property</replaceable>=<replaceable>value</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <arg>-q <replaceable>quote_id</replaceable></arg>
+        <arg>-r <replaceable>reservation_id</replaceable></arg>
+        <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+        <arg choice="req">-J <replaceable>job_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Issuing a job charge</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gcharge -J PBS.1234.0 -p chemistry -u amy -m colony -P 2 -t 1234
+          </userinput>
+        </para>
+        <screen>
+Successfully charged job PBS.1234.0 for 2468 credits
+1 reservations were removed
+        </screen>
+      </example>
+      <note>
+        <para>
+It is possible to establish a system default machine, project or user to be used in job functions (charge, reserve or quote) when left unspecified (see <link linkend="ServerConfig">Server Configuration</link>).
+        </para>
+      </note>
+    </sect1>
+
+    <sect1 id="JobRefund">
+      <title>Issuing Job Refunds</title>
+      <para>
+A job can be refunded in part or in whole by issuing a job refund. This action attempts to lookup the referenced job to ensure that the refund does not exceed the original charge and so that the charge entry can be updated. If multiple matches are found (such as the case when job ids are non-unique), this command will return the list of matched jobs with unique ids so that the correct job can be specified for the refund.
+      </para>
+      <para>
+To issue a refund for a job, use the command <command>grefund</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grefund</command>
+        <arg>-z <replaceable>amount</replaceable></arg>
+        <arg>-a <replaceable>account_id</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group>
+          <arg>-V</arg>
+          <arg>&mdash;version</arg>
+        </group>
+        <group>
+          <arg>-J <replaceable>job_id</replaceable></arg>
+          <arg><arg>-j</arg> <replaceable>gold_job_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Issuing a job refund</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grefund -J PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully refunded 19744 credits for job PBS.1234.0
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

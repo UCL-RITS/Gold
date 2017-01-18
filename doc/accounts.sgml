@@ -1,0 +1,613 @@
+  <chapter id="Accounts">
+    <title>Managing Accounts</title>
+    <para>
+An account is a container for time-bounded resource credits valid toward a specific set of projects, users and machines. Much like with a bank, an account is a repository for resource credits. Each account has a set of access control lists designating which users, projects, and machines may access the account. An account may restrict the projects that can charge to it. Normally an account will be tied to a single project but it may be tied to an arbitrary set of projects or ANY project. An account may restrict the users that can charge to it. It will frequently be tied to the the user MEMBERS of the associated project(s) but it may be tied to an arbitrary set of users or ANY user. An account may restrict the machines that can charge to it. It may be tied to an arbitrary set of machines, just the machine MEMBERS of the associated project(s) or ANY machine.
+      </para>
+      <para>
+When resource credits are deposited into an account, they are associated with a time period within which they are valid. These time-bounded pools of credits are known as allocations. (An allocation is a pool of resource credits associated with an account for use during a particular time period.) By using multiple allocations that expire in regular intervals it is possible to implement a use-it-or-lose-it policy and establish a project cycle.
+      </para>
+      <para>
+Accounts may be nested. Hierarchically nested accounts may be useful for the delegation of management roles and responsibilities. Deposit shares may be established that assist to automate a trickle-down effect for funds deposited at higher level accounts. Additionally, an optional overflow feature allows charges against lower level accounts to trickle up the hierarchy.
+      </para>
+      <para>
+Operations include creating, querying, modifying and deleting accounts as well as making deposits, withdrawals, transfers and balance queries.
+    </para>
+
+    <sect1 id="AccountCreate">
+      <title>Creating Accounts</title>
+      <para>
+<command>gmkaccount</command> is used to create a new account. A new id is automatically generated for the account.
+      </para>
+      <cmdsynopsis>
+        <command>gmkaccount</command>
+        <arg>-n <replaceable>account_name</replaceable></arg>
+        <arg>-p <group><arg>+</arg><arg>-</arg></group><replaceable>project_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>project_name</replaceable></arg></arg>
+        <arg>-u <group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable></arg></arg>
+        <arg>-m <group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable></arg></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+      </cmdsynopsis>
+      <important>
+        <para>
+When creating an account, it is important to specify at least one user, machine and project designation. If omitted, these will default to ANY.
+        </para>
+      </important>
+      <note>
+        <para>
+It is possible to have accounts be created automatically when projects are created by setting the account.autogen configuration parameter to true (see <link linkend="ServerConfig">Server Configuration</link>). The auto-generated account will be associated with the new project, the user MEMBERS of the project and ANY machine.
+        </para>
+      </note>
+      <example>
+        <title>Creating an account</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p chemistry -u MEMBERS -m ANY -n "Chemistry"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+        </screen>
+      </example>
+      <example>
+        <title>Creating a wide-open account</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p ANY -u ANY -m ANY -n "Cornucopia"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+        </screen>
+      </example>
+      <example>
+        <title>Creating an account valid toward all biology project members except for dave and all machines except for blue</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p biology -u MEMBERS,-dave -m ANY,-blue -n "Not Dave"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+Successfully created 1 AccountMachine
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountQuery">
+      <title>Querying Accounts</title>
+      <para>
+To display account information, use the command <command>glsaccount</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsaccount</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-n <replaceable>account_name</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>&mdash;exact-match</arg>
+        <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable><arg rep="repeat">,<replaceable>attribute_name</replaceable></arg></arg>
+        <arg>&mdash;showHidden</arg>
+        <group>
+          <arg>-l</arg>
+          <arg>&mdash;long</arg>
+        </group>
+        <group>
+          <arg>-w</arg>
+          <arg>&mdash;wide</arg>
+        </group>
+        <arg>&mdash;raw</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <arg choice="opt"><arg>-a</arg> <replaceable>account_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all info about all accounts with multi-valued fields displayed in a multi-line format</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsaccount &mdash;long
+          </userinput>
+        </para>
+        <screen>
+Id Name       Amount    Projects  Users   Machines Description 
+-- ---------- --------- --------- ------- -------- -----------
+1  Biology    360000000 biology   MEMBERS blue                 
+2  Chemistry  360000000 chemistry MEMBERS ANY                  
+3  Cornucopia 0         ANY       ANY     ANY                  
+4  Not Dave   250000    biology   -dave   -blue                
+        </screen>
+      </example>
+      <example>
+        <title>Listing all info about all accounts useable by dave</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsaccount -u dave &mdash;long
+          </userinput>
+        </para>
+        <screen>
+Id Name       Amount    Projects  Users   Machines Description 
+-- ---------- --------- --------- ------- -------- ----------- 
+2  Chemistry  360000000 chemistry MEMBERS ANY                  
+3  Cornucopia 0         ANY       ANY     ANY                  
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountModify">
+      <title>Modifying Accounts</title>
+      <para>
+To modify an account, use the command <command>gchaccount</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchaccount</command>
+        <arg>-n <replaceable>account_name</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;addProject(s) <group><arg>+</arg><arg>-</arg></group><replaceable>project_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>project_name</replaceable></arg></arg>
+        <arg>&mdash;addUser(s) <group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;addMachine(s) <group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;delProject(s) <replaceable>project_name</replaceable><arg rep="repeat">,<replaceable>project_name</replaceable></arg></arg>
+        <arg>&mdash;delUser(s) <replaceable>user_name</replaceable><arg rep="repeat">,<replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;delMachine(s) <replaceable>machine_name</replaceable><arg rep="repeat">,<replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-a</arg> <replaceable>account_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Adding a user to the list of users that share the account</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchaccount &mdash;addUser dave 1
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 AccountUser
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountDeposit">
+      <title>Making Deposits</title>
+      <para>
+<command>gdeposit</command> is used to deposit time-bounded resource credits into accounts resulting in the creation or enlargement of an allocation. (See <link linkend="Allocations">Allocations</link> for managing allocations). The start time will default to -infinity and the end time will default to infinity if not specified. Accounts must first be created using <link linkend=AccountCreate><command>gmkaccount</command></link> (unless auto-generated).
+      </para>
+      <cmdsynopsis>
+        <command>gdeposit</command>
+        <group choice="req">
+          <arg choice="plain">-a <replaceable>account_id</replaceable></arg>
+          <arg choice="plain">-p <replaceable>project_name</replaceable></arg>
+        </group>
+        <arg>-i <replaceable>allocation_id</replaceable></arg>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg><arg>-z</arg> <replaceable>amount</replaceable></arg>
+        <arg>-L <replaceable>credit_limit</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Making a deposit</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2003-10-01 -e 2004-10-01 -z 360000000 -a 1
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 360000000 credits into account 1
+        </screen>
+      </example>
+      <example>
+        <title>Making a deposit "into" a project</title>
+        <para>
+If a project has a single account then a deposit can be made against the project.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2003-10-01 -e 2004-10-01 -z 360000000 -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 360000000 credits into account 2
+        </screen>
+      </example>
+      <example>
+        <title>Creating a credit allocation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -L 10000000000 -a 3
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 0 credits into account 3
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountBalance">
+      <title>Querying The Balance</title>
+      <para>
+To display balance information, use the command <command>gbalance</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gbalance</command>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>&mdash;total</arg>
+        <arg>&mdash;available</arg>
+        <arg>&mdash;raw</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Querying the project balance detail broken down by account</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Id Name       Amount    Reserved Balance   CreditLimit   Available
+-- ---------- --------- -------- --------- ------------- -------------
+1  Chemistry  360000000 0        360000000 0             360000000
+2  Cornucopia 0         0        0         1000000000000 1000000000000
+        </screen>
+      </example>
+      <example>
+        <title>Querying the total balance for a particular user in a particular project on a particular machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u bob -m colony -p chemistry &mdash;total
+          </userinput>
+        </para>
+        <screen>
+Balance   
+--------- 
+360000000 
+The account balance is 360000000 credits
+        </screen>
+      </example>
+      <example>
+        <title>List the projects and available balance amy can charge to</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy &mdash;show Project,Balance
+          </userinput>
+        </para>
+        <screen>
+Project   Balance   
+--------- --------- 
+biology   360000000 
+chemistry 360000000 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="PersonalBalance">
+      <title>Personal Balance</title>
+      <para>
+The <command>mybalance</command> has been provided as a wrapper script to show users their personal balance. It provides a list of balances for the projects that they can charge to:
+      </para>
+      <cmdsynopsis>
+        <command>gbalance</command>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+      </cmdsynopsis>
+      <example>
+        <title>List my (project) balances</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+mybalance
+          </userinput>
+        </para>
+        <screen>
+Project   Balance      
+--------- -------------
+biology       324817276
+chemistry 9999979350400
+        </screen>
+      </example>
+      <example>
+        <title>List my balance in (Processor) hours</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+mybalance -h
+          </userinput>
+        </para>
+        <screen>
+Project   Balance      
+--------- -------------
+biology        90227.02
+chemistry 2777772041.77
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountWithdraw">
+      <title>Making Withdrawals</title>
+      <para>
+To issue a withdrawal, use the command <command>gwithdraw</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gwithdraw</command>
+        <group choice="req">
+          <arg choice="plain">-a <replaceable>account_id</replaceable></arg>
+          <arg choice="plain">-p <replaceable>project_name</replaceable></arg>
+        </group>
+        <arg>-i <replaceable>allocation_id</replaceable></arg>
+        <arg choice="req"><arg>-z</arg> <replaceable>amount</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Making a withdrawal</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gwithdraw -z 12800 -a 1 -d "Grid Tax"
+          </userinput>
+        </para>
+        <screen>
+Successfully withdrew 12800 credits from account 1
+        </screen>
+      </example>
+      <example>
+        <title>Making a withdrawal "from" a project</title>
+        <para>
+If a project has a single account then a withdrawal can be made against the project.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gwithdraw -z 12800 -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully withdrew 12800 credits from account 2
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountTransfer">
+      <title>Making Transfers</title>
+      <para>
+To issue a transfer between accounts, use the command <command>gtransfer</command>. If the allocation id is specified, then only credits associated with the specified allocation will be transferred, otherwise, only active credits will be transferred. Account transfers preserve the allocation time periods associated with the resource credits from the source to the destination accounts. If a one-to-one mapping exists between project and account, then the fromProject/toProject options may be used in place of the fromAccount/toAccount options.
+      </para>
+      <cmdsynopsis>
+        <command>gtransfer</command>
+        <group choice="req">
+          <arg choice="plain">&mdash;fromAccount <replaceable>source_account_id</replaceable></arg>
+          <arg choice="plain">&mdash;fromProject <replaceable>source_project_name</replaceable></arg>
+          <arg choice="plain">-i <replaceable>allocation_id</replaceable></arg>
+        </group>
+        <group choice="req">
+          <arg choice="plain">&mdash;toAccount <replaceable>destination_account_id</replaceable></arg>
+          <arg choice="plain">&mdash;toProject <replaceable>destination_project_name</replaceable></arg>
+        </group>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-z</arg> <replaceable>amount</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Transferring credits between two accounts</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gtransfer --fromAccount 1 --toAccount 2 10000
+          </userinput>
+        </para>
+        <screen>
+Successfully transferred 10000 credits from account 1 to account 2
+        </screen>
+      </example>
+      <example>
+        <title>Transferring credits between two single-account projects</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gtransfer --fromProject biology --toProject chemistry 10000
+          </userinput>
+        </para>
+        <screen>
+Successfully transferred 10000 credits from account 1 to account 2
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountStatement">
+      <title>Obtaining an Account Statement</title>
+      <para>
+To generate an account statement, use the command <command>gstatement</command>. For a specified time frame it displays the beginning and ending balances as well as the total credits and debits to the account over that period. This is followed by an itemized report of the debits and credits. Summaries of the debits and credits will be displayed instead of the itemized report if the &mdash;summarize option is specified. If a project, user or machine is specified instead of an account, then the statement will consist of information merged from all accounts valid toward the specified entities.
+      </para>
+      <cmdsynopsis>
+        <command>gstatement</command>
+        <arg><arg>-a</arg> <replaceable>account_id</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>&mdash;summarize</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Generating an account statement for the third quarter of 2006</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gstatement -a 2 -s 2006-07-01 -e 2006-10-01
+          </userinput>
+        </para>
+        <screen>
+################################################################################
+#
+# Statement for account 2 (chemistry) generated on Tue Aug  3 16:06:15 2005.
+#
+# Reporting account activity from -infinity to now.
+#
+################################################################################
+
+Beginning Balance:                    0
+------------------ --------------------
+Total Credits:                360019744
+Total Debits:                    -19744
+------------------ --------------------
+Ending Balance:               360000000
+
+############################### Credit Detail ##################################
+
+Object  Action  JobId      Amount    Time
+------- ------- ---------- --------- ----------------------
+Account Deposit            360000000 2005-08-03 16:01:15-07
+Job     Refund  PBS.1234.0 19744     2005-08-03 16:04:02-07
+
+############################### Debit Detail ###################################
+
+Object     Action     JobId      Project   User Machine Amount Time                
+---------- ---------- ---------- --------- ---- ------- ------ ---------------------- 
+Job        Charge     PBS.1234.0 chemistry amy  colony  -19744 2005-08-03 16:03:39-07
+
+
+############################### End of Report ##################################
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AccountDelete">
+      <title>Deleting Accounts</title>
+      <para>
+To delete an account, use the command <command>grmaccount</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmaccount</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-a</arg> <replaceable>account_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting an account</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmaccount 2
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Account
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

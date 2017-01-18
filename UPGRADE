@@ -1,0 +1,82 @@
+                                 UPGRADE NOTES
+
+Gold 2.2.0.5
+
+   Copyright (c) 2010 Adaptive Computing
+
+     ----------------------------------------------------------------------
+
+   Gold uses the standard configure, make and make install steps for
+   upgrades. This document assumes that you are updating Gold to a new
+   maintenance or fix level within the same major and minor release.
+   Instructions for migrating to a new minor or major release can be found in
+   the release notes (see RELEASENOTES or doc/releasenotes.pdf). This
+   document provides a number of sample steps referenced to a particular
+   installation on a Linux platform using the bash shell. These steps
+   indicate the userid in brackets performing the step. The exact commands to
+   be performed and the user that issues them will vary based on the
+   platform, shell, installation preferences, etc.
+
+     ----------------------------------------------------------------------
+
+Preparation
+
+   To build and update Gold, you first need to unpack the tar archive and
+   change directory into the top directory of the distribution.
+
+   [gold]$ cd ~/src
+
+   [gold]$ tar -zxvf gold-2.2.0.5.tar.gz
+
+   [gold]$ cd gold-2.2.0.5
+
+     ----------------------------------------------------------------------
+
+Configuration
+
+   To configure Gold, run the "configure" script provided with the
+   distribution with the desired options.
+
+   [gold]$ ./configure
+
+     ----------------------------------------------------------------------
+
+Compilation
+
+   To compile the program, type make:
+
+   [gold]$ make
+
+   If you would like to install the web gui, type make gui:
+
+   [gold]$ make gui
+
+     ----------------------------------------------------------------------
+
+Server Shutdown
+
+   Stop the server daemon.
+
+   [gold]$ goldd -k
+
+     ----------------------------------------------------------------------
+
+Installation
+
+   Use `make install' to install Gold. You may need to do this as root if any
+   of the installation or log directories do not already have write
+   permission as the gold admin user.
+
+   [root]# make install
+
+   If you would like to install the web gui, type make install-gui (as root).
+
+   [root]# make install-gui
+
+     ----------------------------------------------------------------------
+
+Server Startup
+
+   Start the server daemon back up.
+
+   [gold]$ goldd

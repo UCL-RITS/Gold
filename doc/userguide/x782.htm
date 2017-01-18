@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Define Accounts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting More Advanced"
+HREF="c750.htm"><LINK
+REL="PREVIOUS"
+TITLE="Getting More Advanced"
+HREF="c750.htm"><LINK
+REL="NEXT"
+TITLE="Make Deposits"
+HREF="x809.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c750.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Getting More Advanced</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x809.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ACCOUNTDEFINE"
+>Define Accounts</A
+></H1
+><P
+>Next, you can create your accounts (see <A
+HREF="c1548.htm#ACCOUNTCREATE"
+>Creating Accounts</A
+>). Think of your accounts as bank accounts to which you can associate the users, projects and machines that can use them.
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN786"
+></A
+><P
+><B
+>Example 5-2. We will create some accounts for use by the biology and chemistry projects.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p biology -u MEMBERS -m MEMBERS -n "biology"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created Account 1
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p chemistry -u MEMBERS -m colony -n "chemistry on colony"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created Account 2
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p chemistry -u amy -n "chemistry for amy"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created Account 3
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p chemistry -u MEMBERS,-amy -n "chemistry not amy"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created Account 4
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsaccount
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name                Amount Projects  Users        Machines Description    
+-- ------------------- ------ --------- ------------ -------- ----------- 
+1  biology                    biology   MEMBERS      MEMBERS  
+2  chemistry on colony        chemistry MEMBERS      colony                  
+3  chemistry for amy          chemistry amy          ANY                     
+4  chemistry not amy          chemistry MEMBERS,-amy ANY                     
+        </PRE
+><P
+>So what we have here is:
+1) a single account for biology available to all of its defined members and able to be used only on the blue machine (since blue is its only member machine)
+2) an account usable toward the chemistry project on the colony machine only
+3) an account usable anywhere for chemistry by amy only
+4) an account usable anywhere for chemistry by any member except for amy
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c750.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x809.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Getting More Advanced</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c750.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Make Deposits</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

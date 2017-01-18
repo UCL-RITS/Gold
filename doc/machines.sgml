@@ -1,0 +1,164 @@
+  <chapter id="Machines">
+    <title>Managing Machines</title>
+    <para>
+A machine is a resource that can run jobs such as a cluster or an SMP box. Machine properties include the description and whether it is active. A machine can be created, queried, modified and deleted.
+    </para>
+
+    <sect1 id="MachineCreate">
+      <title>Creating Machines</title>
+      <para>
+To create a new machine, use the command <command>gmkmachine</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gmkmachine</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>&mdash;arch <replaceable>architecture</replaceable></arg>
+        <arg>&mdash;opsys <replaceable>operating_system</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-m</arg> <replaceable>machine_name</replaceable></arg>
+      </cmdsynopsis>
+      <note>
+        <para>
+It is possible to have machines be created automatically when first encountered in a job function (charge, reserve or quote) by setting the machine.autogen configuration parameter to true (see <link linkend="ServerConfig">Server Configuration</link>). However, bear in mind that machines must be defined in order to assign them as members of a project. It is also possible to establish a system default machine to be used in job functions (charge reserve, quote) when the machine is unspecified (machine.default parameter). 
+        </para>
+      </note>
+      <example>
+        <title>Creating a machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkmachine -d "Linux Cluster" colony
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Machine
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="MachineQuery">
+      <title>Querying Machines</title>
+      <para>
+To display machine information, use the command <command>glsmachine</command>:
+      </para>
+        <cmdsynopsis>
+          <command>glsmachine</command>
+          <group>
+            <arg>-A</arg>
+            <arg>-I</arg>
+          </group>
+          <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable>[,<replaceable>attribute_name</replaceable>...]</arg>
+          <arg>&mdash;showHidden</arg>
+          <arg>&mdash;showSpecial</arg>
+          <arg>&mdash;raw</arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <arg choice="opt"><arg>-m</arg> <replaceable>machine_pattern</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Listing all inactive machine names and descriptions</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsmachine -I &mdash;show Name,Description
+          </userinput>
+        </para>
+        <screen>
+Name  Description              
+----- ------------------------ 
+inert This machine is unusable
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="MachineModify">
+      <title>Modifying Machines</title>
+      <para>
+To modify a machine, use the command <command>gchmachine</command>:
+      </para>
+        <cmdsynopsis>
+          <command>gchmachine</command>
+          <group>
+            <arg>-A</arg>
+            <arg>-I</arg>
+          </group>
+          <arg>&mdash;arch <replaceable>architecture</replaceable></arg>
+          <arg>&mdash;opsys <replaceable>operating_system</replaceable></arg>
+          <arg>-d <replaceable>description</replaceable></arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <group>
+            <arg>-v</arg>
+            <arg>&mdash;verbose</arg>
+          </group>
+          <arg choice="req"><arg>-m</arg> <replaceable>machine_name</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Deactivating a machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchmachine -I colony
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Machine
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="MachineDelete">
+      <title>Deleting Machines</title>
+      <para>
+To delete a machine, use the command <command>grmmachine</command>:
+      </para>
+        <cmdsynopsis>
+          <command>grmmachine</command>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <group>
+            <arg>-v</arg>
+            <arg>&mdash;verbose</arg>
+          </group>
+          <arg choice="req"><arg>-m</arg> <replaceable>machine_name</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Deleting a machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmmachine colony
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Machine
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

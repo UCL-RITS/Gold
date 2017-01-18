@@ -1,0 +1,10 @@
+# Setup GOLD PATH
+if [ ! `echo $PATH | /bin/grep "gold/sbin"` ]; then
+  export PATH=$PATH:@prefix@/sbin
+fi
+if [ ! `echo $PATH | /bin/grep "gold/bin"` ]; then
+  export PATH=$PATH:@prefix@/bin
+fi
+
+# Setup Gold HOME
+export GOLD_HOME=@prefix@

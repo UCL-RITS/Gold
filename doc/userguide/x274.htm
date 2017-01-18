@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Configuration</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="PREVIOUS"
+TITLE="Preparation"
+HREF="x253.htm"><LINK
+REL="NEXT"
+TITLE="Compilation"
+HREF="x285.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x253.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x285.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CONFIGURE"
+>Configuration</A
+></H1
+><P
+>To configure Gold, run the "configure" script provided with the distribution.
+      </P
+><P
+CLASS="LITERALLAYOUT"
+>To&nbsp;see&nbsp;the&nbsp;list&nbsp;of&nbsp;options:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;-h,&nbsp;--help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display&nbsp;the&nbsp;list&nbsp;of&nbsp;options<br>
+<br>
+Use&nbsp;prefix&nbsp;to&nbsp;tell&nbsp;it&nbsp;where&nbsp;Gold&nbsp;should&nbsp;be&nbsp;installed&nbsp;(defaults&nbsp;to&nbsp;/opt/gold):<br>
+<br>
+&nbsp;&nbsp;--prefix=PREFIX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;install&nbsp;architecture-independent&nbsp;files&nbsp;in&nbsp;PREFIX&nbsp;[/opt/moab]<br>
+<br>
+Use&nbsp;with-db&nbsp;to&nbsp;specify&nbsp;the&nbsp;database&nbsp;you&nbsp;intend&nbsp;to&nbsp;use&nbsp;with&nbsp;Gold.&nbsp;Currently&nbsp;only&nbsp;PostgreSQL&nbsp;(Pg),&nbsp;MySQL&nbsp;(mysql)&nbsp;and&nbsp;SQLite&nbsp;(SQLite)&nbsp;have&nbsp;been&nbsp;tested&nbsp;for&nbsp;use&nbsp;with&nbsp;Gold.&nbsp;Postgres&nbsp;and&nbsp;MySQL&nbsp;are&nbsp;external&nbsp;databases&nbsp;which&nbsp;runs&nbsp;in&nbsp;a&nbsp;distinct&nbsp;(possibly&nbsp;remote)&nbsp;process&nbsp;and&nbsp;communicates&nbsp;over&nbsp;sockets&nbsp;while&nbsp;SQLite&nbsp;is&nbsp;an&nbsp;embedded&nbsp;database&nbsp;bundled&nbsp;with&nbsp;Gold&nbsp;with&nbsp;SQL&nbsp;queries&nbsp;being&nbsp;performed&nbsp;within&nbsp;the&nbsp;goldd&nbsp;process&nbsp;itself&nbsp;through&nbsp;library&nbsp;calls.&nbsp;Initial&nbsp;testing&nbsp;has&nbsp;shown&nbsp;SQLite&nbsp;to&nbsp;be&nbsp;at&nbsp;least&nbsp;as&nbsp;fast&nbsp;as&nbsp;PostgreSQL&nbsp;for&nbsp;small&nbsp;installations.&nbsp;The&nbsp;default&nbsp;is&nbsp;to&nbsp;use&nbsp;PostgreSQL.<br>
+<br>
+&nbsp;&nbsp;--with-db=DATABASE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;database&nbsp;to&nbsp;be&nbsp;used&nbsp;{&nbsp;Pg,&nbsp;mysql,&nbsp;SQLite&nbsp;}&nbsp;[Pg]<br>
+<br>
+Use&nbsp;with-user&nbsp;to&nbsp;specify&nbsp;the&nbsp;userid&nbsp;that&nbsp;gold&nbsp;will&nbsp;run&nbsp;under&nbsp;(defaults&nbsp;to&nbsp;the<br>
+user&nbsp;running&nbsp;the&nbsp;configure&nbsp;command).<br>
+<br>
+&nbsp;&nbsp;--with-user=USER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user&nbsp;id&nbsp;under&nbsp;which&nbsp;the&nbsp;gold&nbsp;server&nbsp;will&nbsp;run<br>
+<br>
+Use&nbsp;with-perl-libs&nbsp;to&nbsp;indicate&nbsp;whether&nbsp;you&nbsp;want&nbsp;to&nbsp;install&nbsp;the&nbsp;required&nbsp;perl&nbsp;modules&nbsp;in&nbsp;a&nbsp;local&nbsp;gold&nbsp;directory&nbsp;(PREFIX/lib)&nbsp;or&nbsp;in&nbsp;the&nbsp;default&nbsp;system&nbsp;site-perl&nbsp;directory&nbsp;(triggered&nbsp;by&nbsp;running&nbsp;make&nbsp;deps).<br>
+<br>
+&nbsp;&nbsp;--with-perl-libs=local|site&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;install&nbsp;policy&nbsp;for&nbsp;prerequisite&nbsp;perl&nbsp;libs&nbsp;[local]<br>
+<br>
+Use&nbsp;with-gold-libs&nbsp;to&nbsp;indicate&nbsp;whether&nbsp;you&nbsp;want&nbsp;to&nbsp;install&nbsp;the&nbsp;Gold&nbsp;modules&nbsp;in&nbsp;a&nbsp;local&nbsp;gold&nbsp;directory&nbsp;(PREFIX/lib)&nbsp;or&nbsp;in&nbsp;the&nbsp;default&nbsp;system&nbsp;site-perl&nbsp;directory&nbsp;(defaults&nbsp;to&nbsp;local).<br>
+<br>
+&nbsp;&nbsp;--with-gold-libs=local|site&nbsp;&nbsp;install&nbsp;policy&nbsp;for&nbsp;Gold&nbsp;perl&nbsp;libs&nbsp;[local]<br>
+<br>
+If&nbsp;you&nbsp;will&nbsp;intend&nbsp;to&nbsp;use&nbsp;the&nbsp;Gold&nbsp;web&nbsp;GUI,&nbsp;use&nbsp;with-cgi-bin&nbsp;to&nbsp;specify&nbsp;the&nbsp;directory&nbsp;where&nbsp;you&nbsp;want&nbsp;the&nbsp;gold&nbsp;CGI&nbsp;files&nbsp;to&nbsp;reside&nbsp;(defaults&nbsp;to&nbsp;/var/www/cgi-bin/gold).<br>
+<br>
+&nbsp;&nbsp;--with-cgi-bin=DIR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directory&nbsp;to&nbsp;install&nbsp;cgi-bin&nbsp;files&nbsp;if&nbsp;using&nbsp;web&nbsp;gui&nbsp;[/var/www/cgi-bin/gold]<br>
+<br>
+The&nbsp;PERL&nbsp;environment&nbsp;variable&nbsp;helps&nbsp;the&nbsp;install&nbsp;process&nbsp;find&nbsp;the&nbsp;desired&nbsp;(5.6)&nbsp;perl&nbsp;interpreter&nbsp;if&nbsp;it&nbsp;is&nbsp;not&nbsp;in&nbsp;your&nbsp;path&nbsp;or&nbsp;not&nbsp;found&nbsp;first&nbsp;in&nbsp;a&nbsp;path&nbsp;search.<br>
+<br>
+&nbsp;&nbsp;PERL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;full&nbsp;pathname&nbsp;of&nbsp;the&nbsp;Perl&nbsp;interpreter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><P
+>To assume the defaults, just run configure.
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+cd gold-2.2.0.5
+        </KBD
+>
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+./configure
+        </KBD
+>
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x253.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x285.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Preparation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Compilation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

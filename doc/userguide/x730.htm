@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Examine Account Statement</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting Started"
+HREF="c495.htm"><LINK
+REL="PREVIOUS"
+TITLE="List Transactions"
+HREF="x714.htm"><LINK
+REL="NEXT"
+TITLE="Examine Project Usage"
+HREF="x740.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x714.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Getting Started</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x740.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="EXAMINESTATEMENT"
+>Examine Account Statement</A
+></H1
+><P
+>Finally, you can examine the account statement for our activities (see <A
+HREF="x1969.htm"
+>Obtaining an Account Statement</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN734"
+></A
+><P
+><B
+>Example 4-15. We can request an itemized account statement over all time for the chemistry project (account 2)</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gstatement -p chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>################################################################################
+#
+# Statement for account 2 (chemistry) generated on Tue Aug  3 16:06:15 2005.
+#
+# Reporting account activity from -infinity to now.
+#
+################################################################################
+
+Beginning Balance:                    0
+------------------ --------------------
+Total Credits:                360019744
+Total Debits:                    -19744
+------------------ --------------------
+Ending Balance:               360000000
+
+############################### Credit Detail ##################################
+
+Object  Action  JobId      Amount    Time
+------- ------- ---------- --------- ----------------------
+Account Deposit            360000000 2005-08-03 16:01:15-07
+Job     Refund  PBS.1234.0 19744     2005-08-03 16:04:02-07
+
+############################### Debit Detail ###################################
+
+Object     Action     JobId      Project   User Machine Amount Time
+---------- ---------- ---------- --------- ---- ------- ------ ----------------------
+Job        Charge     PBS.1234.0 chemistry amy  colony  -19744 2005-08-03 16:03:39-07
+
+
+############################### End of Report ##################################
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x714.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x740.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>List Transactions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c495.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Examine Project Usage</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

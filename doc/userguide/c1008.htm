@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Users</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Examine Account Statement"
+HREF="x999.htm"><LINK
+REL="NEXT"
+TITLE="Querying Users"
+HREF="x1051.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x999.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1051.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="USERS"
+></A
+>Chapter 6. Managing Users</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c1008.htm#USERCREATE"
+>Creating Users</A
+></DT
+><DT
+><A
+HREF="x1051.htm"
+>Querying Users</A
+></DT
+><DT
+><A
+HREF="x1105.htm"
+>Modifying Users</A
+></DT
+><DT
+><A
+HREF="x1148.htm"
+>Deleting Users</A
+></DT
+></DL
+></DIV
+><P
+>A user is a person authorized to submit jobs to run on a high performance computing resource. User properties include the common name, phone number, email, organization, and default project for that person. A user can be created, queried, modified and deleted.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="USERCREATE"
+>Creating Users</A
+></H1
+><P
+>To create a new user, use the command <B
+CLASS="COMMAND"
+>gmkuser</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gmkuser</B
+>  [-A | -I] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>common_name</I
+></TT
+>] [-F <TT
+CLASS="REPLACEABLE"
+><I
+>phone_number</I
+></TT
+>] [-E <TT
+CLASS="REPLACEABLE"
+><I
+>email_address</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>default_project</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [&mdash;debug] [-? | &mdash;help] [--man] [&mdash;quiet] [-v | &mdash;verbose] {[-u] <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>}</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>It is possible to have users be created automatically when first encountered in a job function (charge, reserve or quote) by setting the user.autogen configuration parameter to true (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>). However, bear in mind that users must be defined in order to assign them as members of a project. It is also possible to establish a system default user to be used in job functions (charge, reserve, quote) when the user is unspecified (user.default parameter).
+        </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1045"
+></A
+><P
+><B
+>Example 6-1. Creating a user</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkuser -n "Smith, Robert F." -E "bob@western.edu" -F "(509) 555-1234" bob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 User
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x999.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1051.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Examine Account Statement</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Users</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

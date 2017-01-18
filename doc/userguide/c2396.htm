@@ -1,0 +1,350 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Jobs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Deleting Quotations"
+HREF="x2364.htm"><LINK
+REL="NEXT"
+TITLE="Querying Jobs"
+HREF="x2468.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2364.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2468.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="JOBS"
+></A
+>Chapter 13. Managing Jobs</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c2396.htm#JOBCREATE"
+>Creating Jobs</A
+></DT
+><DT
+><A
+HREF="x2468.htm"
+>Querying Jobs</A
+></DT
+><DT
+><A
+HREF="x2516.htm"
+>Modifying Jobs</A
+></DT
+><DT
+><A
+HREF="x2585.htm"
+>Deleting Jobs</A
+></DT
+><DT
+><A
+HREF="x2615.htm"
+>Obtaining Job Quotes</A
+></DT
+><DT
+><A
+HREF="x2698.htm"
+>Making Job Reservations</A
+></DT
+><DT
+><A
+HREF="x2771.htm"
+>Charging Jobs</A
+></DT
+><DT
+><A
+HREF="x2850.htm"
+>Issuing Job Refunds</A
+></DT
+></DL
+></DIV
+><P
+>Gold can track the jobs that run on your system, recording the charges and resources used for each job. Typically, a job record is created when the resource manager charges for a job. Job quotes, reservations, charges and refunds can be issued.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="JOBCREATE"
+>Creating Jobs</A
+></H1
+><P
+>In most cases, jobs will be created by the resource management system with the <A
+HREF="x2698.htm"
+>greserve</A
+> or the <A
+HREF="x2771.htm"
+>gcharge</A
+> command.
+      </P
+><P
+>However, it is also possible to create job records using the <B
+CLASS="COMMAND"
+>gmkjob</B
+> command:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gmkjob</B
+>  [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-o <TT
+CLASS="REPLACEABLE"
+><I
+>organization</I
+></TT
+>] [-C <TT
+CLASS="REPLACEABLE"
+><I
+>queue_name</I
+></TT
+>] [-Q <TT
+CLASS="REPLACEABLE"
+><I
+>quality_of_service</I
+></TT
+>] [-P <TT
+CLASS="REPLACEABLE"
+><I
+>processors</I
+></TT
+>] [-N <TT
+CLASS="REPLACEABLE"
+><I
+>nodes</I
+></TT
+>] [-M <TT
+CLASS="REPLACEABLE"
+><I
+>memory</I
+></TT
+>] [-D <TT
+CLASS="REPLACEABLE"
+><I
+>disk</I
+></TT
+>] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>job_name</I
+></TT
+>] [&mdash;application<TT
+CLASS="REPLACEABLE"
+><I
+>application</I
+></TT
+>] [&mdash;executable<TT
+CLASS="REPLACEABLE"
+><I
+>executable</I
+></TT
+>] [-t <TT
+CLASS="REPLACEABLE"
+><I
+>wallclock_duration</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [-T <TT
+CLASS="REPLACEABLE"
+><I
+>job_type</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [-X | &mdash;extension <TT
+CLASS="REPLACEABLE"
+><I
+>property</I
+></TT
+>=<TT
+CLASS="REPLACEABLE"
+><I
+>value</I
+></TT
+>...] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] [-V | &mdash;version] [[-J] <TT
+CLASS="REPLACEABLE"
+><I
+>job_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2462"
+></A
+><P
+><B
+>Example 13-1. Creating a job record</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkjob -u jsmith -p chem -m cluster -X Charge=2468 -P 2 -t 1234 -J PBS.1234.0
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created Job 102
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2364.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2468.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deleting Quotations</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Jobs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

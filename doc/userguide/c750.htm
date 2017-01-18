@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Getting More Advanced</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Examine Project Usage"
+HREF="x740.htm"><LINK
+REL="NEXT"
+TITLE="Define Accounts"
+HREF="x782.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x740.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x782.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="GETTINGMOREADVANCED"
+></A
+>Chapter 5. Getting More Advanced</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c750.htm#ADVANCEDPROJECTDEFINE"
+>Define Projects</A
+></DT
+><DT
+><A
+HREF="x782.htm"
+>Define Accounts</A
+></DT
+><DT
+><A
+HREF="x809.htm"
+>Make Deposits</A
+></DT
+><DT
+><A
+HREF="x859.htm"
+>Check The Balance</A
+></DT
+><DT
+><A
+HREF="x882.htm"
+>Define Charge Rates</A
+></DT
+><DT
+><A
+HREF="x918.htm"
+>Obtain A Guaranteed Job Quote</A
+></DT
+><DT
+><A
+HREF="x937.htm"
+>Make A Quoted Job Reservation</A
+></DT
+><DT
+><A
+HREF="x961.htm"
+>Charge for a Quoted Job</A
+></DT
+><DT
+><A
+HREF="x985.htm"
+>Partially Refund a Job</A
+></DT
+><DT
+><A
+HREF="x999.htm"
+>Examine Account Statement</A
+></DT
+></DL
+></DIV
+><P
+>In the previous chapter, a view of the system was presented that largely ignored the presence of accounts and other advanced features in Gold. This chapter will touch on the additional versatility derived from explicit use of accounts and other advanced features.
+    </P
+><DIV
+CLASS="IMPORTANT"
+><BLOCKQUOTE
+CLASS="IMPORTANT"
+><P
+><B
+>Important: </B
+>You will need to be a Gold System Adminstrator to perform the tasks in this chapter!
+      </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ADVANCEDPROJECTDEFINE"
+>Define Projects</A
+></H1
+><P
+>Let's assume that we have created users and machines as before in the Getting Started chapter (see <A
+HREF="c495.htm#USERDEFINE"
+>Define Users</A
+> and <A
+HREF="x523.htm"
+>Define Machines</A
+>). Again we will create some projects.
+      </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>In these examples we assume that the account.autogen configuration parameter is NOT set to automatically create a default account for each project (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>).
+        </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN763"
+></A
+><P
+><B
+>Example 5-1. Now we will define the projects. This time we will define the project members at the same time.</B
+></P
+><P
+>For the biology project we will define a set of users and a default set of machines for the project. The specified default machine will be honored within accounts associated with this project that specify MEMBERS in the machine list.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkproject -d "Biology Department" -u amy,bob -m blue biology
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Project
+        </PRE
+><P
+>For the chemistry projects we will just define a set of member users.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkproject -d "Chemistry Department" -u amy,bob,dave chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Project
+        </PRE
+><P
+>Let's see what we've got so far in terms of projects.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsproject
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name      Active Users        Machines Description
+--------- ------ ------------ -------- --------------------
+biology   True   amy,bob      blue     Biology Department
+chemistry True   amy,dave,bob          Chemistry Department
+        </PRE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>Note that accounts were not auto-generated this time because the account.autogen feature is set to false.
+        </P
+></BLOCKQUOTE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x740.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x782.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Examine Project Usage</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Define Accounts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

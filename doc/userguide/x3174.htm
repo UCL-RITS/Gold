@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Querying Role Users</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Roles"
+HREF="c3152.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Roles"
+HREF="c3152.htm"><LINK
+REL="NEXT"
+TITLE="Querying Role Actions"
+HREF="x3193.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c3152.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Managing Roles</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3193.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ROLEUSERQUERY"
+>Querying Role Users</A
+></H1
+><P
+>To list what users can perform what roles, use the command <B
+CLASS="COMMAND"
+>goldsh RoleUser Query</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh RoleUser Query</B
+>  [Show:=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;"Field1,Field2,..."&gt;</I
+></TT
+>] [Role==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Role Name&gt;</I
+></TT
+>] [Name==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;User Name&gt;</I
+></TT
+>] [ShowUsage:=True]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3187"
+></A
+><P
+><B
+>Example 16-2. Listing all role users</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh RoleUser Query
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Role         Name 
+------------ ---- 
+SystemAdmin  gold 
+Anonymous    ANY  
+OVERRIDE     ANY  
+Scheduler    maui 
+SystemAdmin  root 
+UserServices amy  
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c3152.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3193.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Roles</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3152.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Role Actions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

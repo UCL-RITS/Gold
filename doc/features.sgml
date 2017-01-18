@@ -1,0 +1,114 @@
+<sect1 id="Features">
+  <title>New Features</title>
+  <para>
+The following is a list of new features added in this release.
+  </para>
+  <itemizedlist>
+    <listitem>
+       <para>
+<guilabel>Additional Charge Rate Types</guilabel> &mdash;
+This release added a new Instance field to the ChargeRate object in support of an expanded set of charge rate types (See the chapter on Managing Charge Rates in the Gold User's Guide for details). The following new charge rate types replace the former types (Resource, Usage, Multiplier, other):
+          <itemizedlist>
+            <listitem>
+              <para>
+<guilabel>VBR</guilabel> &mdash;
+Value Based Resource (formerly Resource) [These charge rates define how much it costs per unit of time to use a consumable resource like processors, memory or a telescope, etc.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>NBR</guilabel> &mdash;
+Name Based Resource [These charge rates define how much it costs per unit of time to use a named resource such as license=matlab, etc.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>VBU</guilabel> &mdash;
+Value Based Usage (formerly Usage) [These charge rates define how much it costs for total resource usage such as cputime, power consumed, generic resources or licenses that are charged flat fees per use, and which will be subject to multiplier charge rates.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>NBU</guilabel> &mdash;
+Name Based Usage [These charge rates define how much it costs to use a named attribute having a flat charge such as feature=black, and which will be subject to multiplier charge rates.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>VBM</guilabel> &mdash;
+Value Based Multiplier (formerly Multiplier) [These are scaled multipliers which apply a multiplicative charge factor based on a numeric scaling factor (such as Discount=.8).]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>NBM</guilabel> &mdash;
+Name Based Multiplier (formerly other) [These are quality based multipliers which apply a multiplicative charge factor based on a named quality of the job such as quality of service, nodetype, queue, user, etc.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>VBF</guilabel> &mdash;
+Value Based Fee [These charge rates define how much to charge for scaled or enumerated fees such as setup fees, shipping charges, etc. which should be added after the multipliers are applied.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>NBF</guilabel> &mdash;
+Name Based Fee [These charge rates define how much it costs to use a named attribute having a flat charge such as feature, etc. which should be added after the multipliers are applied.]
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>&lt;other&gt;</guilabel> &mdash;
+Multi-dimensional Value Based Resource [These charge rates apply a consumable resource cost that varies depending on the value of a separate named job property.]
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+    </listitem>
+    <listitem>
+       <para>
+<guilabel>New commands to import and manipulate job records</guilabel> &mdash;
+Three new command line clients have been added to import and manipulate job records:
+          <itemizedlist>
+            <listitem>
+              <para>
+<guilabel>gmkjob</guilabel> &mdash;
+Import or create a new job record
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>gchjob</guilabel> &mdash;
+Modify a job record
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+<guilabel>grmjob</guilabel> &mdash;
+Delete a job record
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+    </listitem>
+    <listitem>
+       <para>
+<guilabel>Distinction between charge properties and job properties</guilabel> &mdash;
+Prior to Gold 2.2, WallDuration, StartTime, EndTime and Description options specified to gcharge, greserve and gquote were taken as both charge and job properties, making it difficult to support incremental charging. In Gold 2.2, these properties have now been disambiguated. The duration, starttime, endtime and description for the charge will be passed via the standard options (-t, -s, -e, -d) while the same properties for the job (duration, starttime, endtime and description) can be passed in separately using the extension option (i.e. -X WallDuration=1234). See the man pages for gcharge, greserve and gquote for additional details.
+        </para>
+    </listitem>
+    <listitem>
+       <para>
+<guilabel>CostOnly Quote Option</guilabel> &mdash;
+A job quote now supports a new costOnly option which will return a cost estimate without performing balance checking or other qualifying validation. This is useful if you would like to know how much something would cost, but you are not interested in establishing that a user has an allocation, or belongs to a specified project, etc.
+        </para>
+    </listitem>
+    <listitem>
+       <para>
+<guilabel>Improved Client Performance</guilabel> &mdash;
+The gold server was modified to preload the utf8 module (instead of doing so after the fork for each individual client request). This has been shown to give an 10-20% speedup for common scheduler action command invocations. This improvement is also available in the gold 2.1.12.2 fix release.
+        </para>
+    </listitem>
+  </itemizedlist>
+</sect1>

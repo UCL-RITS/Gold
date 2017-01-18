@@ -1,0 +1,271 @@
+  <chapter id="Integration">
+    <title>Integration with the Resource Management System</title>
+
+    <sect1 id="Accounting">
+      <title>Dynamic versus Delayed Accounting</title>
+
+      <sect2 id="DelayedAccounting">
+        <title>Delayed Accounting</title>
+        <para>
+In the absence of a dynamic system, some sites enforce allocations by periodically (weekly or nightly) parsing resource manager job logs and then applying debits against the appropriate project accounts. Although Gold can easily support this type of system by the use of the qcharge command in post-processing scripts, this approach will allow a user or project to use resources significantly beyond their designated allocation and generally suffers from stale accounting information. 
+        </para>
+      </sect2>
+
+      <sect2 id="DynamicAccounting">
+        <title>Dynamic Accounting</title>
+        <para>
+Gold's design allows it to interact dynamically with your resource management system. Charges for resource utilization can be made immediately when the job finishes (or even incrementally throughout the job).  Additionally, reservations can be issued at the start of a job to place a hold against the user's account, thereby ensuring that a job will only start if it has sufficient reserves to complete. The remainder of this document will describe the interactions for dynamic accounting. 
+        </para>
+      </sect2>
+
+    </sect1>
+
+    <sect1 id="InteractionPoints">
+      <title>Interaction Points</title>
+
+      <sect2 id="SubmissionTime">
+        <title>Job Quotation @ Job Submission Time [Optional &mdash; Recommended]</title>
+        <para>
+When a job is submitted to a grid scheduler or resource broker, it may be useful to determine how much it will cost to run on a particular resource by requesting a job quote. If the quote succeeds, it will return a quote id along with the quoted amount for the job. This quote id may be used later to guarantee that the same charge rates used to form the quote will also be used in the final job charge calculation.
+        </para>
+        <para>
+Even when a job is exclusively scheduled locally, it is useful to obtain a quote at the time of submission to the local resource manager to ensure the user has sufficient funds to run the job and that it meets the access policies necessary for the charge to succeed. A warning can be issued if funds are low or the job might be rejected with an informative message in the case of insufficient funds or any other problems with the account. Without this interaction, the job might wait in the queue for days only to fail when it tries to start.
+        </para>
+        <para>
+To make a job quotation with Gold at this phase requires that:
+          <itemizedlist> 
+            <listitem>
+              <para>
+the grid scheduler has built-in Gold allocation manager support {Silver}, or
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+the resource manager supports a submit filter {LoadLeveler(SUBMIT_FILTER), LSF(esub)}, or
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+a wrapper could be created for the submit command {PBS(qsub)}.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+
+      <sect2 id="StartTime">
+        <title>Job Reservation @ Job Start Time [Optional &mdash; Highly Recommended]</title>
+        <para>
+Just before a job starts, a hold (reservation) is made against the appropriate account(s), temporarily reducing the user's available balance by an amount based on the resources requested and the estimated wallclock limit. If this step is ommitted, it would be possible for users to start more jobs than they have funds to support.
+        </para>
+        <para>
+If the reservation succeeds, it will return a message indicating the amount reserved for the job. In the case where there are insufficient resources to run the job or some other problem with the reservation, the command will fail with an informative message. Depending on site policy, this may or may not prevent the job from starting. 
+        </para>
+        <para>
+To make a job reservation with Gold at this phase requires that:
+          <itemizedlist> 
+            <listitem>
+              <para>
+the scheduler or resource manager has built-in Gold allocation manager support {Maui(AMCFG)}, or
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+the resource manager is able to run a script at job start time {LoadLeveler(prolog), PBS(prologue), LSF(pre_exec)}.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+
+      <sect2 id="EndTime">
+        <title>Job Charge @ Job End Time [Required]</title>
+        <para>
+When a job ends, a charge is made to the user's account(s). Any associated reservations are automatically removed as a side-effect. Depending on site policy, a charge can be elicited only in the case of a successful completion, or for all or specific failure cases as well. Ideally, this step will occur immediately after the job completes (dynamic accounting). This has the added benefit that job run times can often be reconstructed from Gold job reservation and charge timestamps in case the resource management job accounting data becomes corrupt. 
+        </para>
+        <para>
+If the charge succeeds, it will return a message indicating the amount charged for the job.
+        </para>
+        <para>
+To make a job charge with Gold at this phase requires that:
+          <itemizedlist> 
+            <listitem>
+              <para>
+the scheduler or resource manager has built-in Gold allocation manager support {Maui(AMCFG)}, or
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+the resource manager is able to run a script at job start time {LoadLeveler(epilog), PBS(epilogue), LSF(post_exec)}, or
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+the resource manament system supports some kind of feedback or notification machanism occurring at the end of a job (an email can be parsed by a mail filter).
+              </para>
+              </listitem>
+          </itemizedlist>
+        </para>
+      </sect2>
+
+    </sect1>
+
+    <sect1 id="InteractionMethods">
+      <title>Methods of interacting with Gold</title>
+      <para>
+There are essentially six ways of programatically interacting with Gold. Let's consider a simple job charge in each of the different ways.
+      </para>
+
+      <sect2 id="RMInterface">
+        <title>Configuring an application that already has hooks for Gold</title>
+        <para>
+The easiest way to use Gold is to use a resource management system with built-in support for Gold. For example, the Maui Scheduler and Silver Grid Scheduler can be configured to directly interact with Gold to perform the quotes, reservations and charges by setting the appropriate parameters in their config files.
+        </para>
+        <example>
+          <title>Configuring Maui to use Gold</title>
+          <para>
+Add an appropriate AMCFG line into maui.cfg to tell Maui how to talk to Gold
+          </para>
+          <para>
+            <userinput><prompt>$ </prompt>
+vi /usr/local/maui/maui.cfg
+            </userinput>
+          </para>
+          <screen>
+AMCFG[bank] TYPE=GOLD HOST=control_node1 PORT=7112 SOCKETPROTOCOL=HTTP WIREPROTOCOL=XML CHARGEPOLICY=DEBITALLWC JOBFAILUREACTION=IGNORE TIMEOUT=15
+          </screen>
+          <para>
+Add a CLIENTCFG line into maui-private.cfg to specify the shared secret key. This secret key will be the same secret key specified in the "make auth_key" step.
+          </para>
+          <para>
+            <userinput><prompt>$ </prompt>
+vi /usr/local/maui/maui-private.cfg
+            </userinput>
+          </para>
+          <screen>
+CLIENTCFG[AM:bank] KEY=mysecret AUTHTYPE=HMAC64
+          </screen>
+          <para>
+Gold will need to allow the the user id that maui runs under to perform scheduler related commands (Job Charge, Reserve, Quote, etc).
+          </para>
+          <para>
+            <userinput><prompt>$ </prompt>
+gmkuser -d "Maui Scheduler" maui
+            </userinput>
+          </para>
+          <screen>
+Successfully created 1 User
+          </screen>
+          <para>
+            <userinput><prompt>$ </prompt>
+goldsh RoleUser Create Role=Scheduler Name=maui
+            </userinput>
+          </para>
+          <screen>
+Role      Name
+--------- ----
+Scheduler maui
+Successfully created 1 RoleUser
+          </screen>
+          
+        </example>
+      </sect2>
+    
+      <sect2 id="CommandInterface">
+        <title>Using the appropriate command-line client</title>
+        <para>
+From inside a script, or by invoking a system command, you can use a command line client (one of the "g" commands in gold's bin directory).
+        </para>
+        <example>
+          <title>To issue a charge at the completion of a job, you would use gcharge:</title>
+          <para>
+            <userinput>
+gcharge -J PBS.1234.0 -p chemistry -u amy -m colony -P 2 -t 1234 -X WallDuration=1234
+            </userinput>
+          </para>
+        </example>
+      </sect2>
+    
+      <sect2 id="ControlInterface">
+        <title>Using the Gold control program</title>
+        <para>
+The Gold control program, goldsh, will issue a charge for a job expressed in xml (SSS Job Object).
+        </para>
+        <example>
+          <title>To issue a charge you must invoke the Charge action on the Job object:</title>
+          <screen>
+goldsh Data:="&lt;Job&gt;&lt;JobId&gt;PBS.1234.0&lt;/JobId&gt;&lt;ProjectId&gt;chemistry&lt;/ProjectId&gt;
+&lt;UserId&gt;amy&lt;/UserId&gt;&lt;MachineName&gt;colony&lt;/MachineName&gt;
+&lt;Processors&gt;2&lt;/Processors&gt;&lt;WallDuration&gt;1234&lt;/WallDuration&gt;"
+          </screen>
+        </example>
+      </sect2>
+
+      <sect2 id="PerlInterface">
+        <title>Use the Perl API</title>
+        <para>
+If your resource management system is written in Perl or if it can invoke a Perl script, you can access the full Gold functionality via the Perl API.
+        </para>
+        <example>
+          <title>To make a charge via this interface you might do something like:</title>
+          <programlisting>
+use Gold;
+
+my $request = new Gold::Request(object => "Job", action => "Charge");
+my $job = new Gold::Datum("Job");
+$job->setValue("JobId", "PBS.1234.0");
+$job->setValue("ProjectId", "chemistry");
+$job->setValue("UserId", "amy");
+$job->setValue("MachineName", "colony");
+$job->setValue("Processors", "2");
+$job->setValue("WallDuration", "1234");
+$request->setDatum($job);
+my $response = $request->getResponse();
+print $response->getStatus(), ": ", $response->getMessage(), "\n";
+          </programlisting>
+        </example>
+      </sect2>
+    
+      <sect2 id="SSSRMAPInterface">
+        <title>Communicating via the SSSRMAP Protocol</title>
+        <para>
+Finally, it is possible to interact with Gold by directly using the SSSRMAP Wire Protocol and Message Format over the network (see <ulink url="http://www.clusterresources.com/products/gold/docs/"><citetitle>SSS Resource Management and Accounting Documentation</citetitle></ulink>). This will entail building the request body in XML, appending an XML digital signature, combining these in an XML envelope framed in an HTTP POST, sending it to the server, and parsing the similarly formed response. The Maui Scheduler communicates with Gold via this method. 
+        </para>
+        <example>
+          <title>The message might look something like:</title>
+          <literallayout>
+POST /SSSRMAP HTTP/1.1
+Content-Type: text/xml; charset="utf-8"
+Transfer-Encoding: chunked
+
+190
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Envelope&gt;
+  &lt;Body actor="scottmo" chunking="True"&gt;
+    &lt;Request action="Charge" object="Job"&gt;
+      &lt;Data&gt;
+        &lt;Job&gt;
+          &lt;JobId&gt;PBS.1234.0&lt;/JobId&gt;
+          &lt;ProjectId&gt;chemistry&lt;/ProjectId&gt;
+          &lt;UserId&gt;amyh&lt;/UserId&gt;
+          &lt;MachineName&gt;colony&lt;/MachineName&gt;
+          &lt;Processors&gt;2&lt;/Processors&gt;
+          &lt;WallDuration&gt;1234&lt;/WallDuration&gt;
+        &lt;/Job&gt;
+      &lt;/Data&gt;
+    &lt;/Request&gt;
+  &lt;//Body&gt;
+  &lt;Signature&gt;
+    &lt;DigestValue&gt;azu4obZswzBt89OgATukBeLyt6Y=&lt;/DigestValue&gt;
+    &lt;SignatureValue&gt;YXE/C08XX3RX4PMU1bWju+5/E5M=&lt;/SignatureValue&gt;
+    &lt;SecurityToken type="Symmetric"&gt;&lt;/SecurityToken&gt;
+  &lt;/Signature&gt;
+&lt;/Envelope&gt;
+0
+          </literallayout>
+        </example>
+      </sect2>
+    
+    </sect1>
+
+</chapter>

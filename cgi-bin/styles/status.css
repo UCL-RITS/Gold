@@ -1,0 +1,38 @@
+@import "gold.css";
+                                                                        
+body {
+    background-color: #EFEBAB;
+    background-image: url(/images/status_background.gif);
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+}
+                                                                        
+table#results {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    margin: auto;
+    margin-top: 1em;
+}
+                                                                        
+table#results td {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    font-size: 70%;
+    padding: 4px;
+}
+                                                                        
+table#results tbody td {
+    padding: 6px;
+    background-color: white;
+}
+                                                                                
+table#results thead td {
+    background-color: #E6E396;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    white-space: nowrap;
+    padding: 6px;
+    border: 2px outset;
+}
+

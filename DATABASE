@@ -1,0 +1,52 @@
+Selecting a Database:
+=====================
+
+Gold makes use of a database for transactions and data persistence.
+Three databases have been tested for use with Gold thus far: PostgreSQL,
+MySQL and SQLite. Postgres and MySQL are external databases which run in a
+distinct (possibly remote) process and communicate over sockets. These
+databases must be separately installed, configured and started.
+SQLite is an embedded database bundled with the Gold source code with SQL
+queries being performed within the goldd process itself through library calls.
+The following information may help you make a choice of databases to use.
+    
+  o PostgreSQL
+    ----------
+
+    PostgreSQL is an open source database. Gold requires Postgres 7.2 or higher
+    (7.1 can probably be used but generates warnings from the DBD::Pg module).
+    The PostgreSQL database has been thoroughly tested in production with Gold
+    and all Gold functionality is available since it was developed using the
+    PostgreSQL database. Postgres supports multiple connections so Gold is
+    configured to be a forking server when using PostgreSQL.
+
+  o MySQL
+    -----
+
+    MySQL is an open source database. Gold requires MySQL 4.0.6 or higher.
+    (Prior versions did not support UNION which is used by Gold in time travel.
+    It is possible to use 4.0 with a minor code tweak to the OFFSET line in
+    Database.pm)
+
+    MySQL 4.1 is required in order to have support for the (undocumented)
+    Transaction Undo and Redo functionality since subqueries were not supported
+    until this version.
+
+  o SQLite
+    ------
+
+    SQLite is an open source embedded database bundled with Gold. It does
+    not require any configuration and reads and writes from a file.
+    Initial testing has shown Gold to perform at least as fast as PostgreSQL
+    for small databases. 
+
+    Due to the lack of "ALTER TABLE" functionality, Gold objects cannot be
+    customized after installation. It appears that this functionality is likely
+    to be forthcoming in a future release of SQLite.
+
+    Since SQLite supports only a single connection, Gold is not configured to
+    be a forking server when using SQLite. This should probably not be an issue
+    for small to medium sized clusters.
+
+    Due to a lack of support for multi-column IN clauses, the (undocumented)
+    Transaction Undo and Redo functions are not available.

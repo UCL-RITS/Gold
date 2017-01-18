@@ -1,0 +1,456 @@
+#! /usr/bin/perl -w
+################################################################################
+#
+# Gold server
+#
+# File   :  goldd
+#
+################################################################################
+#                                                                              #
+#                           Copyright (c) 2004, 2005                           #
+#                  Pacific Northwest National Laboratory,                      #
+#                         Battelle Memorial Institute.                         #
+#                             All rights reserved.                             #
+#                                                                              #
+################################################################################
+#                                                                              #
+#     Redistribution and use in source and binary forms, with or without       #
+#     modification, are permitted provided that the following conditions       #
+#     are met:                                                                 #
+#                                                                              #
+#     · Redistributions of source code must retain the above copyright         #
+#     notice, this list of conditions and the following disclaimer.            #
+#                                                                              #
+#     · Redistributions in binary form must reproduce the above copyright      #
+#     notice, this list of conditions and the following disclaimer in the      #
+#     documentation and/or other materials provided with the distribution.     #
+#                                                                              #
+#     · Neither the name of Battelle nor the names of its contributors         #
+#     may be used to endorse or promote products derived from this software    #
+#     without specific prior written permission.                               #
+#                                                                              #
+#     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      #
+#     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        #
+#     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS        #
+#     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE           #
+#     COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,      #
+#     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,     #
+#     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;         #
+#     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER         #
+#     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT       #
+#     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN        #
+#     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          #
+#     POSSIBILITY OF SUCH DAMAGE.                                              #
+#                                                                              #
+################################################################################
+use strict;
+use vars qw(@ARGV);
+use lib qw(/opt/gold/lib);
+@USE_OPEN@use open IO => ':bytes';
+use Getopt::Long 2.24;
+use autouse 'Pod::Usage' => qw(pod2usage);
+use Log::Log4perl qw(get_logger :levels);
+use Data::Properties;
+use XML::LibXML;
+use Error qw(:try);
+use Errno;
+use IO::Socket;
+use POSIX qw(:sys_wait_h);
+use Gold::Cache;
+use Gold::Exception;
+use Gold::Global;
+use Gold::Reply;
+use Gold::Proxy;
+
+# preload utf8::SWASH when using UTF8 regexp (For Upper/Lower/Digit/Word)
+# We do this to avoid autoload/DESTROY in each forked child
+# This gives us a 10-20% speedup
+# code based from perl-Safe example
+my $a = pack('U', 0xC4);
+my $b = chr 0xE4;
+utf8::upgrade $b;
+$a =~ /(\p{IsDigit}|\p{IsWord}|$b)/i;
+
+my $stale   = 0;
+my $forking = @FORKING_SERVER@;
+
+Main:
+{
+    # Set signal handlers
+    $SIG{CHLD} = \&REAPER;
+    $SIG{PIPE} = 'IGNORE';
+
+    # Parse Command Line Arguments
+    my ($shutdown, $restart, $startup, $status, $help, $man, $debug, $version);
+    GetOptions(
+        'stop|k'    => \$shutdown,
+        'restart|r' => \$restart,
+        'start|s'   => \$startup,
+        'status'    => \$status,
+        'debug|d:s' => \$debug,
+        'help|?'    => \$help,
+        'man'       => \$man,
+        'version|V' => \$version,
+    ) or pod2usage(2);
+
+    # Display usage if necessary
+    pod2usage(2) if $help;
+    if ($man)
+    {
+        if ($< == 0)    # Cannot invoke perldoc as root
+        {
+            my $id = eval { getpwnam("nobody") };
+            $id = eval { getpwnam("nouser") } unless defined $id;
+            $id = -2                          unless defined $id;
+            $<  = $id;
+        }
+        $> = $<;                         # Disengage setuid
+        $ENV{PATH} = "/bin:/usr/bin";    # Untaint PATH
+        delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+        if ($0 =~ /^([-\/\w\.]+)$/) { $0 = $1; }    # Untaint $0
+        else { die "Illegal characters were found in \$0 ($0)\n"; }
+        pod2usage(-exitstatus => 0, -verbose => 2);
+    }
+
+    # Display version if requested
+    if ($version)
+    {
+        print "Gold version $VERSION\n";
+        exit 0;
+    }
+
+    # Set $GOLD_HOME and untaint $ENV{PATH} and $ENV{IFS}
+    my $GOLD_HOME = "@prefix@";
+    $ENV{PATH} = "/bin:/usr/bin";
+    delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+
+    # If Gold shutdown or restart requested
+    my $pidFile = "${GOLD_HOME}/etc/gold.pid";
+    if ($shutdown || ($restart && -e "$pidFile"))
+    {
+        # Get the Pid of the process to kill.
+        open(PID, "$pidFile")
+          || die "Cannot open $pidFile for reading: $!\nIs Gold running?\n";
+        <PID> =~ /^(\d+)$/;
+        my $pid = $1;
+        close PID;
+        die "Invalid pid in $pidFile" unless $pid;
+
+        # Remove the PID file before the process dies
+        unlink $pidFile;
+
+        # Issue the kill to every process of the process group of the stored pid
+        print "Killing goldd Pid ($pid)\n";
+        kill 15, -$pid or die "Unable to kill Gold with Pid ($pid): $!\n";
+
+        # exit if shutdown option was specified
+        exit 0 if $shutdown;
+    }
+    else
+    {
+        # Check to see if goldd already running
+        if (open(PID, "$pidFile"))
+        {
+            <PID> =~ /(\d+)/;
+            my $pid = $1;
+            close PID;
+            if ($pid)
+            {
+                kill 0, $pid and die "Gold Pid ($pid) is already running\n";
+            }
+        }
+    }
+
+    # Daemonize unless debug option is specified
+    if (! defined $debug)
+    {
+        fork && exit;
+        setpgrp();
+        chdir("/tmp");
+        umask(0);
+    }
+
+    # Write pid to pidFile
+    open(PID, ">$pidFile") or die "Unable to open $pidFile for writing: $!\n";
+    #select(PID); $| = 1; # Turn on autoflushing
+    print PID $$;
+    close PID;
+    print "Starting Gold Pid ($$)\n";
+
+    # Read the Config File
+    my $configFile = "${GOLD_HOME}/etc/goldd.conf";
+    open CONFIG, "$configFile"
+      or die(
+        "Unable to open config file ($configFile): $!.\nYou may need to set the \$GOLD_HOME environment variable.\n"
+      );
+    $config = new Data::Properties();
+    $config->load(\*CONFIG);
+    close CONFIG;
+
+    # Configure Logging
+    Log::Log4perl::Logger::create_custom_level("TRACE", "DEBUG")
+      unless Log::Log4perl::Level::is_valid("TRACE");
+    Log::Log4perl::Logger::create_custom_level("FAIL", "ERROR")
+      unless Log::Log4perl::Level::is_valid("FAIL");
+    Log::Log4perl->init("$configFile");
+    $log = get_logger("Gold");
+    if (defined $debug)
+    {
+        my $screenAppender =
+          new Log::Log4perl::Appender("Log::Log4perl::Appender::Screen",);
+        my $layout = new Log::Log4perl::Layout::PatternLayout(
+            "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %M [%F:%L]  %m%n");
+        $screenAppender->layout($layout);
+        if ($debug)
+        {
+            $screenAppender->threshold($debug);
+        }
+        else
+        {
+            $screenAppender->threshold("DEBUG");
+        }
+        $log->add_appender($screenAppender);
+    }
+    if ($log->is_info())
+    {
+        $log->info(
+            "$0 (PID $$) Started *******************************************");
+        $log->info("invoked with arguments: (", join(', ', @ARGV), ")");
+    }
+
+    # Read in AUTH_KEY
+    open AUTH_KEY, "${GOLD_HOME}/etc/auth_key"
+      or $log->logdie("Unable to open auth_key file: $!");
+    chomp($AUTH_KEY = <AUTH_KEY>);
+    close AUTH_KEY;
+
+    # Initialize database and populate cache
+    Gold::Cache->populate(new Gold::Database());
+
+    # Determine the port number
+    my $port = $config->get_property("server.port", $SERVER_PORT);
+    if ($port =~ /^(\d+)$/) { $port = $1; }
+    else { $log->logdie("Illegal characters were found in \$port ($port)"); }
+
+    # Create the server socket
+    my $server = new IO::Socket::INET(
+        LocalPort => $port,
+        Proto     => 'tcp',
+        Listen    => SOMAXCONN,
+        Reuse     => 1,
+    ) or $log->logdie("Unable to create server socket: $!");
+
+    # Loop -- waiting for client connections
+    while (1)
+    {
+        my $client = $server->accept() or do
+        {
+            unless ($!{ECHILD} || $!{EINTR})
+            {
+                $log->logwarn("Unable to accept socket: $!");
+            }
+            next;
+        };
+
+        # Force a cache refresh if the previous request invalidates the cache
+        if ($stale)
+        {
+            $stale = 0;
+            Gold::Cache->populate(new Gold::Database());
+        }
+
+        # Fork a child to handle client connection
+        if ($forking)
+        {
+            my $pid = fork and next;    # parent
+            defined $pid or $log->logwarn("Unable to fork: $!");
+            close $server;
+        }
+
+        # Service client connection
+        if ($log->is_info())
+        {
+            $log->info("New Connection Received");
+        }
+
+        my $sendResponseOnFailure = 0;
+        my $code                  = 0;
+        try
+        {
+            # Formerly we enabled responses after receiving a message, since
+            # there may be cases in which it may not make sense to reply
+            # before this, but several cases merited a failure response so
+            # I will enable responses up front and wait for a compelling reason
+            # to change it back.
+            $sendResponseOnFailure = 1;
+
+            # Read in the message and request
+            my $message      = new Gold::Message(connection => $client);
+            my $messageChunk = $message->receiveChunk();
+            my $request      = $messageChunk->getRequest();
+            my $chunking     = $request->getChunking();
+
+            # Translate a request into a response
+            my $proxy = new Gold::Proxy(request => $request);
+            my $moreChunks = 1;
+            while ($moreChunks)
+            {
+                $sendResponseOnFailure = 1;
+                my $response = $proxy->execute();
+                my $chunkNum = $response->getChunkNum();
+                my $chunkMax = $response->getChunkMax();
+
+                my $status = $response->getStatus();
+                $code = $response->getCode();
+                my $database = $request->getDatabase();
+                if ($status eq "Success" || $status eq "Warning")
+                {
+                    $database->getHandle()->commit();
+                }
+                else
+                {
+                    $database->getHandle()->rollback();
+                }
+
+                # Last chunk
+                if ($chunkMax == 0 || $chunkNum == $chunkMax)
+                {
+                    $moreChunks = 0;
+                }
+                # Not last chunk but chunking not requested
+                elsif (! $chunking && ($chunkMax == -1 || $chunkMax >= 1))
+                {
+                    $response->setChunkMax(0);
+                    $response->setStatus("Warning");
+                    $response->setCode("146");
+                    $response->setMessage(
+                        "Results were truncated -- use chunking to enable large messages"
+                    );
+                    $moreChunks = 0;
+                }
+                $sendResponseOnFailure = 0;
+                my $replyChunk = new Gold::Chunk()->setResponse($response);
+                $replyChunk->setEncryption($messageChunk->getEncryption());
+                $replyChunk->setWireProtocol($messageChunk->getWireProtocol());
+                my $reply = new Gold::Reply(connection => $client);
+                $reply->sendChunk($replyChunk);
+            }
+        }
+        catch Gold::Exception with
+        {
+            my $E = shift;
+            #
+            # Error 243 is a null message.  I don't want to fill logs with that.
+            #
+            unless ($E->{'-value'} == 243)
+            {
+                $log->error("Gold server error (",
+                    $E->{'-value'}, "): ", $E->{'-text'}, ".");
+                if ($sendResponseOnFailure)
+                {
+                    my $response = new Gold::Response()
+                      ->failure($E->{'-value'}, $E->{'-text'});
+                    my $replyChunk = new Gold::Chunk()->setResponse($response);
+                    my $reply = new Gold::Reply(connection => $client);
+                    $reply->sendChunk($replyChunk);
+                }
+            }
+        }
+        catch Error with
+        {
+            my $E = shift;
+            $log->error("Internal server error: ", $E->{'-text'}, ".");
+            if ($sendResponseOnFailure)
+            {
+                my $response =
+                  new Gold::Response()->failure("720", $E->{'-text'});
+                my $replyChunk = new Gold::Chunk()->setResponse($response);
+                my $reply = new Gold::Reply(connection => $client);
+                $reply->sendChunk($replyChunk);
+            }
+        };
+
+        if ($forking)
+        {
+            exit $code;    # child exits
+        }
+        else
+        {
+            $stale = 1 if $code eq '080';
+            close $client;
+        }
+    }
+}
+
+# ----------------------------------------------------------------------------
+# &REAPER()
+# ----------------------------------------------------------------------------
+
+sub REAPER
+{
+    while ((my $pid = waitpid(-1, WNOHANG)) > 0)
+    {
+        # Refresh metadata cache if exit code is 080
+        if ($? == 20480)
+        {
+            $stale = 1;
+        }
+    }
+}
+
+##############################################################################
+
+__END__
+
+=head1 NAME
+
+goldd - Gold server
+
+=head1 SYNOPSIS
+
+B<goldd> [B<-k>, B<--stop>] [B<-r>, B<--restart>] [B<-s>, <--start>] [B<-?>, B<--help>] [B<--man>] [B<-d>, B<--debug> [<debug level>]] [B<-V>, B<--version>]
+
+=head1 DESCRIPTION
+
+B<goldd> is a forking server that listens for and services gold client requests. It handles the startup and daemonization, shutdown and restart of the application.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-k | --stop>
+
+shutdown (kill) the Gold server
+
+=item B<-r | --restart>
+
+restart the Gold server
+
+=item B<-s | --start>
+
+start the Gold server. This option is assumed in the absence of a stop or restart flag and may be ommitted in a start request.
+
+=item B<-d | --debug> [<debug level>]
+
+log debug info to screen. An optional debug level parameter can be supplied indicating the logging threshold and can be one of TRACE, DEBUG (default), INFO, WARN, ERROR and FATAL.
+
+=item B<-? | --help>
+
+brief help message
+
+=item B<--man>
+
+full documentation
+
+=item B<-V | --version>
+
+display Gold package version
+
+=back
+
+=head1 AUTHOR
+
+Scott Jackson, Scott.Jackson@pnl.gov
+
+=cut
+

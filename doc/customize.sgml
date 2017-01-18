@@ -1,0 +1,446 @@
+  <chapter id="Customize">
+    <title>Customizing Gold Objects</title>
+    <para>
+Gold provides the ability to dynamically create new objects or customize or delete existing objects through the gold control program (goldsh).
+    </para>
+    <note> 
+      <para>
+The object customizations described in this chapter will be noticeable in subsequent goldsh queries (and in the web GUI after a fresh login). For installations with a database that supports multiple connections (e.g. PostgreSQL) these changes will be visible immediately while others (e.g. SQLite) will require the gold server to be restarted. Client commands may need to be modified to properly interact with changed objects or attributes.
+      </para>
+    </note>
+    <caution> 
+      <para>
+The goldsh control program allows you to make powerful and sweeping modifications to many objects with a single command. Inadvertent mistakes could result in modifications that are very difficult to reverse.
+      </para>
+    </caution>
+
+    <sect1 id="AttributeDelete">
+      <title>Removing an Attribute from an Object</title>
+      <para>
+To delete an attribute from an object, use the command <command>goldsh Attribute Delete</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Attribute Delete</command>
+        <arg choice="plain">Object==<replaceable>&lt;Object Name&gt;</replaceable></arg>
+        <arg choice="plain">Name==<replaceable>&lt;Attribute Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <caution> 
+        <para>
+The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent deletion of all attributes.
+        </para>
+      </caution>
+      <caution> 
+        <para>
+When using Gold as an Allocation Manager, certain objects and attributes are assumed to exist. For example, a call to Job Charge would fail if you had deleted the Allocation Amount attribute. The Attribute Undelete command might come in useful in such a case.
+        </para>
+      </caution>
+      <example>
+        <title>Removing the Organization attribute from Machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Delete Object==Machine Name==Organization
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Attribute
+        </screen>
+      </example>
+      <example>
+        <title>Perhaps we don't care to track the Executable attribute in a Job</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Delete Object==Job Name==Executable
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Attribute
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AttributeCreate">
+      <title>Adding an Attribute to an Object</title>
+      <para>
+To create a new attribute for an object, use the command <command>goldsh Attribute Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Attribute Create</command>
+        <arg choice="plain">Object=<replaceable>&lt;Object Namee&gt;</replaceable></arg>
+        <arg choice="plain">Name=<replaceable>&lt;Attribute Name&gt;</replaceable></arg>
+        <arg>DataType=AutoGen|TimeStamp|Boolean|Float|Integer|Currency|(String)</arg>
+        <arg>PrimaryKey=True|(False)</arg>
+        <arg>Required=True|(False)</arg>
+        <arg>Fixed=True|(False)</arg>
+        <arg>Values=<replaceable>&lt;Foreign Key or List of Values&gt;</replaceable></arg>
+        <arg>DefaultValue=<replaceable>&lt;Default Value&gt;</replaceable></arg>
+        <arg>Sequence=<replaceable>&lt;Integer Number&gt;</replaceable></arg>
+        <arg>Hidden=<replaceable>&lt;True|(False)&gt;</replaceable></arg>
+        <arg>Description=<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Adding a Country Attribute to User</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Create Object=User Name=Country Values=\"\(Brazil,China,France,Russia,USA\)\" DefaultValue=USA
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+      </example>
+      <example>
+        <title>We need to track submission time in Jobs</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Create Object=Job Name=SubmissionTime DataType=TimeStamp
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AttributeModify">
+      <title>Modifying an Attribute</title>
+      <para>
+To modify an attribute, use the command <command>goldsh Attribute Modify</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Attribute Modify</command>
+        <arg choice="plain">Object==<replaceable>&lt;Object Name&gt;</replaceable></arg>
+        <arg choice="plain">Name==<replaceable>&lt;Attribute Name&gt;</replaceable></arg>
+        <arg>Required=True|(False)</arg>
+        <arg>Fixed=True|(False)</arg>
+        <arg>Values=<replaceable>&lt;Foreign Key or List of Values&gt;</replaceable></arg>
+        <arg>DefaultValue=<replaceable>&lt;Default Value&gt;</replaceable></arg>
+        <arg>Sequence=<replaceable>&lt;Integer Number&gt;</replaceable></arg>
+        <arg>Hidden=<replaceable>&lt;True|(False)&gt;</replaceable></arg>
+        <arg>Description=<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <caution> 
+        <para>
+The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent modification of all attributes.
+        </para>
+      </caution>
+      <example>
+        <title>Change User Organization values to not be restricted by foreign key</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Modify Object==User Name==Organization Values=NULL
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Attribute
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ObjectCreate">
+      <title>Creating a Custom Object</title>
+      <para>
+To create a new object, use the command <command>goldsh Object Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Object Create</command>
+        <arg choice="plain">Name=<replaceable>&lt;Object Namee&gt;</replaceable></arg>
+        <arg>Association=True|(False)</arg>
+        <arg>Parent=<replaceable>&lt;Parent Object&gt;</replaceable></arg>
+        <arg>Child=<replaceable>&lt;Child Object&gt;</replaceable></arg>
+        <arg>Description=<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Creating a Node Object</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Object Create Name=Node Description=\"Node Information\"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Object
+        </screen>
+      </example>
+      <example>
+        <title>We need to track submission time in Jobs</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Attribute Create Object=Job Name=SubmissionTime DataType=TimeStamp
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ActionCreate">
+      <title>Adding an Action to an Object</title>
+      <para>
+To specify that an action is allowed for an object, use the command <command>goldsh Action Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Action Create</command>
+        <arg choice="plain">Object=<replaceable>&lt;Object Namee&gt;</replaceable></arg>
+        <arg choice="plain">Name=<replaceable>&lt;Action Name&gt;</replaceable></arg>
+        <arg>Display=True|(False)</arg>
+        <arg>Description=<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Adding a Modify Action to Transaction</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Action Create Object=Transaction Name=Modify Description=Modify
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="CustomObjectExamples">
+      <title>Examples Creating Custom Objects</title>
+      <para>
+Creating a custom object involves defining a new object, adding attributes to the object, and adding actions to the object.
+      </para>
+      <example>
+        <title>Creating a License object to track license usage and charges.</title>
+        <para>
+Invoke the gold control program in interactive mode.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh
+          </userinput>
+        </para>
+        <para>
+Create the License Object.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Object Create Name=License Description=License
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Object
+        </screen>
+        <para>
+Next we can define its attributes. We'll give each record a unique id (so the record can be more easily modified), a license type that can be one of (Matlab,Mathematica,Compiler,AutoCAD,Oracle), the user who is using it, the start and end time, how many instances of the license were used, and how much was charged.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=Id DataType=AutoGen PrimaryKey=True Description="Record Id"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=Type DataType=String Required=True Values="(Matlab,Mathematica,Compiler,AutoCAD,Oracle)" Fixed=True Description="License Type"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=User Required=True Values="@User" Description="User Name"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=StartTime DataType=TimeStamp Description="Start Time"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=EndTime DataType=TimeStamp Description="End Time"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=Count DataType=Integer Description="Number of Licenses Used"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=License Name=Charge DataType=Currency Description="Amount Charged"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+Finally, we designate the actions we will allow on the object. The standard set of actions includes Create, Query, Delete, Modify and Undelete.  Since we would like to manage licenses from the web GUI we will set Display=True.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=License Name=Create Display=True Description=Create
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=License Name=Query Display=True Description=Query
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=License Name=Modify Display=True Description=Modify
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=License Name=Delete Display=True Description=Delete
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=License Name=Undelete Display=True Description=Undelete
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+When we are done we can exit the goldsh prompt.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+quit
+          </userinput>
+        </para>
+        <para>
+That's about it. Licenses should now be able to be managed via the GUI and goldsh. The data source will need to use one of the methods of interacting with Gold (see <link linkend="InteractionMethods">Methods of interacting with Gold</link>) in order to push license record usage info to Gold.
+        </para>
+      </example>
+      <para>
+Apart from being used as an Allocation Manager, Gold can be used as a generalized information service. It can be used to manage just about any object oriented information over the web. For example, Gold could be used to provide meta-schedulers with machine/user mappings, or node/resource information.
+      </para>
+      <example>
+        <title>Using Gold as a Grid Map File.</title>
+        <para>
+Invoke the gold control program in interactive mode.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh
+          </userinput>
+        </para>
+        <para>
+Create the GridMap Object.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Object Create Name=GridMap Description="Online Grid Map File"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Object
+        </screen>
+        <para>
+Next, we can define its attributes. Each entry will consist of a userid (which will serve as the primary key) and a required public X.509 certificate.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=GridMap Name=User PrimaryKey=True Values=@User Description="User Name"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Attribute Create Object=GridMap Name=Certificate DataType=String Required=True Description="X.509 Public Key"
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Attribute
+        </screen>
+        <para>
+Finally, we designate the actions we will allow on the object.  Since we would like to manage certificates from the web GUI we will set Display=True.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=GridMap Name=Create Display=True Description=Create
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=GridMap Name=Query Display=True Description=Query
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=GridMap Name=Modify Display=True Description=Modify
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=GridMap Name=Delete Display=True Description=Delete
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+          <userinput><prompt>gold> </prompt>
+Action Create Object=GridMap Name=Undelete Display=True Description=Undelete
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Action
+        </screen>
+        <para>
+Exit the goldsh prompt.
+        </para>
+        <para>
+          <userinput><prompt>gold> </prompt>
+quit
+          </userinput>
+        </para>
+        <para>
+From this point, a peer service will need to use one of the methods of interacting with Gold (see <link linkend="InteractionMethods">Methods of interacting with Gold</link>) in order to query the GridMap information.
+        </para>
+      </example>
+    </sect1>
+
+  </chapter>

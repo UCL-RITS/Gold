@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Transactions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Deleting Charge Rates"
+HREF="x3062.htm"><LINK
+REL="NEXT"
+TITLE="Managing Roles"
+HREF="c3152.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3062.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3152.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="TRANSACTIONS"
+></A
+>Chapter 15. Managing Transactions</H1
+><P
+>Gold logs all modifying transactions in a detailed transaction journal (queries are not recorded). Previous transactions can be queried but not modified or deleted.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="TRANSACTIONQUERY"
+>Querying Transactions</A
+></H1
+><P
+>To display transaction information, use the command <B
+CLASS="COMMAND"
+>glstxn</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>glstxn</B
+>  [-O <TT
+CLASS="REPLACEABLE"
+><I
+>object</I
+></TT
+>] [-A <TT
+CLASS="REPLACEABLE"
+><I
+>action</I
+></TT
+>] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>name_or_id</I
+></TT
+>] [-U <TT
+CLASS="REPLACEABLE"
+><I
+>actor</I
+></TT
+>] [-a <TT
+CLASS="REPLACEABLE"
+><I
+>account_id</I
+></TT
+>] [-i <TT
+CLASS="REPLACEABLE"
+><I
+>allocation_id</I
+></TT
+>] [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-J <TT
+CLASS="REPLACEABLE"
+><I
+>job_id</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [-T <TT
+CLASS="REPLACEABLE"
+><I
+>transaction_id</I
+></TT
+>] [-R <TT
+CLASS="REPLACEABLE"
+><I
+>request_id</I
+></TT
+>] [&mdash;show <TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>[,<TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>...]...] [&mdash;showHidden] [&mdash;raw] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3132"
+></A
+><P
+><B
+>Example 15-1. List all deposits made in 2004</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -A Deposit -s 2004-01-01 -e 2005-01-01
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3137"
+></A
+><P
+><B
+>Example 15-2. List everything done by amy since the beginning of 2004</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -U amy -s 2004-01-01
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3142"
+></A
+><P
+><B
+>Example 15-3. List all transactions affecting Job Id PBS.1234.0</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -J PBS.1234.0
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3147"
+></A
+><P
+><B
+>Example 15-4. List all transactions affecting charge rates</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -O ChargeRate
+          </KBD
+>
+        </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3062.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3152.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deleting Charge Rates</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Managing Roles</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

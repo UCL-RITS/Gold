@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Customizing Gold Objects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Multi-Object Queries"
+HREF="x3693.htm"><LINK
+REL="NEXT"
+TITLE="Adding an Attribute to an Object"
+HREF="x3742.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3693.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3742.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CUSTOMIZE"
+></A
+>Chapter 19. Customizing Gold Objects</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c3708.htm#ATTRIBUTEDELETE"
+>Removing an Attribute from an Object</A
+></DT
+><DT
+><A
+HREF="x3742.htm"
+>Adding an Attribute to an Object</A
+></DT
+><DT
+><A
+HREF="x3779.htm"
+>Modifying an Attribute</A
+></DT
+><DT
+><A
+HREF="x3810.htm"
+>Creating a Custom Object</A
+></DT
+><DT
+><A
+HREF="x3838.htm"
+>Adding an Action to an Object</A
+></DT
+><DT
+><A
+HREF="x3858.htm"
+>Examples Creating Custom Objects</A
+></DT
+></DL
+></DIV
+><P
+>Gold provides the ability to dynamically create new objects or customize or delete existing objects through the gold control program (goldsh).
+    </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>The object customizations described in this chapter will be noticeable in subsequent goldsh queries (and in the web GUI after a fresh login). For installations with a database that supports multiple connections (e.g. PostgreSQL) these changes will be visible immediately while others (e.g. SQLite) will require the gold server to be restarted. Client commands may need to be modified to properly interact with changed objects or attributes.
+      </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>The goldsh control program allows you to make powerful and sweeping modifications to many objects with a single command. Inadvertent mistakes could result in modifications that are very difficult to reverse.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ATTRIBUTEDELETE"
+>Removing an Attribute from an Object</A
+></H1
+><P
+>To delete an attribute from an object, use the command <B
+CLASS="COMMAND"
+>goldsh Attribute Delete</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh Attribute Delete</B
+>   Object==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object Name&gt;</I
+></TT
+>   Name==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Attribute Name&gt;</I
+></TT
+>  [ShowUsage:=True]</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent deletion of all attributes.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>When using Gold as an Allocation Manager, certain objects and attributes are assumed to exist. For example, a call to Job Charge would fail if you had deleted the Allocation Amount attribute. The Attribute Undelete command might come in useful in such a case.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3730"
+></A
+><P
+><B
+>Example 19-1. Removing the Organization attribute from Machine</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh Attribute Delete Object==Machine Name==Organization
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deleted 1 Attribute
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3736"
+></A
+><P
+><B
+>Example 19-2. Perhaps we don't care to track the Executable attribute in a Job</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh Attribute Delete Object==Job Name==Executable
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deleted 1 Attribute
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3693.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3742.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Multi-Object Queries</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Adding an Attribute to an Object</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

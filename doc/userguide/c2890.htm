@@ -1,0 +1,595 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Charge Rates</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Issuing Job Refunds"
+HREF="x2850.htm"><LINK
+REL="NEXT"
+TITLE="Querying ChargeRates"
+HREF="x3010.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2850.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3010.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="CHARGERATES"
+></A
+>Chapter 14. Managing Charge Rates</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c2890.htm#CHARGERATECREATE"
+>Creating ChargeRates</A
+></DT
+><DT
+><A
+HREF="x3010.htm"
+>Querying ChargeRates</A
+></DT
+><DT
+><A
+HREF="x3035.htm"
+>Modifying Charge Rates</A
+></DT
+><DT
+><A
+HREF="x3062.htm"
+>Deleting Charge Rates</A
+></DT
+></DL
+></DIV
+><P
+>Charge Rates establish how much to charge for usage. There are nine main types of charge rates: Value Based Resources, Name Based Resources, Value Based Usage, Name Based Usage, Value Based Multipliers, Name Based Multipliers, Value Based Fees, Name Based Fees and Multi-dimensional Value Based Resources.
+        <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Value Based Resource</SPAN
+> &mdash;
+Value Based Resource (or Consumable Resource) Charge Rates define how much it costs per unit of time to use a consumable resource like processors, memory, telescope time, generic resources that have a count and are charged per time used, etc. These resource metrics must first be multiplied by the wallclock duration before being added to the total charge. Value Based Resource Charge Rates are of Type "VBR", with the Name being the resource name (such as Processors) and the given Rate (such as 1) being multiplied by the consumed resource value (such as 8).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Name Based Resource</SPAN
+> &mdash;
+Name Based Resource Charge Rates define how much it costs per unit of time to use a named resource like license, etc. The cost for the named resource must first be multiplied by the wallclock duration before being added to the total charge. Name Based Resource Charge Rates are of Type "NBR", with the Name being the resource name (such as License), with the Instance being the resource value (such as matlab), and having the given Rate (such as 5).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Value Based Usage</SPAN
+> &mdash;
+Value Based Usage Charge Rates define how much to charge for metrics of total resource usage such as cputime, power consumed, generic resources or licenses that are charged flat fees per use, etc. These usage metrics are added to the total charge without being multiplied by wall duration. Value Based Usage Charge Rates are of Type "VBU", with the Name being the resource name (such as Power) and the given Rate (such as .001) being multiplied by the consumed resource value (such as 40000).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Name Based Usage</SPAN
+> &mdash;
+Name Based Usage Charge Rates define how much it costs to use a named attribute having a flat charge such as feature, etc. These usage metrics are added to the total charge without being multiplied by wall duration. Name Based Usage Charge Rates are of Type "NBU", with the Name being the resource name (such as Feature), with the instance being the usage value (such as GPU), and having the given flat Rate (such as 200).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Value Based Multiplier</SPAN
+> &mdash;
+Value Based Multiplier Charge Rates are scaled multipliers which apply a multiplicative charge factor based on a numeric scaling factor. These incoming scaling factors are multiplied against the Value-Based Multiplier Rate and then are multiplied against the total of the resource and usage charges for the job. Value Based Multiplier Charge Rates are of Type "VBM", with the Name being the multiplier name (such as Discount) and the given Rate (such as 1) being multiplied with the scaling factor (such as .5) before being multiplied to the total job charge.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Name Based Multiplier</SPAN
+> &mdash;
+Name Based Multiplier Charge Rates are quality based multipliers which apply a multiplicative charge factor based on a quality of the job such as quality of service, nodetype, queue, user, time of day, etc. These charge multipliers are determined by a hash or lookup table based on the value of the job attribute. These rates are multiplied against the total of the resource and usage charges for the job. Name Based Multiplier Charge Rates are of Type "NBM", with the Name being the quality name (such as QualityOfService), with the Instance being the quality instance (such as Premium), and having the given multiplier Rate (such as 2).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Value Based Fee</SPAN
+> &mdash;
+Value Based Fee Charge Rates define how much to charge for scaled or enumerated fees such as setup fees, shipping charges, etc. which should be added after the multipliers are applied. These fees are added to the total charge. Value Based Fee Charge Rates are of Type "VBF", with the Name being the fee name (such as Shipping) and the given Rate (such as 25) being multiplied by the scaling or counted value (such as 4).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Name Based Fee</SPAN
+> &mdash;
+Name Based Fee Charge Rates define how much it costs to use a named attribute having a flat charge such as feature, etc. which should be added after the multipliers are applied. These fees are added to the total charge. Name Based Fee Charge Rates are of Type "NBF", with the Name being the fee name (such as Zone), with the instance being the fee value (such as Asia), and having the given flat Rate (such as 100).
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Multi-dimensional Value Based Resource</SPAN
+> &mdash;
+Multi-dimensional Value Based Resource Charge Rates applies a consumable resource cost that varies depending on the value of a separate named job property. These resource metrics will first be multiplied by the wallclock duration before being added to the total charge. For example, using this capability you can apply different processor rates for different users or machines, or different disk prices for different queues. Multi-dimensional Value Based Resource Charge Rates have the Type being the consumable resource (such as Processors), the Rate being the cost of this resource (such as 1.5), the Name being the name of the controlling job property (such as User), and the Instance being the value of the controlling job property (such as frank).
+            </P
+></LI
+></UL
+>
+    </P
+><P
+>By default, job charges are calculated according to the following formula:
+
+For each Value Based Resource Charge Rate applicable to a given job, a value-based resource charge is calculated by multiplying the amount of the resource used by the amount of time it was used, multiplied by the charge rate for that resource. For each Name Based Resource Charge Rate applicable to a given job, a name-based resource charge is calculated by multiplying the charge rate for that named resource by the amount of time it was used. For each Value Based Usage Charge Type applicable to a given job, a value-based usage charge is calculated by multiplying the amount of the usage by the charge rate for that usage. For each Name Based Usage Charge Type applicable to a given job, a name-based usage charge is given by the charge rate for that usage. For each Multi-dimensional Value Based Resource Charge Rate applicable to a given job, a value-based resource charge is calculated by multiplying the amount of the resource used by the amount of time it was used, multiplied by the charge rate for that resource. These value-based, name-based and multi-dimensional value-based resource charges and the value-based and name-based usage charges are added together. Then, for each Value Based Multiplier Charge Rate applicable to the job, a value-based multiplier is calculated by multiplying the amount of the multiplier by the charge rate for that multipler. For each Name Based Multiplier Charge Rate applicable to the job, a name-based multiplier is given by charge rate for that multipler. The sum of the resource and usage charges is then multiplied by each of the applicable value-based and name-based multipliers. Next, for each Value Based Fee Charge Type applicable to a given job, a value-based fee charge is calculated by multiplying the amount of the fee by the charge rate for that fee. For each Name Based Fee Charge Type applicable to a given job, a name-based fee charge is given by the charge rate for that fee. Finally, these value-based and name-based fee charges are to the total job charge.
+    </P
+><P
+>In short, the formula can be represented by (((((&Sigma;(VBR*value)+&Sigma;(NBR)+&Sigma;(MVBR*value))*wall_duration)+(&Sigma;(VBU*value)+&Sigma;(NBU))) *&Pi;(VBM*value)*&Pi;(NBM))+(&Sigma;(VBF*value)+&Sigma;(NBF))).
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CHARGERATECREATE"
+>Creating ChargeRates</A
+></H1
+><P
+>To create a new charge rate, use the command <B
+CLASS="COMMAND"
+>goldsh ChargeRate Create</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh ChargeRate Create</B
+>   Type=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Charge Rate Type&gt;</I
+></TT
+>   Name=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Charge Rate Name&gt;</I
+></TT
+>  [Instance=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Floating Point Multiplier&gt;</I
+></TT
+>]  Rate=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Floating Point Multiplier&gt;</I
+></TT
+>  [Description=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Description&gt;</I
+></TT
+>] [ShowUsage:=True]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2940"
+></A
+><P
+><B
+>Example 14-1. Creating a couple of value-based resource charge rates</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBR Name=Processors Rate=1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBR Name=Memory Rate=0.001
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2950"
+></A
+><P
+><B
+>Example 14-2. Creating a name-based resource charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=NBR Name=License Instance=Matlab Rate=5
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2956"
+></A
+><P
+><B
+>Example 14-3. Creating a couple of value-based usage charge rates</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBU Name=Power Rate=0.001
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBU Name=CpuTime Rate=1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2966"
+></A
+><P
+><B
+>Example 14-4. Creating a name-based usage charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=NBU Name=Feature Instance=GPU Rate=200
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2972"
+></A
+><P
+><B
+>Example 14-5. Creating a value-based multiplier charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBM Name=Discount Rate=1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2978"
+></A
+><P
+><B
+>Example 14-6. Creating a couple of name-based multiplier charge rates</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=NBM Name=QualityOfService Instance=Premium Rate=2
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=NBM Name=QualityOfService Instance=BottomFeeder Rate=0.5
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2988"
+></A
+><P
+><B
+>Example 14-7. Creating a value-based fee charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=VBF Name=Shipping Rate=25
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2994"
+></A
+><P
+><B
+>Example 14-8. Creating a name-based fee charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=NBF Name=Zone Instance=Asia Rate=200
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3000"
+></A
+><P
+><B
+>Example 14-9. Creating a couple of multi-dimensional value-based resource charge rates</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=Disk Name=User Instance=dave Rate=0.02
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Create Type=Disk Name=User Instance=michael Rate=0.05
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ChargeRate
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2850.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3010.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Issuing Job Refunds</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying ChargeRates</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,1970 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Gold User's Guide</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="NEXT"
+TITLE="Notice"
+HREF="f23.htm"></HEAD
+><BODY
+CLASS="BOOK"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</A
+></H1
+><DIV
+CLASS="MEDIAOBJECT"
+><P
+><IMG
+SRC="gold_logo_globe.png"
+ALIGN="CENTER"></P
+></DIV
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN9"
+></A
+>Scott Jackson</H3
+><DIV
+CLASS="AFFILIATION"
+><SPAN
+CLASS="ORGNAME"
+>Adaptive Computing<BR></SPAN
+></DIV
+><P
+CLASS="COPYRIGHT"
+>Copyright &copy; 2010 Adaptive Computing</P
+><DIV
+CLASS="LEGALNOTICE"
+><P
+></P
+><A
+NAME="AEN20"
+></A
+><P
+>Distribution of this document for commercial purposes in either hard or soft copy form is strictly prohibited without prior written consent from Adaptive Computing.
+  </P
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="f23.htm"
+>Notice</A
+></DT
+><DT
+>1. <A
+HREF="c27.htm"
+>Overview</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c27.htm#BACKGROUND"
+>Background</A
+></DT
+><DT
+><A
+HREF="x36.htm"
+>Features</A
+></DT
+><DT
+><A
+HREF="x91.htm"
+>Interfaces</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x91.htm#COMMANDLINECLIENTS"
+>Command Line Clients</A
+></DT
+><DT
+><A
+HREF="x91.htm#INTERACTIVECONTROLPROGRAM"
+>Interactive Control Program</A
+></DT
+><DT
+><A
+HREF="x91.htm#WEBGUI"
+>Web-based Graphical User Interface</A
+></DT
+><DT
+><A
+HREF="x91.htm#PERLAPI"
+>Perl API</A
+></DT
+><DT
+><A
+HREF="x91.htm#SSSRMAP"
+>SSSRMAP Wire Protocol</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>2. <A
+HREF="c137.htm"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c137.htm#SELECTDATABASE"
+>Select a Database</A
+></DT
+><DT
+><A
+HREF="x159.htm"
+>Install Prerequisites</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x159.htm#AEN162"
+>Perl 5.8 or higher (with suidperl) [REQUIRED]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN173"
+>PostgreSQL database 7.2 or higher (or other tested database) [OPTIONAL]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN200"
+>libxml2 2.4.25 or higher [REQUIRED]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN211"
+>gnu readline 2.0 or higher [OPTIONAL]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN220"
+>Apache Httpd Server 2.0 or higher [OPTIONAL]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN231"
+>OpenSSL 0.9.5a or higher [OPTIONAL]</A
+></DT
+><DT
+><A
+HREF="x159.htm#AEN242"
+>mod_ssl 2.26 or higher [OPTIONAL]</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x253.htm"
+>Preparation</A
+></DT
+><DT
+><A
+HREF="x274.htm"
+>Configuration</A
+></DT
+><DT
+><A
+HREF="x285.htm"
+>Compilation</A
+></DT
+><DT
+><A
+HREF="x295.htm"
+>Perl Module Dependencies</A
+></DT
+><DT
+><A
+HREF="x304.htm"
+>Installation</A
+></DT
+><DT
+><A
+HREF="x320.htm"
+>General Setup</A
+></DT
+><DT
+><A
+HREF="x329.htm"
+>Database Setup</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x329.htm#CONFIGURETRUSTEDCONNECTIONS"
+>Configure trusted connections</A
+></DT
+><DT
+><A
+HREF="x329.htm#ENABLETRANSACTIONS"
+>Enable support for transactions</A
+></DT
+><DT
+><A
+HREF="x329.htm#CREATEGOLDADMIN"
+>Add the "gold" user as a database administrator</A
+></DT
+><DT
+><A
+HREF="x329.htm#CREATEGOLDDATABASE"
+>Create the gold database (as the gold user)</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x374.htm"
+>Web Server Setup</A
+></DT
+><DT
+><A
+HREF="x403.htm"
+>Bootstrap</A
+></DT
+><DT
+><A
+HREF="x418.htm"
+>Startup</A
+></DT
+><DT
+><A
+HREF="x428.htm"
+>Initialization</A
+></DT
+><DT
+><A
+HREF="x431.htm"
+>Accessing the GUI</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="c442.htm"
+>Upgrading</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c442.htm#UPGRADEPREPARATION"
+>Preparation</A
+></DT
+><DT
+><A
+HREF="x457.htm"
+>Configuration</A
+></DT
+><DT
+><A
+HREF="x463.htm"
+>Compilation</A
+></DT
+><DT
+><A
+HREF="x473.htm"
+>Server Shutdown</A
+></DT
+><DT
+><A
+HREF="x479.htm"
+>Installation</A
+></DT
+><DT
+><A
+HREF="x489.htm"
+>Server Startup</A
+></DT
+></DL
+></DD
+><DT
+>4. <A
+HREF="c495.htm"
+>Getting Started</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c495.htm#USERDEFINE"
+>Define Users</A
+></DT
+><DT
+><A
+HREF="x523.htm"
+>Define Machines</A
+></DT
+><DT
+><A
+HREF="x541.htm"
+>Define Projects</A
+></DT
+><DT
+><A
+HREF="x562.htm"
+>Add Users to the Projects</A
+></DT
+><DT
+><A
+HREF="x580.htm"
+>Make Deposits</A
+></DT
+><DT
+><A
+HREF="x599.htm"
+>Check The Balance</A
+></DT
+><DT
+><A
+HREF="x615.htm"
+>Integrate Gold with your Resource Management System</A
+></DT
+><DT
+><A
+HREF="x624.htm"
+>Obtain A Job Quote</A
+></DT
+><DT
+><A
+HREF="x634.htm"
+>Make A Job Reservation</A
+></DT
+><DT
+><A
+HREF="x663.htm"
+>Charge for a Job</A
+></DT
+><DT
+><A
+HREF="x689.htm"
+>Refund a Job</A
+></DT
+><DT
+><A
+HREF="x714.htm"
+>List Transactions</A
+></DT
+><DT
+><A
+HREF="x730.htm"
+>Examine Account Statement</A
+></DT
+><DT
+><A
+HREF="x740.htm"
+>Examine Project Usage</A
+></DT
+></DL
+></DD
+><DT
+>5. <A
+HREF="c750.htm"
+>Getting More Advanced</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c750.htm#ADVANCEDPROJECTDEFINE"
+>Define Projects</A
+></DT
+><DT
+><A
+HREF="x782.htm"
+>Define Accounts</A
+></DT
+><DT
+><A
+HREF="x809.htm"
+>Make Deposits</A
+></DT
+><DT
+><A
+HREF="x859.htm"
+>Check The Balance</A
+></DT
+><DT
+><A
+HREF="x882.htm"
+>Define Charge Rates</A
+></DT
+><DT
+><A
+HREF="x918.htm"
+>Obtain A Guaranteed Job Quote</A
+></DT
+><DT
+><A
+HREF="x937.htm"
+>Make A Quoted Job Reservation</A
+></DT
+><DT
+><A
+HREF="x961.htm"
+>Charge for a Quoted Job</A
+></DT
+><DT
+><A
+HREF="x985.htm"
+>Partially Refund a Job</A
+></DT
+><DT
+><A
+HREF="x999.htm"
+>Examine Account Statement</A
+></DT
+></DL
+></DD
+><DT
+>6. <A
+HREF="c1008.htm"
+>Managing Users</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1008.htm#USERCREATE"
+>Creating Users</A
+></DT
+><DT
+><A
+HREF="x1051.htm"
+>Querying Users</A
+></DT
+><DT
+><A
+HREF="x1105.htm"
+>Modifying Users</A
+></DT
+><DT
+><A
+HREF="x1148.htm"
+>Deleting Users</A
+></DT
+></DL
+></DD
+><DT
+>7. <A
+HREF="c1172.htm"
+>Managing Machines</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1172.htm#MACHINECREATE"
+>Creating Machines</A
+></DT
+><DT
+><A
+HREF="x1211.htm"
+>Querying Machines</A
+></DT
+><DT
+><A
+HREF="x1241.htm"
+>Modifying Machines</A
+></DT
+><DT
+><A
+HREF="x1274.htm"
+>Deleting Machines</A
+></DT
+></DL
+></DD
+><DT
+>8. <A
+HREF="c1298.htm"
+>Managing Projects</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1298.htm#PROJECTCREATE"
+>Creating Projects</A
+></DT
+><DT
+><A
+HREF="x1363.htm"
+>Querying Projects</A
+></DT
+><DT
+><A
+HREF="x1412.htm"
+>Modifying Projects</A
+></DT
+><DT
+><A
+HREF="x1497.htm"
+>Deleting Projects</A
+></DT
+><DT
+><A
+HREF="x1521.htm"
+>Project Usage Summary</A
+></DT
+></DL
+></DD
+><DT
+>9. <A
+HREF="c1548.htm"
+>Managing Accounts</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1548.htm#ACCOUNTCREATE"
+>Creating Accounts</A
+></DT
+><DT
+><A
+HREF="x1626.htm"
+>Querying Accounts</A
+></DT
+><DT
+><A
+HREF="x1684.htm"
+>Modifying Accounts</A
+></DT
+><DT
+><A
+HREF="x1754.htm"
+>Making Deposits</A
+></DT
+><DT
+><A
+HREF="x1812.htm"
+>Querying The Balance</A
+></DT
+><DT
+><A
+HREF="x1854.htm"
+>Personal Balance</A
+></DT
+><DT
+><A
+HREF="x1879.htm"
+>Making Withdrawals</A
+></DT
+><DT
+><A
+HREF="x1922.htm"
+>Making Transfers</A
+></DT
+><DT
+><A
+HREF="x1969.htm"
+>Obtaining an Account Statement</A
+></DT
+><DT
+><A
+HREF="x2003.htm"
+>Deleting Accounts</A
+></DT
+></DL
+></DD
+><DT
+>10. <A
+HREF="c2027.htm"
+>Managing Allocations</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2027.htm#ALLOCATIONCREATE"
+>Creating Allocations</A
+></DT
+><DT
+><A
+HREF="x2036.htm"
+>Querying Allocations</A
+></DT
+><DT
+><A
+HREF="x2073.htm"
+>Modifying Allocations</A
+></DT
+><DT
+><A
+HREF="x2114.htm"
+>Deleting Allocations</A
+></DT
+></DL
+></DD
+><DT
+>11. <A
+HREF="c2146.htm"
+>Managing Reservations</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2146.htm#RESERVATIONCREATE"
+>Creating Reservations</A
+></DT
+><DT
+><A
+HREF="x2155.htm"
+>Querying Reservations</A
+></DT
+><DT
+><A
+HREF="x2208.htm"
+>Modifying Reservations</A
+></DT
+><DT
+><A
+HREF="x2238.htm"
+>Deleting Reservations</A
+></DT
+></DL
+></DD
+><DT
+>12. <A
+HREF="c2280.htm"
+>Managing Quotations</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2280.htm#QUOTATIONCREATE"
+>Creating Quotations</A
+></DT
+><DT
+><A
+HREF="x2289.htm"
+>Querying Quotations</A
+></DT
+><DT
+><A
+HREF="x2334.htm"
+>Modifying Quotations</A
+></DT
+><DT
+><A
+HREF="x2364.htm"
+>Deleting Quotations</A
+></DT
+></DL
+></DD
+><DT
+>13. <A
+HREF="c2396.htm"
+>Managing Jobs</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2396.htm#JOBCREATE"
+>Creating Jobs</A
+></DT
+><DT
+><A
+HREF="x2468.htm"
+>Querying Jobs</A
+></DT
+><DT
+><A
+HREF="x2516.htm"
+>Modifying Jobs</A
+></DT
+><DT
+><A
+HREF="x2585.htm"
+>Deleting Jobs</A
+></DT
+><DT
+><A
+HREF="x2615.htm"
+>Obtaining Job Quotes</A
+></DT
+><DT
+><A
+HREF="x2698.htm"
+>Making Job Reservations</A
+></DT
+><DT
+><A
+HREF="x2771.htm"
+>Charging Jobs</A
+></DT
+><DT
+><A
+HREF="x2850.htm"
+>Issuing Job Refunds</A
+></DT
+></DL
+></DD
+><DT
+>14. <A
+HREF="c2890.htm"
+>Managing Charge Rates</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2890.htm#CHARGERATECREATE"
+>Creating ChargeRates</A
+></DT
+><DT
+><A
+HREF="x3010.htm"
+>Querying ChargeRates</A
+></DT
+><DT
+><A
+HREF="x3035.htm"
+>Modifying Charge Rates</A
+></DT
+><DT
+><A
+HREF="x3062.htm"
+>Deleting Charge Rates</A
+></DT
+></DL
+></DD
+><DT
+>15. <A
+HREF="c3084.htm"
+>Managing Transactions</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3084.htm#TRANSACTIONQUERY"
+>Querying Transactions</A
+></DT
+></DL
+></DD
+><DT
+>16. <A
+HREF="c3152.htm"
+>Managing Roles</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3152.htm#ROLEQUERY"
+>Querying Roles</A
+></DT
+><DT
+><A
+HREF="x3174.htm"
+>Querying Role Users</A
+></DT
+><DT
+><A
+HREF="x3193.htm"
+>Querying Role Actions</A
+></DT
+><DT
+><A
+HREF="x3216.htm"
+>Creating Roles</A
+></DT
+><DT
+><A
+HREF="x3233.htm"
+>Associating an Action with a Role</A
+></DT
+><DT
+><A
+HREF="x3257.htm"
+>Adding a Role to a User</A
+></DT
+><DT
+><A
+HREF="x3277.htm"
+>Removing an Action from a Role</A
+></DT
+><DT
+><A
+HREF="x3300.htm"
+>Removing a Role from a User</A
+></DT
+><DT
+><A
+HREF="x3319.htm"
+>Deleting Roles</A
+></DT
+></DL
+></DD
+><DT
+>17. <A
+HREF="c3338.htm"
+>Managing Passwords</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3338.htm#PASSWORDCREATE"
+>Creating Passwords</A
+></DT
+><DT
+><A
+HREF="x3358.htm"
+>Querying Passwords</A
+></DT
+><DT
+><A
+HREF="x3375.htm"
+>Modifying Passwords</A
+></DT
+><DT
+><A
+HREF="x3394.htm"
+>Deleting Passwords</A
+></DT
+></DL
+></DD
+><DT
+>18. <A
+HREF="c3410.htm"
+>Using the Gold Shell (goldsh)</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3410.htm#GOLDSHUSAGE"
+>Usage</A
+></DT
+><DT
+><A
+HREF="x3459.htm"
+>Command Syntax</A
+></DT
+><DT
+><A
+HREF="x3559.htm"
+>Valid Objects</A
+></DT
+><DT
+><A
+HREF="x3568.htm"
+>Valid Actions for an Object</A
+></DT
+><DT
+><A
+HREF="x3577.htm"
+>Valid Predicates for an Object and Action</A
+></DT
+><DT
+><A
+HREF="x3586.htm"
+>Common Options</A
+></DT
+><DT
+><A
+HREF="x3594.htm"
+>Common Actions Available for most Objects</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x3594.htm#QUERYACTION"
+>Query Action</A
+></DT
+><DT
+><A
+HREF="x3594.htm#CREATEACTION"
+>Create Action</A
+></DT
+><DT
+><A
+HREF="x3594.htm#MODIFYACTION"
+>Modify Action</A
+></DT
+><DT
+><A
+HREF="x3594.htm#DELETEACTION"
+>Delete Action</A
+></DT
+><DT
+><A
+HREF="x3594.htm#UNDELETEACTION"
+>Undelete Action</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x3693.htm"
+>Multi-Object Queries</A
+></DT
+></DL
+></DD
+><DT
+>19. <A
+HREF="c3708.htm"
+>Customizing Gold Objects</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3708.htm#ATTRIBUTEDELETE"
+>Removing an Attribute from an Object</A
+></DT
+><DT
+><A
+HREF="x3742.htm"
+>Adding an Attribute to an Object</A
+></DT
+><DT
+><A
+HREF="x3779.htm"
+>Modifying an Attribute</A
+></DT
+><DT
+><A
+HREF="x3810.htm"
+>Creating a Custom Object</A
+></DT
+><DT
+><A
+HREF="x3838.htm"
+>Adding an Action to an Object</A
+></DT
+><DT
+><A
+HREF="x3858.htm"
+>Examples Creating Custom Objects</A
+></DT
+></DL
+></DD
+><DT
+>20. <A
+HREF="c3976.htm"
+>Integration with the Resource Management System</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3976.htm#ACCOUNTING"
+>Dynamic versus Delayed Accounting</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c3976.htm#DELAYEDACCOUNTING"
+>Delayed Accounting</A
+></DT
+><DT
+><A
+HREF="c3976.htm#DYNAMICACCOUNTING"
+>Dynamic Accounting</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x3986.htm"
+>Interaction Points</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x3986.htm#SUBMISSIONTIME"
+>Job Quotation @ Job Submission Time [Optional &mdash; Recommended]</A
+></DT
+><DT
+><A
+HREF="x3986.htm#STARTTIME"
+>Job Reservation @ Job Start Time [Optional &mdash; Highly Recommended]</A
+></DT
+><DT
+><A
+HREF="x3986.htm#ENDTIME"
+>Job Charge @ Job End Time [Required]</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x4022.htm"
+>Methods of interacting with Gold</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x4022.htm#RMINTERFACE"
+>Configuring an application that already has hooks for Gold</A
+></DT
+><DT
+><A
+HREF="x4022.htm#COMMANDINTERFACE"
+>Using the appropriate command-line client</A
+></DT
+><DT
+><A
+HREF="x4022.htm#CONTROLINTERFACE"
+>Using the Gold control program</A
+></DT
+><DT
+><A
+HREF="x4022.htm#PERLINTERFACE"
+>Use the Perl API</A
+></DT
+><DT
+><A
+HREF="x4022.htm#SSSRMAPINTERFACE"
+>Communicating via the SSSRMAP Protocol</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>21. <A
+HREF="c4076.htm"
+>Configuration Files</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+></DT
+><DT
+><A
+HREF="x4197.htm"
+>Client Configuration</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>1-1. <A
+HREF="x91.htm#AEN97"
+>Listing Users</A
+></DT
+><DT
+>1-2. <A
+HREF="x91.htm#AEN104"
+>Listing Users</A
+></DT
+><DT
+>1-3. <A
+HREF="x91.htm#AEN120"
+>Listing Users</A
+></DT
+><DT
+>1-4. <A
+HREF="x91.htm#AEN126"
+>Listing Users</A
+></DT
+><DT
+>1-5. <A
+HREF="x91.htm#AEN134"
+>Listing Users</A
+></DT
+><DT
+>4-1. <A
+HREF="c495.htm#AEN505"
+>Let's add the users amy, bob and dave.</A
+></DT
+><DT
+>4-2. <A
+HREF="x523.htm#AEN527"
+>Let's define machines called colony and blue.</A
+></DT
+><DT
+>4-3. <A
+HREF="x541.htm#AEN548"
+>We will define the projects biology and chemistry.</A
+></DT
+><DT
+>4-4. <A
+HREF="x562.htm#AEN566"
+>Adding users to our projects.</A
+></DT
+><DT
+>4-5. <A
+HREF="x580.htm#AEN584"
+>Let's add 360000000 credits to each project. We will cause them both to be valid just for the fiscal year 2005.</A
+></DT
+><DT
+>4-6. <A
+HREF="x599.htm#AEN603"
+>Let's look at amy's balance</A
+></DT
+><DT
+>4-7. <A
+HREF="x599.htm#AEN609"
+>You may just want the total balance for a certain project and machine</A
+></DT
+><DT
+>4-8. <A
+HREF="x615.htm#AEN621"
+>We'll assume our job has the following characteristics:</A
+></DT
+><DT
+>4-9. <A
+HREF="x624.htm#AEN628"
+>Let's see how much it will cost to run our job.</A
+></DT
+><DT
+>4-10. <A
+HREF="x634.htm#AEN638"
+>Make a reservation for our job.</A
+></DT
+><DT
+>4-11. <A
+HREF="x663.htm#AEN667"
+>Issue the charge for our job.</A
+></DT
+><DT
+>4-12. <A
+HREF="x689.htm#AEN693"
+>Let's isse a refund for our job.</A
+></DT
+><DT
+>4-13. <A
+HREF="x714.htm#AEN718"
+>Let's list all the job transactions</A
+></DT
+><DT
+>4-14. <A
+HREF="x714.htm#AEN724"
+>It may also be illustrative to examine what transactions actually composed our charge request...</A
+></DT
+><DT
+>4-15. <A
+HREF="x730.htm#AEN734"
+>We can request an itemized account statement over all time for the chemistry project (account 2)</A
+></DT
+><DT
+>4-16. <A
+HREF="x740.htm#AEN744"
+>Display usage by user for the chemistry project</A
+></DT
+><DT
+>5-1. <A
+HREF="c750.htm#AEN763"
+>Now we will define the projects. This time we will define the project members at the same time.</A
+></DT
+><DT
+>5-2. <A
+HREF="x782.htm#AEN786"
+>We will create some accounts for use by the biology and chemistry projects.</A
+></DT
+><DT
+>5-3. <A
+HREF="x809.htm#AEN813"
+>Let's deposit 100 million credits for use by the biology project. We are going to establish a use-it-or-lose-it policy here in which one fourth of the credits expire each quarter. Since there is only one account for the biology project, we can specify the project name in the deposit.</A
+></DT
+><DT
+>5-4. <A
+HREF="x809.htm#AEN831"
+>Next we will make some deposits valid toward the chemistry project for the entire year. Since there are multiple accounts for the chemistry project, we must specify the appropriate account id in the deposit.</A
+></DT
+><DT
+>5-5. <A
+HREF="x809.htm#AEN848"
+>We can now take a closer look at the accounts and the allocations that we have created.</A
+></DT
+><DT
+>5-6. <A
+HREF="x859.htm#AEN863"
+>Let's look at amy's balance</A
+></DT
+><DT
+>5-7. <A
+HREF="x859.htm#AEN870"
+>Let's just get amy's balance for chemistry on colony.</A
+></DT
+><DT
+>5-8. <A
+HREF="x859.htm#AEN876"
+>Now let's just get the total that can be used by amy for chemistry on colony. This includes amy's available credit.</A
+></DT
+><DT
+>5-9. <A
+HREF="x882.htm#AEN887"
+>Let's examine the predefined charge rates.</A
+></DT
+><DT
+>5-10. <A
+HREF="x882.htm#AEN894"
+>Let's say we want to charge for memory used</A
+></DT
+><DT
+>5-11. <A
+HREF="x882.htm#AEN900"
+>We also want a quality of service multiplier</A
+></DT
+><DT
+>5-12. <A
+HREF="x882.htm#AEN906"
+>Creating another quality-based charge multiplier</A
+></DT
+><DT
+>5-13. <A
+HREF="x882.htm#AEN912"
+>Let's take a look at the current charge rates.</A
+></DT
+><DT
+>5-14. <A
+HREF="x918.htm#AEN921"
+>Let's request a guaranteed charge quote that reflects the memory and quality of service we expect to use.</A
+></DT
+><DT
+>5-15. <A
+HREF="x937.htm#AEN940"
+>Make a reservation for our job that reflects our resource and quality preferences while specifying the quote id.</A
+></DT
+><DT
+>5-16. <A
+HREF="x961.htm#AEN964"
+>Let's change a charge rate and issue the charge for our job. We will request that the quote be honored.</A
+></DT
+><DT
+>5-17. <A
+HREF="x985.htm#AEN988"
+>Suppose you want to issue a partial refund.</A
+></DT
+><DT
+>5-18. <A
+HREF="x999.htm#AEN1002"
+>We can request an itemized account statement over all time for account 3 (chemistry for amy)</A
+></DT
+><DT
+>6-1. <A
+HREF="c1008.htm#AEN1045"
+>Creating a user</A
+></DT
+><DT
+>6-2. <A
+HREF="x1051.htm#AEN1081"
+>Listing all info about active users</A
+></DT
+><DT
+>6-3. <A
+HREF="x1051.htm#AEN1087"
+>Displaying bob's phone number</A
+></DT
+><DT
+>6-4. <A
+HREF="x1051.htm#AEN1093"
+>Listing all user names without the header</A
+></DT
+><DT
+>6-5. <A
+HREF="x1051.htm#AEN1099"
+>Listing a user's projects</A
+></DT
+><DT
+>6-6. <A
+HREF="x1105.htm#AEN1136"
+>Activating a user</A
+></DT
+><DT
+>6-7. <A
+HREF="x1105.htm#AEN1142"
+>Changing a user's email address</A
+></DT
+><DT
+>6-8. <A
+HREF="x1148.htm#AEN1166"
+>Deleting a user</A
+></DT
+><DT
+>7-1. <A
+HREF="c1172.htm#AEN1205"
+>Creating a machine</A
+></DT
+><DT
+>7-2. <A
+HREF="x1211.htm#AEN1235"
+>Listing all inactive machine names and descriptions</A
+></DT
+><DT
+>7-3. <A
+HREF="x1241.htm#AEN1268"
+>Deactivating a machine</A
+></DT
+><DT
+>7-4. <A
+HREF="x1274.htm#AEN1292"
+>Deleting a machine</A
+></DT
+><DT
+>8-1. <A
+HREF="c1298.htm#AEN1351"
+>Creating a project</A
+></DT
+><DT
+>8-2. <A
+HREF="c1298.htm#AEN1357"
+>Creating a project and specifying user members at the same time</A
+></DT
+><DT
+>8-3. <A
+HREF="x1363.htm#AEN1394"
+>Listing all info about all projects</A
+></DT
+><DT
+>8-4. <A
+HREF="x1363.htm#AEN1400"
+>Displaying the name and user members of a project in long format</A
+></DT
+><DT
+>8-5. <A
+HREF="x1363.htm#AEN1406"
+>Listing all project names</A
+></DT
+><DT
+>8-6. <A
+HREF="x1412.htm#AEN1479"
+>Deactivating a project</A
+></DT
+><DT
+>8-7. <A
+HREF="x1412.htm#AEN1485"
+>Adding users as members of a project</A
+></DT
+><DT
+>8-8. <A
+HREF="x1412.htm#AEN1491"
+>Adding machines as members of a project</A
+></DT
+><DT
+>8-9. <A
+HREF="x1497.htm#AEN1515"
+>Deleting a project</A
+></DT
+><DT
+>8-10. <A
+HREF="x1521.htm#AEN1542"
+>Displaying a usage summary for the chemistry project during the third quarter of 2006</A
+></DT
+><DT
+>9-1. <A
+HREF="c1548.htm#AEN1608"
+>Creating an account</A
+></DT
+><DT
+>9-2. <A
+HREF="c1548.htm#AEN1614"
+>Creating a wide-open account</A
+></DT
+><DT
+>9-3. <A
+HREF="c1548.htm#AEN1620"
+>Creating an account valid toward all biology project members except for dave and all machines except for blue</A
+></DT
+><DT
+>9-4. <A
+HREF="x1626.htm#AEN1672"
+>Listing all info about all accounts with multi-valued fields displayed in a multi-line format</A
+></DT
+><DT
+>9-5. <A
+HREF="x1626.htm#AEN1678"
+>Listing all info about all accounts useable by dave</A
+></DT
+><DT
+>9-6. <A
+HREF="x1684.htm#AEN1748"
+>Adding a user to the list of users that share the account</A
+></DT
+><DT
+>9-7. <A
+HREF="x1754.htm#AEN1793"
+>Making a deposit</A
+></DT
+><DT
+>9-8. <A
+HREF="x1754.htm#AEN1799"
+>Making a deposit "into" a project</A
+></DT
+><DT
+>9-9. <A
+HREF="x1754.htm#AEN1806"
+>Creating a credit allocation</A
+></DT
+><DT
+>9-10. <A
+HREF="x1812.htm#AEN1836"
+>Querying the project balance detail broken down by account</A
+></DT
+><DT
+>9-11. <A
+HREF="x1812.htm#AEN1842"
+>Querying the total balance for a particular user in a particular project on a particular machine</A
+></DT
+><DT
+>9-12. <A
+HREF="x1812.htm#AEN1848"
+>List the projects and available balance amy can charge to</A
+></DT
+><DT
+>9-13. <A
+HREF="x1854.htm#AEN1867"
+>List my (project) balances</A
+></DT
+><DT
+>9-14. <A
+HREF="x1854.htm#AEN1873"
+>List my balance in (Processor) hours</A
+></DT
+><DT
+>9-15. <A
+HREF="x1879.htm#AEN1909"
+>Making a withdrawal</A
+></DT
+><DT
+>9-16. <A
+HREF="x1879.htm#AEN1915"
+>Making a withdrawal "from" a project</A
+></DT
+><DT
+>9-17. <A
+HREF="x1922.htm#AEN1957"
+>Transferring credits between two accounts</A
+></DT
+><DT
+>9-18. <A
+HREF="x1922.htm#AEN1963"
+>Transferring credits between two single-account projects</A
+></DT
+><DT
+>9-19. <A
+HREF="x1969.htm#AEN1997"
+>Generating an account statement for the third quarter of 2006</A
+></DT
+><DT
+>9-20. <A
+HREF="x2003.htm#AEN2021"
+>Deleting an account</A
+></DT
+><DT
+>10-1. <A
+HREF="x2036.htm#AEN2067"
+>Listing allocations for account 4</A
+></DT
+><DT
+>10-2. <A
+HREF="x2073.htm#AEN2102"
+>Changing the end time for an allocation</A
+></DT
+><DT
+>10-3. <A
+HREF="x2073.htm#AEN2108"
+>Changing the credit limit for an allocation</A
+></DT
+><DT
+>10-4. <A
+HREF="x2114.htm#AEN2134"
+>Deleting an allocation</A
+></DT
+><DT
+>10-5. <A
+HREF="x2114.htm#AEN2140"
+>Purging inactive allocations</A
+></DT
+><DT
+>11-1. <A
+HREF="x2155.htm#AEN2196"
+>Listing all info about all reservations for bob</A
+></DT
+><DT
+>11-2. <A
+HREF="x2155.htm#AEN2202"
+>Listing all info about all reservations that impinge against amy's balance</A
+></DT
+><DT
+>11-3. <A
+HREF="x2208.htm#AEN2232"
+>Changing the expiration time of a reservation</A
+></DT
+><DT
+>11-4. <A
+HREF="x2238.htm#AEN2262"
+>Deleting a reservation by name (JobId)</A
+></DT
+><DT
+>11-5. <A
+HREF="x2238.htm#AEN2268"
+>Deleting a reservation by ReservationId</A
+></DT
+><DT
+>11-6. <A
+HREF="x2238.htm#AEN2274"
+>Purging stale reservations</A
+></DT
+><DT
+>12-1. <A
+HREF="x2289.htm#AEN2328"
+>Listing all info about all quotes for user amy on machine colony</A
+></DT
+><DT
+>12-2. <A
+HREF="x2334.htm#AEN2358"
+>Changing the expiration time of a quotation</A
+></DT
+><DT
+>12-3. <A
+HREF="x2364.htm#AEN2384"
+>Deleting a quotation</A
+></DT
+><DT
+>12-4. <A
+HREF="x2364.htm#AEN2390"
+>Purging stale quotations</A
+></DT
+><DT
+>13-1. <A
+HREF="c2396.htm#AEN2462"
+>Creating a job record</A
+></DT
+><DT
+>13-2. <A
+HREF="x2468.htm#AEN2510"
+>Show specific info about jobs run by amy</A
+></DT
+><DT
+>13-3. <A
+HREF="x2516.htm#AEN2579"
+>Changing a job</A
+></DT
+><DT
+>13-4. <A
+HREF="x2585.htm#AEN2609"
+>Deleting a job</A
+></DT
+><DT
+>13-5. <A
+HREF="x2615.htm#AEN2679"
+>Requesting a quotation</A
+></DT
+><DT
+>13-6. <A
+HREF="x2615.htm#AEN2685"
+>Requesting a guaranteed quote</A
+></DT
+><DT
+>13-7. <A
+HREF="x2698.htm#AEN2762"
+>Creating a reservation</A
+></DT
+><DT
+>13-8. <A
+HREF="x2771.htm#AEN2841"
+>Issuing a job charge</A
+></DT
+><DT
+>13-9. <A
+HREF="x2850.htm#AEN2884"
+>Issuing a job refund</A
+></DT
+><DT
+>14-1. <A
+HREF="c2890.htm#AEN2940"
+>Creating a couple of value-based resource charge rates</A
+></DT
+><DT
+>14-2. <A
+HREF="c2890.htm#AEN2950"
+>Creating a name-based resource charge rate</A
+></DT
+><DT
+>14-3. <A
+HREF="c2890.htm#AEN2956"
+>Creating a couple of value-based usage charge rates</A
+></DT
+><DT
+>14-4. <A
+HREF="c2890.htm#AEN2966"
+>Creating a name-based usage charge rate</A
+></DT
+><DT
+>14-5. <A
+HREF="c2890.htm#AEN2972"
+>Creating a value-based multiplier charge rate</A
+></DT
+><DT
+>14-6. <A
+HREF="c2890.htm#AEN2978"
+>Creating a couple of name-based multiplier charge rates</A
+></DT
+><DT
+>14-7. <A
+HREF="c2890.htm#AEN2988"
+>Creating a value-based fee charge rate</A
+></DT
+><DT
+>14-8. <A
+HREF="c2890.htm#AEN2994"
+>Creating a name-based fee charge rate</A
+></DT
+><DT
+>14-9. <A
+HREF="c2890.htm#AEN3000"
+>Creating a couple of multi-dimensional value-based resource charge rates</A
+></DT
+><DT
+>14-10. <A
+HREF="x3010.htm#AEN3029"
+>Listing all charge rates</A
+></DT
+><DT
+>14-11. <A
+HREF="x3035.htm#AEN3056"
+>Changing a charge rate</A
+></DT
+><DT
+>14-12. <A
+HREF="x3062.htm#AEN3078"
+>Deleting a charge rate</A
+></DT
+><DT
+>15-1. <A
+HREF="c3084.htm#AEN3132"
+>List all deposits made in 2004</A
+></DT
+><DT
+>15-2. <A
+HREF="c3084.htm#AEN3137"
+>List everything done by amy since the beginning of 2004</A
+></DT
+><DT
+>15-3. <A
+HREF="c3084.htm#AEN3142"
+>List all transactions affecting Job Id PBS.1234.0</A
+></DT
+><DT
+>15-4. <A
+HREF="c3084.htm#AEN3147"
+>List all transactions affecting charge rates</A
+></DT
+><DT
+>16-1. <A
+HREF="c3152.htm#AEN3168"
+>Listing all roles</A
+></DT
+><DT
+>16-2. <A
+HREF="x3174.htm#AEN3187"
+>Listing all role users</A
+></DT
+><DT
+>16-3. <A
+HREF="x3193.htm#AEN3210"
+>Listing all role actions</A
+></DT
+><DT
+>16-4. <A
+HREF="x3216.htm#AEN3227"
+>Creating a Manager role</A
+></DT
+><DT
+>16-5. <A
+HREF="x3233.htm#AEN3251"
+>Allow the Manager to change role responsibilities</A
+></DT
+><DT
+>16-6. <A
+HREF="x3257.htm#AEN3268"
+>Adding a user to the Manager role</A
+></DT
+><DT
+>16-7. <A
+HREF="x3277.htm#AEN3294"
+>Don't let UserServices Create or Update Projects</A
+></DT
+><DT
+>16-8. <A
+HREF="x3300.htm#AEN3313"
+>Removing dave as a Manager</A
+></DT
+><DT
+>16-9. <A
+HREF="x3319.htm#AEN3332"
+>Deleting the Manager role</A
+></DT
+><DT
+>17-1. <A
+HREF="c3338.htm#AEN3352"
+>Creating a password</A
+></DT
+><DT
+>17-2. <A
+HREF="x3358.htm#AEN3369"
+>List the users who have set passwords</A
+></DT
+><DT
+>17-3. <A
+HREF="x3375.htm#AEN3388"
+>Changing amy's password</A
+></DT
+><DT
+>17-4. <A
+HREF="x3394.htm#AEN3404"
+>Deleting a password</A
+></DT
+><DT
+>18-1. <A
+HREF="c3410.htm#AEN3433"
+>Specifying the command as direct arguments</A
+></DT
+><DT
+>18-2. <A
+HREF="c3410.htm#AEN3439"
+>Using the interactive prompt</A
+></DT
+><DT
+>18-3. <A
+HREF="c3410.htm#AEN3449"
+>Reading commands from a file</A
+></DT
+><DT
+>18-4. <A
+HREF="x3559.htm#AEN3562"
+>Listing all objects</A
+></DT
+><DT
+>18-5. <A
+HREF="x3568.htm#AEN3571"
+>Listing all actions associated with the Account object</A
+></DT
+><DT
+>18-6. <A
+HREF="x3577.htm#AEN3580"
+>Show the usage for Allocation Query</A
+></DT
+><DT
+>18-7. <A
+HREF="x3594.htm#AEN3616"
+>Return the number of inactive reservations</A
+></DT
+><DT
+>18-8. <A
+HREF="x3594.htm#AEN3631"
+>Add a new project member</A
+></DT
+><DT
+>18-9. <A
+HREF="x3594.htm#AEN3651"
+>Change/set scottmo phone number and email address</A
+></DT
+><DT
+>18-10. <A
+HREF="x3594.htm#AEN3657"
+>Extend all reservations against project chemistry by 10 days</A
+></DT
+><DT
+>18-11. <A
+HREF="x3594.htm#AEN3672"
+>Get rid of the pesky Jacksons</A
+></DT
+><DT
+>18-12. <A
+HREF="x3594.htm#AEN3687"
+>Let's resurrect the deleted users that were active</A
+></DT
+><DT
+>18-13. <A
+HREF="x3693.htm#AEN3696"
+>Print the current and total allocation summed by project</A
+></DT
+><DT
+>18-14. <A
+HREF="x3693.htm#AEN3702"
+>Show all active projects for amy or bob</A
+></DT
+><DT
+>19-1. <A
+HREF="c3708.htm#AEN3730"
+>Removing the Organization attribute from Machine</A
+></DT
+><DT
+>19-2. <A
+HREF="c3708.htm#AEN3736"
+>Perhaps we don't care to track the Executable attribute in a Job</A
+></DT
+><DT
+>19-3. <A
+HREF="x3742.htm#AEN3767"
+>Adding a Country Attribute to User</A
+></DT
+><DT
+>19-4. <A
+HREF="x3742.htm#AEN3773"
+>We need to track submission time in Jobs</A
+></DT
+><DT
+>19-5. <A
+HREF="x3779.htm#AEN3804"
+>Change User Organization values to not be restricted by foreign key</A
+></DT
+><DT
+>19-6. <A
+HREF="x3810.htm#AEN3826"
+>Creating a Node Object</A
+></DT
+><DT
+>19-7. <A
+HREF="x3810.htm#AEN3832"
+>We need to track submission time in Jobs</A
+></DT
+><DT
+>19-8. <A
+HREF="x3838.htm#AEN3852"
+>Adding a Modify Action to Transaction</A
+></DT
+><DT
+>19-9. <A
+HREF="x3858.htm#AEN3861"
+>Creating a License object to track license usage and charges.</A
+></DT
+><DT
+>19-10. <A
+HREF="x3858.htm#AEN3929"
+>Using Gold as a Grid Map File.</A
+></DT
+><DT
+>20-1. <A
+HREF="x4022.htm#AEN4028"
+>Configuring Maui to use Gold</A
+></DT
+><DT
+>20-2. <A
+HREF="x4022.htm#AEN4052"
+>To issue a charge at the completion of a job, you would use gcharge:</A
+></DT
+><DT
+>20-3. <A
+HREF="x4022.htm#AEN4059"
+>To issue a charge you must invoke the Charge action on the Job object:</A
+></DT
+><DT
+>20-4. <A
+HREF="x4022.htm#AEN4065"
+>To make a charge via this interface you might do something like:</A
+></DT
+><DT
+>20-5. <A
+HREF="x4022.htm#AEN4073"
+>The message might look something like:</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="f23.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Notice</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

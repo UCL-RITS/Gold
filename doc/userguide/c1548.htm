@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Accounts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Project Usage Summary"
+HREF="x1521.htm"><LINK
+REL="NEXT"
+TITLE="Querying Accounts"
+HREF="x1626.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1521.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1626.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="ACCOUNTS"
+></A
+>Chapter 9. Managing Accounts</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c1548.htm#ACCOUNTCREATE"
+>Creating Accounts</A
+></DT
+><DT
+><A
+HREF="x1626.htm"
+>Querying Accounts</A
+></DT
+><DT
+><A
+HREF="x1684.htm"
+>Modifying Accounts</A
+></DT
+><DT
+><A
+HREF="x1754.htm"
+>Making Deposits</A
+></DT
+><DT
+><A
+HREF="x1812.htm"
+>Querying The Balance</A
+></DT
+><DT
+><A
+HREF="x1854.htm"
+>Personal Balance</A
+></DT
+><DT
+><A
+HREF="x1879.htm"
+>Making Withdrawals</A
+></DT
+><DT
+><A
+HREF="x1922.htm"
+>Making Transfers</A
+></DT
+><DT
+><A
+HREF="x1969.htm"
+>Obtaining an Account Statement</A
+></DT
+><DT
+><A
+HREF="x2003.htm"
+>Deleting Accounts</A
+></DT
+></DL
+></DIV
+><P
+>An account is a container for time-bounded resource credits valid toward a specific set of projects, users and machines. Much like with a bank, an account is a repository for resource credits. Each account has a set of access control lists designating which users, projects, and machines may access the account. An account may restrict the projects that can charge to it. Normally an account will be tied to a single project but it may be tied to an arbitrary set of projects or ANY project. An account may restrict the users that can charge to it. It will frequently be tied to the the user MEMBERS of the associated project(s) but it may be tied to an arbitrary set of users or ANY user. An account may restrict the machines that can charge to it. It may be tied to an arbitrary set of machines, just the machine MEMBERS of the associated project(s) or ANY machine.
+      </P
+><P
+>When resource credits are deposited into an account, they are associated with a time period within which they are valid. These time-bounded pools of credits are known as allocations. (An allocation is a pool of resource credits associated with an account for use during a particular time period.) By using multiple allocations that expire in regular intervals it is possible to implement a use-it-or-lose-it policy and establish a project cycle.
+      </P
+><P
+>Accounts may be nested. Hierarchically nested accounts may be useful for the delegation of management roles and responsibilities. Deposit shares may be established that assist to automate a trickle-down effect for funds deposited at higher level accounts. Additionally, an optional overflow feature allows charges against lower level accounts to trickle up the hierarchy.
+      </P
+><P
+>Operations include creating, querying, modifying and deleting accounts as well as making deposits, withdrawals, transfers and balance queries.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ACCOUNTCREATE"
+>Creating Accounts</A
+></H1
+><P
+><B
+CLASS="COMMAND"
+>gmkaccount</B
+> is used to create a new account. A new id is automatically generated for the account.
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gmkaccount</B
+>  [-n <TT
+CLASS="REPLACEABLE"
+><I
+>account_name</I
+></TT
+>] [-p  [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+> [, [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>...]] [-u  [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+> [, [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>...]] [-m  [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+> [, [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>...]] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose]</P
+><DIV
+CLASS="IMPORTANT"
+><BLOCKQUOTE
+CLASS="IMPORTANT"
+><P
+><B
+>Important: </B
+>When creating an account, it is important to specify at least one user, machine and project designation. If omitted, these will default to ANY.
+        </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>It is possible to have accounts be created automatically when projects are created by setting the account.autogen configuration parameter to true (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>). The auto-generated account will be associated with the new project, the user MEMBERS of the project and ANY machine.
+        </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1608"
+></A
+><P
+><B
+>Example 9-1. Creating an account</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p chemistry -u MEMBERS -m ANY -n "Chemistry"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1614"
+></A
+><P
+><B
+>Example 9-2. Creating a wide-open account</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p ANY -u ANY -m ANY -n "Cornucopia"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1620"
+></A
+><P
+><B
+>Example 9-3. Creating an account valid toward all biology project members except for dave and all machines except for blue</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkaccount -p biology -u MEMBERS,-dave -m ANY,-blue -n "Not Dave"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Account
+Successfully created 1 AccountProject
+Successfully created 1 AccountUser
+Successfully created 1 AccountUser
+Successfully created 1 AccountMachine
+Successfully created 1 AccountMachine
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1521.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1626.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Project Usage Summary</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Accounts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

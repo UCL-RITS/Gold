@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Make A Quoted Job Reservation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting More Advanced"
+HREF="c750.htm"><LINK
+REL="PREVIOUS"
+TITLE="Obtain A Guaranteed Job Quote"
+HREF="x918.htm"><LINK
+REL="NEXT"
+TITLE="Charge for a Quoted Job"
+HREF="x961.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x918.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 5. Getting More Advanced</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x961.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="QUOTEDRESERVE"
+>Make A Quoted Job Reservation</A
+></H1
+><P
+>If the quote id is specified when we make the reservation, the reservation will use the quoted amounts in calculating the amount to reserve and it will connect to the existing job entry.
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN940"
+></A
+><P
+><B
+>Example 5-15. Make a reservation for our job that reflects our resource and quality preferences while specifying the quote id.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+greserve -J PBS.1234.0 -p chemistry -u amy -m colony -P 16 -M 2048 -t 3600 -Q Premium -q 1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully reserved 129946 credits for job PBS.1234.0
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsres
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name       Amount StartTime           EndTime             Job User Project   Machine Accounts Description 
+-- ---------- ------ ------------------- ------------------- --- ---- --------- ------- -------- ----------- 
+1  PBS.1234.0 129946 2005-02-16 12:35:13 2005-02-16 13:35:13 3   amy  chemistry colony  3               
+        </PRE
+><P
+>The reservation modifies the job entry to take on the new JobId and to change its stage from Quote to Reserve.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsjob -j 1
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id JobId      User Project   Machine Queue QualityOfService Stage   Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ---------- ---- --------- ------- ----- ---------------- ------- ------ ---------- ----- ------------ --------- ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony        Premium          Reserve        16                                     
+        </PRE
+><P
+>As before, the reservation will decrease our balance by the amount reserved.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gbalance -u amy -p chemistry -m colony
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name                Amount   Reserved Balance  CreditLimit Available 
+-- ------------------- -------- -------- -------- ----------- --------- 
+2  chemistry on colony 50000000        0 50000000           0  50000000 
+3  chemistry for amy    8960512   129946  8830566     1000000   9830566 
+        </PRE
+><P
+>Gold has two accounts to choose from. Gold will debit allocations in the order of earliest expiring and most specific first. Specifically, precedence is considered in the following order of highest to lowest: hierarchical relation, expiration time, generality of the project, generality of the user, and generality of the machine. Here we see that Gold considers the account that is exclusively for amy to be more specific (and of hence of higher precedence) than the account that is exclusively for the colony machine. This ordering will ensure that allocations that will expire the soonest will be used up first and that accounts with more specific access restrictions will be used in favor of accounts that have more general access (for example - amy will use up an account just for amy before the she begins using a shared account).
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x918.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x961.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Obtain A Guaranteed Job Quote</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c750.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Charge for a Quoted Job</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

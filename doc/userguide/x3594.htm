@@ -1,0 +1,605 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Common Actions Available for most Objects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Using the Gold Shell (goldsh)"
+HREF="c3410.htm"><LINK
+REL="PREVIOUS"
+TITLE="Common Options"
+HREF="x3586.htm"><LINK
+REL="NEXT"
+TITLE="Multi-Object Queries"
+HREF="x3693.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3586.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Using the Gold Shell (goldsh)</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3693.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="COMMONACTIONS"
+>Common Actions Available for most Objects</A
+></H1
+><P
+>There are a number of actions that are available for most objects. These actions include Query, Create, Modify, Delete and Undelete. Commands involving these actions inherit some common structure unique to the action type.
+      </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="QUERYACTION"
+>Query Action</A
+></H2
+><P
+>The Query action is used to query objects. It accept predicates that describe the attributes (fields) to return (including aggregation operations on those attributes), conditions that select which objects to return the attributes for, and other options unique to queries.
+	      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Selections</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Selections&nbsp;use&nbsp;the&nbsp;Show&nbsp;option&nbsp;to&nbsp;specify&nbsp;a&nbsp;list&nbsp;of&nbsp;the&nbsp;attributes&nbsp;to&nbsp;return&nbsp;for&nbsp;the&nbsp;selected&nbsp;object.&nbsp;If&nbsp;selections&nbsp;are&nbsp;not&nbsp;specified,&nbsp;a&nbsp;default&nbsp;set&nbsp;of&nbsp;attributes&nbsp;(those&nbsp;not&nbsp;marked&nbsp;as&nbsp;hidden)&nbsp;will&nbsp;be&nbsp;returned.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Show<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;:=<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;"attribute1,attribute2,attribute3,..."<br>
+<br>
+Aggregation&nbsp;operators&nbsp;may&nbsp;be&nbsp;applied&nbsp;to&nbsp;attributes&nbsp;by&nbsp;enclosing&nbsp;the&nbsp;target&nbsp;attribute&nbsp;in&nbsp;parenthesis&nbsp;and&nbsp;prepending&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;desired&nbsp;operator.&nbsp;The&nbsp;aggregation&nbsp;operators&nbsp;that&nbsp;can&nbsp;be&nbsp;applied&nbsp;depend&nbsp;on&nbsp;the&nbsp;datatype&nbsp;of&nbsp;the&nbsp;attribute.<br>
+<br>
+Valid&nbsp;selection&nbsp;operators&nbsp;include:<br>
+<br>
+Sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ascending&nbsp;sort<br>
+Tros&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Descending&nbsp;sort<br>
+Count&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Count<br>
+Max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maximum&nbsp;value<br>
+Min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Minimum&nbsp;value<br>
+Average&nbsp;&nbsp;&nbsp;Average&nbsp;value<br>
+Sum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sum<br>
+GroupBy&nbsp;&nbsp;&nbsp;Group&nbsp;other&nbsp;aggregations&nbsp;by&nbsp;this&nbsp;attribute<br>
+<br>
+For&nbsp;example:&nbsp;Allocation&nbsp;Query&nbsp;Show:="Sum(Amount),GroupBy(Account)"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Conditions</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Conditions&nbsp;are&nbsp;used&nbsp;to&nbsp;select&nbsp;which&nbsp;objects&nbsp;the&nbsp;action&nbsp;is&nbsp;to&nbsp;be&nbsp;performed&nbsp;on.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;to&nbsp;be&nbsp;tested<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;conditional&nbsp;operator<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;object&nbsp;or&nbsp;value&nbsp;against&nbsp;which&nbsp;the&nbsp;attribute&nbsp;is&nbsp;tested<br>
+<br>
+Valid&nbsp;condition&nbsp;operators&nbsp;include:<br>
+<br>
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equal&nbsp;to<br>
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not&nbsp;equal&nbsp;to<br>
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than<br>
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matches<br>
+<br>
+Matching&nbsp;uses&nbsp;the&nbsp;wildcards&nbsp;*&nbsp;and&nbsp;?&nbsp;(equivalent&nbsp;to&nbsp;SQL&nbsp;%&nbsp;and&nbsp;_&nbsp;respectively)&nbsp;in&nbsp;a&nbsp;manner&nbsp;similar&nbsp;to&nbsp;file&nbsp;globbing.&nbsp;*&nbsp;matches&nbsp;zero&nbsp;or&nbsp;more&nbsp;unspecified&nbsp;characters&nbsp;and&nbsp;?&nbsp;matches&nbsp;exactly&nbsp;one&nbsp;unspecified&nbsp;character.&nbsp;For&nbsp;example&nbsp;mscf*&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;the&nbsp;letters&nbsp;mscf,&nbsp;while&nbsp;mscf?&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;mscf&nbsp;and&nbsp;have&nbsp;a&nbsp;total&nbsp;of&nbsp;exactly&nbsp;five&nbsp;characters.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Options</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Options&nbsp;indicate&nbsp;processing&nbsp;options&nbsp;that&nbsp;affect&nbsp;the&nbsp;result.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;option<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;:=<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;Value&nbsp;of&nbsp;the&nbsp;option<br>
+<br>
+Valid&nbsp;options&nbsp;for&nbsp;query&nbsp;actions&nbsp;include:<br>
+<br>
+ShowHidden:=True|False&nbsp;(False)&nbsp;&nbsp;Includes&nbsp;hidden&nbsp;attributes&nbsp;in&nbsp;the&nbsp;result<br>
+Time:="YYYY-MM-DD&nbsp;[hh:mm:ss]"&nbsp;&nbsp;&nbsp;Run&nbsp;the&nbsp;command&nbsp;as&nbsp;if&nbsp;it&nbsp;were&nbsp;the&nbsp;specified&nbsp;time<br>
+Unique:=True|False&nbsp;(False)&nbsp;&nbsp;&nbsp;&nbsp;Display&nbsp;only&nbsp;unique&nbsp;results&nbsp;(like&nbsp;DISTINCT&nbsp;in&nbsp;SQL)<br>
+Limit:={Integer&nbsp;Number}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limit&nbsp;the&nbsp;results&nbsp;to&nbsp;the&nbsp;number&nbsp;of&nbsp;objects&nbsp;specified<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3616"
+></A
+><P
+><B
+>Example 18-7. Return the number of inactive reservations</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> Reservation Query EndTime&lt;now Show:="Count(Id)"
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Id
+--
+8
+	        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CREATEACTION"
+>Create Action</A
+></H2
+><P
+>The Create action is used to create a new object. It accepts predicates that describe the values of the attributes to be set.
+	      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Assignments</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Assignments&nbsp;specify&nbsp;values&nbsp;to&nbsp;be&nbsp;assigned&nbsp;to&nbsp;attributes&nbsp;in&nbsp;the&nbsp;new&nbsp;object.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;being&nbsp;assigned&nbsp;a&nbsp;value<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;=&nbsp;(is&nbsp;assigned)<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;new&nbsp;value&nbsp;being&nbsp;assigned&nbsp;to&nbsp;the&nbsp;attribute<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3631"
+></A
+><P
+><B
+>Example 18-8. Add a new project member</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> ProjectUser Create Project=chemistry Name=scottmo
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Project   Name    Active Admin 
+--------- ------- ------ ----- 
+chemistry scottmo True   False 
+Successfully created 1 ProjectUser
+	        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="MODIFYACTION"
+>Modify Action</A
+></H2
+><P
+>The Modify action is used to modify existing objects. It accepts predicates that select which objects will be modified and predicates that describe the values of the attributes to be set.
+	      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Assignments</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Assignments&nbsp;specify&nbsp;values&nbsp;to&nbsp;be&nbsp;assigned&nbsp;to&nbsp;attributes&nbsp;in&nbsp;the&nbsp;selected&nbsp;objects.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;being&nbsp;assigned&nbsp;a&nbsp;value<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;assignment&nbsp;operators&nbsp;{=,&nbsp;+=,&nbsp;-=}<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;value&nbsp;being&nbsp;assigned&nbsp;to&nbsp;the&nbsp;attribute<br>
+<br>
+Valid&nbsp;assignment&nbsp;operators&nbsp;include:<br>
+<br>
+=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;assigned<br>
++=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;incremented&nbsp;by<br>
+-=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;decremented&nbsp;by<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Conditions</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Conditions&nbsp;are&nbsp;used&nbsp;to&nbsp;select&nbsp;which&nbsp;objects&nbsp;the&nbsp;action&nbsp;is&nbsp;to&nbsp;be&nbsp;performed&nbsp;on.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;to&nbsp;be&nbsp;tested<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;conditional&nbsp;operator<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;object&nbsp;or&nbsp;value&nbsp;against&nbsp;which&nbsp;the&nbsp;attribute&nbsp;is&nbsp;tested<br>
+<br>
+Valid&nbsp;condition&nbsp;operators&nbsp;include:<br>
+<br>
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equal&nbsp;to<br>
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not&nbsp;equal&nbsp;to<br>
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than<br>
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matches<br>
+<br>
+Matching&nbsp;uses&nbsp;the&nbsp;wildcards&nbsp;*&nbsp;and&nbsp;?&nbsp;(equivalent&nbsp;to&nbsp;SQL&nbsp;%&nbsp;and&nbsp;_&nbsp;respectively)&nbsp;in&nbsp;a&nbsp;manner&nbsp;similar&nbsp;to&nbsp;file&nbsp;globbing.&nbsp;*&nbsp;matches&nbsp;zero&nbsp;or&nbsp;more&nbsp;unspecified&nbsp;characters&nbsp;and&nbsp;?&nbsp;matches&nbsp;exactly&nbsp;one&nbsp;unspecified&nbsp;character.&nbsp;For&nbsp;example&nbsp;mscf*&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;the&nbsp;letters&nbsp;mscf,&nbsp;while&nbsp;mscf?&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;mscf&nbsp;and&nbsp;have&nbsp;a&nbsp;total&nbsp;of&nbsp;exactly&nbsp;five&nbsp;characters.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3651"
+></A
+><P
+><B
+>Example 18-9. Change/set scottmo phone number and email address</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> User Modify Name==scottmo PhoneNumber="(509) 376-2204" EmailAddress="Scott.Jackson@pnl.gov"
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully modified 1 Users
+	        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3657"
+></A
+><P
+><B
+>Example 18-10. Extend all reservations against project chemistry by 10 days</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> Reservation Modify EndTime+="10 days" Project==chemistry
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Id Account Amount Name       Job User Project   Machine EndTime             Description 
+-- ------- ------ ---------- --- ---- --------- ------- ------------------- -----------
+1  2       57600  PBS.1234.0 1   amy  chemistry colony  2004-11-06 10:47:30             
+Successfully modified 1 Reservations
+	        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="DELETEACTION"
+>Delete Action</A
+></H2
+><P
+>The Delete action is used to delete objects. It accepts predicates that select which objects are to be deleted.
+	      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Conditions</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Conditions&nbsp;are&nbsp;used&nbsp;to&nbsp;select&nbsp;which&nbsp;objects&nbsp;the&nbsp;action&nbsp;is&nbsp;to&nbsp;be&nbsp;performed&nbsp;on.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;to&nbsp;be&nbsp;tested<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;conditional&nbsp;operator<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;object&nbsp;or&nbsp;value&nbsp;against&nbsp;which&nbsp;the&nbsp;attribute&nbsp;is&nbsp;tested<br>
+<br>
+Valid&nbsp;condition&nbsp;operators&nbsp;include:<br>
+<br>
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equal&nbsp;to<br>
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not&nbsp;equal&nbsp;to<br>
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than<br>
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matches<br>
+<br>
+Matching&nbsp;uses&nbsp;the&nbsp;wildcards&nbsp;*&nbsp;and&nbsp;?&nbsp;(equivalent&nbsp;to&nbsp;SQL&nbsp;%&nbsp;and&nbsp;_&nbsp;respectively)&nbsp;in&nbsp;a&nbsp;manner&nbsp;similar&nbsp;to&nbsp;file&nbsp;globbing.&nbsp;*&nbsp;matches&nbsp;zero&nbsp;or&nbsp;more&nbsp;unspecified&nbsp;characters&nbsp;and&nbsp;?&nbsp;matches&nbsp;exactly&nbsp;one&nbsp;unspecified&nbsp;character.&nbsp;For&nbsp;example&nbsp;mscf*&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;the&nbsp;letters&nbsp;mscf,&nbsp;while&nbsp;mscf?&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;mscf&nbsp;and&nbsp;have&nbsp;a&nbsp;total&nbsp;of&nbsp;exactly&nbsp;five&nbsp;characters.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3672"
+></A
+><P
+><B
+>Example 18-11. Get rid of the pesky Jacksons</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> User Delete CommonName~"Jackson*"
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully deleted 1 Users and 1 associations
+	        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="UNDELETEACTION"
+>Undelete Action</A
+></H2
+><P
+>The Delete action is used to restore deleted objects. It accepts predicates that select which objects are to be undeleted.
+	      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><SPAN
+CLASS="GUILABEL"
+>Conditions</SPAN
+></DT
+><DD
+><P
+CLASS="LITERALLAYOUT"
+>Conditions&nbsp;are&nbsp;used&nbsp;to&nbsp;select&nbsp;which&nbsp;objects&nbsp;the&nbsp;action&nbsp;is&nbsp;to&nbsp;be&nbsp;performed&nbsp;on.<br>
+<br>
+Name&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;Name&nbsp;of&nbsp;the&nbsp;attribute&nbsp;to&nbsp;be&nbsp;tested<br>
+Op&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;conditional&nbsp;operator<br>
+Value&nbsp;=&nbsp;&nbsp;&nbsp;The&nbsp;object&nbsp;or&nbsp;value&nbsp;against&nbsp;which&nbsp;the&nbsp;attribute&nbsp;is&nbsp;tested<br>
+<br>
+Valid&nbsp;condition&nbsp;operators&nbsp;include:<br>
+<br>
+==&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equal&nbsp;to<br>
+!=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Not&nbsp;equal&nbsp;to<br>
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than<br>
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than<br>
+&lt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Less&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+&gt;=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater&nbsp;than&nbsp;or&nbsp;equal&nbsp;to<br>
+~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Matches<br>
+<br>
+Matching&nbsp;uses&nbsp;the&nbsp;wildcards&nbsp;*&nbsp;and&nbsp;?&nbsp;(equivalent&nbsp;to&nbsp;SQL&nbsp;%&nbsp;and&nbsp;_&nbsp;respectively)&nbsp;in&nbsp;a&nbsp;manner&nbsp;similar&nbsp;to&nbsp;file&nbsp;globbing.&nbsp;*&nbsp;matches&nbsp;zero&nbsp;or&nbsp;more&nbsp;unspecified&nbsp;characters&nbsp;and&nbsp;?&nbsp;matches&nbsp;exactly&nbsp;one&nbsp;unspecified&nbsp;character.&nbsp;For&nbsp;example&nbsp;mscf*&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;the&nbsp;letters&nbsp;mscf,&nbsp;while&nbsp;mscf?&nbsp;matches&nbsp;objects&nbsp;having&nbsp;the&nbsp;specified&nbsp;attributes&nbsp;whose&nbsp;values&nbsp;start&nbsp;with&nbsp;mscf&nbsp;and&nbsp;have&nbsp;a&nbsp;total&nbsp;of&nbsp;exactly&nbsp;five&nbsp;characters.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3687"
+></A
+><P
+><B
+>Example 18-12. Let's resurrect the deleted users that were active</B
+></P
+><P
+>	          <KBD
+CLASS="USERINPUT"
+>              <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> User Undelete Active==True
+	          </KBD
+>
+	        </P
+><PRE
+CLASS="SCREEN"
+>Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully undeleted 1 Users and 1 associations
+	        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3586.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3693.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Common Options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3410.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Multi-Object Queries</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

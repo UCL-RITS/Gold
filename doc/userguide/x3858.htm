@@ -1,0 +1,574 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Examples Creating Custom Objects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Customizing Gold Objects"
+HREF="c3708.htm"><LINK
+REL="PREVIOUS"
+TITLE="Adding an Action to an Object"
+HREF="x3838.htm"><LINK
+REL="NEXT"
+TITLE="Integration with the Resource Management System"
+HREF="c3976.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3838.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 19. Customizing Gold Objects</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3976.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CUSTOMOBJECTEXAMPLES"
+>Examples Creating Custom Objects</A
+></H1
+><P
+>Creating a custom object involves defining a new object, adding attributes to the object, and adding actions to the object.
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3861"
+></A
+><P
+><B
+>Example 19-9. Creating a License object to track license usage and charges.</B
+></P
+><P
+>Invoke the gold control program in interactive mode.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh
+          </KBD
+>
+        </P
+><P
+>Create the License Object.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Object Create Name=License Description=License
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Object
+        </PRE
+><P
+>Next we can define its attributes. We'll give each record a unique id (so the record can be more easily modified), a license type that can be one of (Matlab,Mathematica,Compiler,AutoCAD,Oracle), the user who is using it, the start and end time, how many instances of the license were used, and how much was charged.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=Id DataType=AutoGen PrimaryKey=True Description="Record Id"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=Type DataType=String Required=True Values="(Matlab,Mathematica,Compiler,AutoCAD,Oracle)" Fixed=True Description="License Type"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=User Required=True Values="@User" Description="User Name"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=StartTime DataType=TimeStamp Description="Start Time"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=EndTime DataType=TimeStamp Description="End Time"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=Count DataType=Integer Description="Number of Licenses Used"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=License Name=Charge DataType=Currency Description="Amount Charged"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>Finally, we designate the actions we will allow on the object. The standard set of actions includes Create, Query, Delete, Modify and Undelete.  Since we would like to manage licenses from the web GUI we will set Display=True.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=License Name=Create Display=True Description=Create
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=License Name=Query Display=True Description=Query
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=License Name=Modify Display=True Description=Modify
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=License Name=Delete Display=True Description=Delete
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=License Name=Undelete Display=True Description=Undelete
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>When we are done we can exit the goldsh prompt.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+quit
+          </KBD
+>
+        </P
+><P
+>That's about it. Licenses should now be able to be managed via the GUI and goldsh. The data source will need to use one of the methods of interacting with Gold (see <A
+HREF="x4022.htm"
+>Methods of interacting with Gold</A
+>) in order to push license record usage info to Gold.
+        </P
+></DIV
+><P
+>Apart from being used as an Allocation Manager, Gold can be used as a generalized information service. It can be used to manage just about any object oriented information over the web. For example, Gold could be used to provide meta-schedulers with machine/user mappings, or node/resource information.
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3929"
+></A
+><P
+><B
+>Example 19-10. Using Gold as a Grid Map File.</B
+></P
+><P
+>Invoke the gold control program in interactive mode.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh
+          </KBD
+>
+        </P
+><P
+>Create the GridMap Object.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Object Create Name=GridMap Description="Online Grid Map File"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Object
+        </PRE
+><P
+>Next, we can define its attributes. Each entry will consist of a userid (which will serve as the primary key) and a required public X.509 certificate.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=GridMap Name=User PrimaryKey=True Values=@User Description="User Name"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Attribute Create Object=GridMap Name=Certificate DataType=String Required=True Description="X.509 Public Key"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Attribute
+        </PRE
+><P
+>Finally, we designate the actions we will allow on the object.  Since we would like to manage certificates from the web GUI we will set Display=True.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=GridMap Name=Create Display=True Description=Create
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=GridMap Name=Query Display=True Description=Query
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=GridMap Name=Modify Display=True Description=Modify
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=GridMap Name=Delete Display=True Description=Delete
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+Action Create Object=GridMap Name=Undelete Display=True Description=Undelete
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Action
+        </PRE
+><P
+>Exit the goldsh prompt.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>gold&#62; </SAMP
+>
+quit
+          </KBD
+>
+        </P
+><P
+>From this point, a peer service will need to use one of the methods of interacting with Gold (see <A
+HREF="x4022.htm"
+>Methods of interacting with Gold</A
+>) in order to query the GridMap information.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3838.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3976.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Adding an Action to an Object</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3708.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Integration with the Resource Management System</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

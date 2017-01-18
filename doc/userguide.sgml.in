@@ -1,0 +1,122 @@
+<!--
+      This is the Gold User's Guide by Scott Jackson.
+      See userguide.txt or userguide.pdf for formatted output.
+-->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!ENTITY PRODUCT "@PACKAGE_NAME@"> <!-- change product name here -->
+<!ENTITY VERSION "2.2"> <!-- change product version here -->
+<!ENTITY copyright SYSTEM "adaptivecopyright.sgml">
+<!ENTITY legalnotice SYSTEM "adaptivelegalnotice.sgml">
+<!ENTITY overview SYSTEM "overview.sgml">
+<!ENTITY installation SYSTEM "installation.sgml">
+<!ENTITY upgrade SYSTEM "upgrade.sgml">
+<!ENTITY gettingstarted SYSTEM "gettingstarted.sgml">
+<!ENTITY gettingadvanced SYSTEM "gettingadvanced.sgml">
+<!ENTITY users SYSTEM "users.sgml">
+<!ENTITY machines SYSTEM "machines.sgml">
+<!ENTITY projects SYSTEM "projects.sgml">
+<!ENTITY accounts SYSTEM "accounts.sgml">
+<!ENTITY allocations SYSTEM "allocations.sgml">
+<!ENTITY reservations SYSTEM "reservations.sgml">
+<!ENTITY quotations SYSTEM "quotations.sgml">
+<!ENTITY chargerates SYSTEM "chargerates.sgml">
+<!ENTITY jobs SYSTEM "jobs.sgml">
+<!ENTITY transactions SYSTEM "transactions.sgml">
+<!ENTITY roles SYSTEM "roles.sgml">
+<!ENTITY passwords SYSTEM "passwords.sgml">
+<!ENTITY goldsh SYSTEM "goldsh.sgml">
+<!ENTITY customize SYSTEM "customize.sgml">
+<!ENTITY integration SYSTEM "integration.sgml">
+<!ENTITY configuration SYSTEM "configuration.sgml">
+]>
+
+<book>
+
+<!-- Metadata -->
+
+  <bookinfo>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="gold_logo_globe.png" format="png" align="center">
+      </imageobject>
+    </mediaobject>
+    <date>2010-07-01</date>
+    <title><productname>Gold</productname> User's Guide</title>
+    <author>
+      <firstname>Scott</firstname>
+      <surname>Jackson</surname>
+      <affiliation><orgname>Adaptive Computing</orgname></affiliation>
+    </author>
+    <address><email>scottmo@adaptivecomputing.com</email></address>
+    <releaseinfo>Version @PACKAGE_VERSION@</releaseinfo>
+    &copyright;
+    &legalnotice;
+  </bookinfo>
+
+<!-- Table of contents -->
+
+  <toc></toc>
+
+<!-- Preface -->
+
+  <preface>
+    <title>Notice</title>
+    <important>
+      <para>
+This is the minor release of the User's Guide. Other information may be found by subscribing and posting to the gold users list (gold-users@supercluster.org), submitting bug reports or change requests (gold-support@adaptivecomputing.com) or contacting the author (scottmo@adaptivecomputing.com).
+      </para>
+    </important>
+  </preface>
+
+<!-- Chapters -->
+
+  &overview;
+
+  &installation;
+
+  <chapter id="Upgrade">
+    <title>Upgrading</title>
+    &upgrade;
+  </chapter>
+
+  &gettingstarted;
+
+  &gettingadvanced;
+
+  &users;
+
+  &machines;
+
+  &projects;
+
+  &accounts;
+
+  &allocations;
+
+  &reservations;
+
+  &quotations;
+
+  &jobs;
+
+  &chargerates;
+
+  &transactions;
+
+  &roles;
+
+  &passwords;
+
+  &goldsh;
+
+  &customize;
+
+  &integration;
+
+  &configuration;
+
+<!-- End of Book -->
+
+</book>
+

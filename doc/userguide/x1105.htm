@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Modifying Users</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Users"
+HREF="c1008.htm"><LINK
+REL="PREVIOUS"
+TITLE="Querying Users"
+HREF="x1051.htm"><LINK
+REL="NEXT"
+TITLE="Deleting Users"
+HREF="x1148.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1051.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 6. Managing Users</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1148.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="USERMODIFY"
+>Modifying Users</A
+></H1
+><P
+>To modify a user, use the command <B
+CLASS="COMMAND"
+>gchuser</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gchuser</B
+>  [-A | -I] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>common_name</I
+></TT
+>] [-F <TT
+CLASS="REPLACEABLE"
+><I
+>phone_number</I
+></TT
+>] [-E <TT
+CLASS="REPLACEABLE"
+><I
+>email_address</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>default_project</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] {[-u] <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>}</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1136"
+></A
+><P
+><B
+>Example 6-6. Activating a user</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchuser -A bob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully modified 1 User
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1142"
+></A
+><P
+><B
+>Example 6-7. Changing a user's email address</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchuser -E "rsmith@cs.univ.edu" bob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully modified 1 User
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1051.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1148.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Querying Users</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1008.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Deleting Users</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

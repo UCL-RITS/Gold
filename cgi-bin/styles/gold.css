@@ -1,0 +1,114 @@
+/*  GOLD Stylesheet
+    Author: Geoffrey Elliott
+    Updated: September 2003
+*/
+
+body {
+    color: black;
+    background-color: white;
+    font-family: Verdana, Helvetica, sans-serif;
+}
+
+/* h1, h2, h3, h4 {
+    text-align: center;
+}
+*/
+
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+.clear {
+    clear: both;
+}
+
+.header {
+    margin: auto 50px;
+    margin-bottom: 1.5em;
+    background-image: url(../images/header_background.gif);
+    background-repeat: repeat-x;
+    height: 36px;
+}
+
+.header .leftFlare {
+    float: left;
+    width: 16px;
+}
+
+.header .rightFlare {
+    float: right;
+    width: 16px;
+}
+
+.header h1 {
+    font-size: 120%;
+    margin: 0px 16px;
+    height: 24px;
+    padding: 6px 0px;
+}
+
+.row {
+    clear: both;
+    width: 46em;
+    margin: .6em auto;
+    font-size: 75%;
+}
+
+.rowLabel {
+    float: left;
+    display: block;
+    text-align: right;
+    width: 30%;
+    font-weight: bold;
+    padding-top: .3em;
+    padding-right: .5em;
+}
+
+hr {
+    margin: 0.8em 82px 0.5em;
+    border: none;
+    background-color: black;
+    height: 1px;
+    clear: both;
+}
+
+html>body hr {
+    margin: 1.4em 82px 0.8em;
+}
+
+#submitRow {
+    clear: both;
+    text-align: center;
+}
+
+#requiredDesc, #primaryKeyDesc, #selectInstructions {
+    text-align: center;
+    font-size: 75%;
+}
+
+#primaryKeyDesc {
+    margin-bottom: 1.5em;
+}
+
+.required {
+    color: #D00;
+    font-weight: bold;
+}
+
+fieldset {
+    border: 1px solid black;
+    margin-top: 1.5em;
+    padding: 1em;
+    clear: both;
+}
+
+legend {
+    background-color: #EFD856;
+    border: 1px outset #EFD856;
+    font-weight: bold;
+    font-size: 105%;
+    padding: 3px 6px;
+    margin: 0px 2px;
+}
+

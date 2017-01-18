@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Interfaces</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Overview"
+HREF="c27.htm"><LINK
+REL="PREVIOUS"
+TITLE="Features"
+HREF="x36.htm"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="c137.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x36.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 1. Overview</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c137.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="INTERFACES"
+>Interfaces</A
+></H1
+><P
+>Gold provides a variety of means of interaction, including command-line interfaces, graphical user interfaces, application programming interfaces and communication protocols.
+      </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="COMMANDLINECLIENTS"
+>Command Line Clients</A
+></H2
+><P
+>The command-line clients provided feature rich argument sets and built-in documentation. These commands allow scripting and are the preferred way to interact with Gold for basic usage and administration. Use the --help option for usage information or the --man option for a manual page on any command.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN97"
+></A
+><P
+><B
+>Example 1-1. Listing Users</B
+></P
+><P
+>            <KBD
+CLASS="USERINPUT"
+>glsuser
+            </KBD
+>
+          </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="INTERACTIVECONTROLPROGRAM"
+>Interactive Control Program</A
+></H2
+><P
+>The goldsh command uses a control language to issue object-oriented requests to the server and display the results. The commands may be included directly as command-line arguments or read from stdin. Use the "ShowUsage:=True" option after a valid Object Action combination for usage information on the command.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN104"
+></A
+><P
+><B
+>Example 1-2. Listing Users</B
+></P
+><P
+>            <KBD
+CLASS="USERINPUT"
+>goldsh User Query
+            </KBD
+>
+          </P
+></DIV
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Do not use this command unless you understand the syntax and the potential for unintended results.
+          </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="WEBGUI"
+>Web-based Graphical User Interface</A
+></H2
+><P
+>A powerful and easy-to-use web-based GUI is being developed for use by users, managers and administrators. It sports two interface types:
+          <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Management Interface</SPAN
+> &mdash;
+The management interface supports an interface that makes administration and interaction very safe and easy. It approaches things from a functional standpoint, aggregating results and protecting against accidental modifications.
+              </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>Object Interface</SPAN
+> &mdash;
+The object interface exposes you to the full power of the actions the server can perform on the objects. This interface allows actions to be performed on many objects in a single command and can impose arbitrary field conditions, field updates and field selections to the query.
+              </P
+></LI
+></UL
+>
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN120"
+></A
+><P
+><B
+>Example 1-3. Listing Users</B
+></P
+><P
+>Click on "Manage Users" -&#62; "List Users"
+          </P
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="PERLAPI"
+>Perl API</A
+></H2
+><P
+>You can access the full Gold functionality via the Perl API. Use perldoc to obtain usage information for the Perl Gold modules.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN126"
+></A
+><P
+><B
+>Example 1-4. Listing Users</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>use Gold;
+
+my $request = new Gold::Request(object =&#62; "User", action =&#62; "Query");
+my $response = $request-&#62;getResponse();
+foreach my $datum ($response-&#62;getData())
+{
+  print $datum-&#62;toString(), "\n";
+}
+          </PRE
+></DIV
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="SSSRMAP"
+>SSSRMAP Wire Protocol</A
+></H2
+><P
+>It is also possible to interact with Gold by directly using the SSSRMAP Wire Protocol and Message Format over the network. Documentation for these protocols can be found at <A
+HREF="http://www.clusterresources.com/products/gold/docs/"
+TARGET="_top"
+><I
+CLASS="CITETITLE"
+>SSS Resource Management and Accounting Protocol Documentation</I
+></A
+>.
+        </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN134"
+></A
+><P
+><B
+>Example 1-5. Listing Users</B
+></P
+><P
+CLASS="LITERALLAYOUT"
+>POST&nbsp;/SSSRMAP&nbsp;HTTP/1.1<br>
+Content-Type:&nbsp;text/xml;&nbsp;charset="utf-8"<br>
+Transfer-Encoding:&nbsp;chunked<br>
+<br>
+190<br>
+&lt;?xml&nbsp;version="1.0"&nbsp;encoding="UTF-8"?&gt;<br>
+&lt;Envelope&gt;<br>
+&nbsp;&nbsp;&lt;Body&nbsp;actor="scottmo"&nbsp;chunking="True"&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;Request&nbsp;action="Query"&nbsp;object="User"&gt;&lt;/Request&gt;<br>
+&nbsp;&nbsp;&lt;/Body&gt;<br>
+&nbsp;&nbsp;&lt;Signature&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;DigestValue&gt;azu4obZswzBt89OgATukBeLyt6Y=&lt;/DigestValue&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;SignatureValue&gt;YXE/C08XX3RX4PMU1bWju+5/E5M=&lt;/SignatureValue&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;SecurityToken&nbsp;type="Symmetric"&nbsp;name="scottmo"&gt;&lt;/SecurityToken&gt;<br>
+&nbsp;&nbsp;&lt;/Signature&gt;<br>
+&lt;/Envelope&gt;<br>
+0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x36.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Features</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c27.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

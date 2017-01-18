@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Installation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Interfaces"
+HREF="x91.htm"><LINK
+REL="NEXT"
+TITLE="Install Prerequisites"
+HREF="x159.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x91.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x159.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="INSTALLATION"
+></A
+>Chapter 2. Installation</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c137.htm#SELECTDATABASE"
+>Select a Database</A
+></DT
+><DT
+><A
+HREF="x159.htm"
+>Install Prerequisites</A
+></DT
+><DT
+><A
+HREF="x253.htm"
+>Preparation</A
+></DT
+><DT
+><A
+HREF="x274.htm"
+>Configuration</A
+></DT
+><DT
+><A
+HREF="x285.htm"
+>Compilation</A
+></DT
+><DT
+><A
+HREF="x295.htm"
+>Perl Module Dependencies</A
+></DT
+><DT
+><A
+HREF="x304.htm"
+>Installation</A
+></DT
+><DT
+><A
+HREF="x320.htm"
+>General Setup</A
+></DT
+><DT
+><A
+HREF="x329.htm"
+>Database Setup</A
+></DT
+><DT
+><A
+HREF="x374.htm"
+>Web Server Setup</A
+></DT
+><DT
+><A
+HREF="x403.htm"
+>Bootstrap</A
+></DT
+><DT
+><A
+HREF="x418.htm"
+>Startup</A
+></DT
+><DT
+><A
+HREF="x428.htm"
+>Initialization</A
+></DT
+><DT
+><A
+HREF="x431.htm"
+>Accessing the GUI</A
+></DT
+></DL
+></DIV
+><P
+>Gold uses the standard configure, make and make install steps for installation. However, there are a number of preparation, prerequisite, setup and customization steps that need to be performed. This document provides general installation guidance and provides a number of sample steps referenced to a particular installation on a Linux platform using the bash shell. These steps indicate the userid in brackets performing the step. The exact commands to be performed and the user that issues them will vary based on the platform, shell, installation preferences, etc.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="SELECTDATABASE"
+>Select a Database</A
+></H1
+><P
+>Gold makes use of a database for transactions and data persistence. Three databases have been tested for use with Gold thus far: PostgreSQL, MySQL and SQLite. Postgres and MySQL are external databases which run in a distinct (possibly remote) process and communicate over sockets. These databases must be separately installed, configured and started. SQLite is an embedded database bundled with the Gold source code with SQL queries being performed within the goldd process itself through library calls. The following information may help you make a choice of databases to use.
+      </P
+><P
+>        <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>PostgreSQL</SPAN
+> --
+PostgreSQL is an open source database. Gold requires Postgres 7.2 or higher. The PostgreSQL database has been thoroughly tested in production with Gold and all Gold functionality is available since it was developed using the PostgreSQL database. Postgres supports multiple connections so Gold is configured to be a forking server when using PostgreSQL.
+            </P
+><P
+>PostgreSQL is recommended since it is an excellent database, has been more thoroughly tested than the others, and supports all Gold features.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>MySQL</SPAN
+> --
+MySQL is an open source database. Gold requires MySQL 4.0.6 or higher. (Prior versions did not support UNION which is used by Gold in time travel. It is possible to use 4.0 with a minor code tweak to the OFFSET line in Database.pm).
+            </P
+><P
+>MySQL 4.1 is required in order to have support for the (undocumented) Transaction Undo and Redo functionality since subqueries were not supported until this version.
+            </P
+></LI
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>SQLite</SPAN
+> --
+SQLite is an open source embedded database bundled with Gold. It does not require any configuration and reads and writes from a file. Initial testing has shown Gold to perform at least as fast as PostgreSQL for small databases.
+            </P
+><P
+>Due to the lack of "ALTER TABLE" functionality, Gold objects cannot be customized after installation. It appears that this functionality is likely to be forthcoming in a future release of SQLite.
+            </P
+><P
+>Since SQLite supports only a single connection, Gold is not configured to be a forking server when using SQLite. This should probably not be an issue for small to medium sized clusters.
+            </P
+><P
+>Due to a lack of support for multi-column IN clauses, the (undocumented) Transaction Undo and Redo functions are not available.
+            </P
+></LI
+></UL
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x91.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x159.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Interfaces</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Install Prerequisites</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

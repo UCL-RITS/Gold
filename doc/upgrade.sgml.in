@@ -1,0 +1,101 @@
+    <para>
+&PRODUCT; uses the standard configure, make and make install steps for upgrades. This document assumes that you are updating &PRODUCT; to a new maintenance or fix level within the same major and minor release. Instructions for migrating to a new minor or major release can be found in the release notes (see RELEASENOTES or doc/releasenotes.pdf). This document provides a number of sample steps referenced to a particular installation on a Linux platform using the bash shell. These steps indicate the userid in brackets performing the step. The exact commands to be performed and the user that issues them will vary based on the platform, shell, installation preferences, etc.
+    </para>
+
+    <sect1 id="UpgradePreparation">
+      <title>Preparation</title>
+      <para>
+To build and update &PRODUCT;, you first need to unpack the tar archive and change directory into the top directory of the distribution.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+cd ~/src
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+tar -zxvf @PACKAGE_TARNAME@-@PACKAGE_VERSION@.tar.gz
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+cd @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="UpgradeConfigure">
+      <title>Configuration</title>
+      <para>
+To configure &PRODUCT;, run the "configure" script provided with the distribution with the desired options.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+./configure
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="UpgradeCompilation">
+      <title>Compilation</title>
+      <para>
+To compile the program, type make:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+make
+        </userinput>
+      </para>
+      <para>
+If you would like to install the web gui, type make gui:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+make gui
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="UpgradeShutdown">
+      <title>Server Shutdown</title>
+      <para>
+Stop the server daemon.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+goldd -k
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="UpgradeInstall">
+      <title>Installation</title>
+      <para>
+Use `make install' to install &PRODUCT;. You may need to do this as root if any of the installation or log directories do not already have write permission as the gold admin user.
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make install
+        </userinput>
+      </para>
+      <para>
+If you would like to install the web gui, type make install-gui (as root).
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make install-gui
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="UpgradeStartup">
+      <title>Server Startup</title>
+      <para>
+Start the server daemon back up.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+goldd
+        </userinput>
+      </para>
+    </sect1>

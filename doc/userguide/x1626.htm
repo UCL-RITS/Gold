@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Querying Accounts</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Accounts"
+HREF="c1548.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Accounts"
+HREF="c1548.htm"><LINK
+REL="NEXT"
+TITLE="Modifying Accounts"
+HREF="x1684.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1548.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 9. Managing Accounts</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1684.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ACCOUNTQUERY"
+>Querying Accounts</A
+></H1
+><P
+>To display account information, use the command <B
+CLASS="COMMAND"
+>glsaccount</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>glsaccount</B
+>  [-A | -I] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>account_name</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [&mdash;exact-match] [&mdash;show <TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>...]...] [&mdash;showHidden] [-l | &mdash;long] [-w | &mdash;wide] [&mdash;raw] [-h | &mdash;hours] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [[-a] <TT
+CLASS="REPLACEABLE"
+><I
+>account_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1672"
+></A
+><P
+><B
+>Example 9-4. Listing all info about all accounts with multi-valued fields displayed in a multi-line format</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsaccount &mdash;long
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name       Amount    Projects  Users   Machines Description 
+-- ---------- --------- --------- ------- -------- -----------
+1  Biology    360000000 biology   MEMBERS blue                 
+2  Chemistry  360000000 chemistry MEMBERS ANY                  
+3  Cornucopia 0         ANY       ANY     ANY                  
+4  Not Dave   250000    biology   -dave   -blue                
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1678"
+></A
+><P
+><B
+>Example 9-5. Listing all info about all accounts useable by dave</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsaccount -u dave &mdash;long
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Name       Amount    Projects  Users   Machines Description 
+-- ---------- --------- --------- ------- -------- ----------- 
+2  Chemistry  360000000 chemistry MEMBERS ANY                  
+3  Cornucopia 0         ANY       ANY     ANY                  
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1548.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1684.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Accounts</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1548.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Modifying Accounts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

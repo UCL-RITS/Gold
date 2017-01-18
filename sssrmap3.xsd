@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--============================================================================
+	XML Schema for SSSRMAP v1.0
+	Scalable Systems Software Resource Managment and Accounting Protocol
+=============================================================================-->
+
+<schema
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:sssrmap="http://www.scidac.org/ScalableSystems/SSSRMAP"
+	targetNamespace="http://www.scidac.org/ScalableSystems/SSSRMAP"
+	elementFormDefault="qualified">
+
+<!--============================================================================
+	Envelope Element
+=============================================================================-->
+
+<complexType name="EnvelopeType">
+  <choice minOccurs="1" maxOccurs="1">
+    <choice minOccurs="1" maxOccurs="2">
+      <element ref="sssrmap:Signature" minOccurs="0" maxOccurs="1"/>
+      <element ref="sssrmap:Body" minOccurs="1" maxOccurs="1"/>
+    </choice>
+    <element ref="sssrmap:EncryptedData" minOccurs="1" maxOccurs="1"/>
+  </choice>
+	<attribute name="type" type="string" use="optional"/>
+	<attribute name="component" type="string" use="optional"/>
+	<attribute name="name" type="string" use="optional"/>
+	<attribute name="version" type="string" use="optional"/>
+</complexType>
+
+<element name="Envelope" type="sssrmap:EnvelopeType"/>
+
+<!--============================================================================
+	EncryptedData Element
+=============================================================================-->
+
+<complexType name="EncryptionDataType">
+  <choice minOccurs="0" maxOccurs="1">
+    <element ref="sssrmap:EncryptedKey" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:CipherValue" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:SecurityToken" minOccurs="1" maxOccurs="1"/>
+  </choice>
+</complexType>
+
+<element name="EncryptedData" type="sssrmap:EncryptedDataType"/>
+
+<!--============================================================================
+	EncryptedKey Element
+=============================================================================-->
+
+<complexType name="EncryptedKeyType">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="method" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="EncryptedKey" type="sssrmap:EncryptedKeyType"/>
+
+<!--============================================================================
+	CipherValue Element
+=============================================================================-->
+
+<complexType name="CipherValueType">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="method" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="CipherValue" type="sssrmap:CipherValueType"/>
+
+<!--============================================================================
+	SecurityToken Element
+=============================================================================-->
+
+<complexType name="SecurityTokenType" mixed="true">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="type" type="string" use="optional"/>
+      <attribute name="name" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="SecurityToken" type="sssrmap:SecurityTokenType"/>
+
+<!--============================================================================
+	Signature Element
+=============================================================================-->
+
+<complexType name="SignatureType">
+  <choice minOccurs="2" maxOccurs="3">
+    <element ref="sssrmap:DigestValue" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:SignatureValue" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:SecurityToken" minOccurs="0" maxOccurs="1"/>
+  </choice>
+</complexType>
+
+<element name="Signature" type="sssrmap:SignatureType"/>
+
+<!--============================================================================
+	DigestValue Element
+=============================================================================-->
+
+<complexType name="DigestValueType">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="method" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="DigestValue" type="sssrmap:DigestValueType"/>
+
+<!--============================================================================
+	SignatureValue Element
+=============================================================================-->
+
+<complexType name="SignatureValueType">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="method" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="SignatureValue" type="sssrmap:SignatureValueType"/>
+
+<!--============================================================================
+	Body Element
+=============================================================================-->
+
+<complexType name="BodyType">
+	<choice minOccurs="1" maxOccurs="1">
+		<element ref="sssrmap:Request" minOccurs="0" maxOccurs="1"/>
+		<element ref="sssrmap:Response" minOccurs="0" maxOccurs="1"/>
+		<any minOccurs="0" maxOccurs="1" namespace="##other"/>
+	</choice>
+</complexType>
+
+<element name="Body" type="sssrmap:BodyType"/>
+
+<!--============================================================================
+	A Request consists of get, set, where, data and count
+=============================================================================-->
+
+<complexType name="RequestType">
+	<choice minOccurs="0" maxOccurs="unbounded">
+    <element ref="sssrmap:Object" minOccurs="0" maxOccurs="unbounded"/>
+    <element ref="sssrmap:Option" minOccurs="0" maxOccurs="unbounded"/>
+		<choice minOccurs="0" maxOccurs="1">
+    	<element ref="sssrmap:Get" minOccurs="0" maxOccurs="unbounded"/>
+    	<element ref="sssrmap:Set" minOccurs="1" maxOccurs="unbounded"/>
+		</choice>
+    <element ref="sssrmap:Where" minOccurs="0" maxOccurs="unbounded"/>
+		<element ref="sssrmap:Data" minOccurs="0" maxOccurs="unbounded"/>
+		<element ref="sssrmap:Count" minOccurs="0" maxOccurs="1"/>
+		<any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+	</choice>
+	<attribute name="action" type="string" use="required"/>
+	<attribute name="actor" type="string" use="required"/>
+	<attribute name="id" type="string" use="optional"/>
+	<attribute name="chunking" type="sssrmap:BoolType" use="optional"/>
+	<attribute name="chunkSize" type="positiveInteger" use="optional"/>
+</complexType>
+
+<element name="Request" type="sssrmap:RequestType"/>
+
+<!--============================================================================
+	A Response consists of status, code, message, data and count
+=============================================================================-->
+
+<complexType name="ResponseType">
+	<choice minOccurs="0" maxOccurs="unbounded">
+    <element ref="sssrmap:Status" minOccurs="1" maxOccurs="1"/>
+		<element ref="sssrmap:Count" minOccurs="0" maxOccurs="1"/>
+		<element ref="sssrmap:Data" minOccurs="0" maxOccurs="unbounded"/>
+		<element ref="sssrmap:File" minOccurs="0" maxOccurs="unbounded"/>
+		<any minOccurs="0" maxOccurs="unbounded" namespace="##other"/>
+	</choice>
+	<attribute name="id" type="string" use="optional"/>
+	<attribute name="chunkNum" type="integer" use="optional"/>
+	<attribute name="chunkMax" type="integer" use="optional"/>
+</complexType>
+
+<element name="Response" type="sssrmap:ResponseType"/>
+
+<!--============================================================================
+	Object elements are used in an object-oriented request to specify the object
+  receiving the action. Multiple objects are possible in a multi-object query.
+=============================================================================-->
+
+<complexType name="ObjectType">
+  <simpleContent>
+    <extension base="string">
+	    <attribute name="join" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="Object" type="sssrmap:ObjectType"/>
+
+<!--============================================================================
+	Get elements are used to specify which fields are to be returned in a query
+=============================================================================-->
+
+<complexType name="GetType">
+	<attribute name="name" type="string" use="required"/>
+	<attribute name="object" type="string" use="optional"/>
+	<attribute name="op" type="sssrmap:GetOperatorType" use="optional"/>
+	<attribute name="units" type="string" use="optional"/>
+</complexType>
+
+<element name="Get" type="sssrmap:GetType"/>
+
+<!--============================================================================
+	Set elements are used to specify the fields to be assigned new values
+=============================================================================-->
+
+<complexType name="SetType">
+  <simpleContent>
+    <extension base="string">
+     	<attribute name="name" type="string" use="required"/>
+    	<attribute name="op" type="sssrmap:SetOperatorType" use="optional"/>
+    	<attribute name="units" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="Set" type="sssrmap:SetType"/>
+
+<!--============================================================================
+	Where elements specify search conditions for the objects to be acted upon
+=============================================================================-->
+
+<complexType name="WhereType">
+  <simpleContent>
+    <extension base="string">
+    	<attribute name="name" type="string" use="required"/>
+    	<attribute name="op" type="sssrmap:WhereOperatorType" use="optional"/>
+    	<attribute name="conj" type="sssrmap:ConjunctionType" use="optional"/>
+    	<attribute name="group" type="integer" use="optional"/>
+    	<attribute name="object" type="string" use="optional"/>
+    	<attribute name="subject" type="string" use="optional"/>
+    	<attribute name="units" type="string" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="Where" type="sssrmap:WhereType"/>
+
+<!--============================================================================
+	Option elements are used to specify processing options for the command
+=============================================================================-->
+
+<complexType name="OptionType">
+  <simpleContent>
+    <extension base="string">
+      <attribute name="name" type="string" use="required"/>
+    	<attribute name="op" type="sssrmap:OptionOperatorType" use="optional"/>
+    	<attribute name="conj" type="sssrmap:ConjunctionType" use="optional"/>
+    </extension>
+  </simpleContent>
+</complexType>
+
+<element name="Option" type="sssrmap:OptionType"/>
+
+<!--============================================================================
+	Count is a non Negative integer (0 to infinity)
+=============================================================================-->
+
+<element name="Count" type="nonNegativeInteger"/>
+
+<!--============================================================================
+	Data elements allow structured data to be in the request or response
+=============================================================================-->
+
+<complexType name="DataType">
+	<sequence>
+		<any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+	</sequence>
+	<attribute name="name" type="string" use="optional"/>
+	<attribute ref="sssrmap:type" use="optional"/>
+</complexType>
+
+<element name="Data" type="sssrmap:DataType"/>
+
+<!--============================================================================
+	Status consists of Value, Code and Message
+=============================================================================-->
+
+<complexType name="StatusType">
+  <choice minOccurs="1" maxOccurs="unbounded">
+    <element ref="sssrmap:Value" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:Code" minOccurs="1" maxOccurs="1"/>
+    <element ref="sssrmap:Message" minOccurs="0" maxOccurs="1"/>
+    <any minOccurs="0" maxOccurs="unbounded" namespace="##other"/>
+  </choice>
+</complexType>
+
+<element name="Status" type="sssrmap:StatusType"/>
+
+<!--============================================================================
+	Value is a value of "Success", "Warning" or "Failure"
+=============================================================================-->
+
+<simpleType name="StatusValueType">
+	<restriction base="string">
+		<enumeration value="Success"/>
+		<enumeration value="Warning"/>
+		<enumeration value="Failure"/>
+	</restriction>
+</simpleType>
+
+<element name="Value" type="sssrmap:StatusValueType"/>
+
+<!--============================================================================
+	A return Code is a string consisting of 3 digits [0-9]
+=============================================================================-->
+
+<simpleType name="CodeType">
+	<restriction base="string">
+		<pattern value="[0-9]{3}"/>
+	</restriction>
+</simpleType>
+
+<element name="Code" type="sssrmap:CodeType"/>
+
+<!--============================================================================
+	Message is a simple string
+=============================================================================-->
+
+<element name="Message" type="string"/>
+
+<!--============================================================================
+	A BoolType is a string either "True" or "False" or (nil)
+=============================================================================-->
+
+<simpleType name="BoolType">
+	<restriction base="string">
+		<enumeration value="True"/>
+		<enumeration value="False"/>
+		<enumeration value=""/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Where OperatorType
+	It could be one of: EQ, GT, LT, GE, LE, NE, Match
+=============================================================================-->
+
+<simpleType name="WhereOperatorType">
+	<restriction base="string">
+		<enumeration value="EQ"/>
+		<enumeration value="GT"/>
+		<enumeration value="LT"/>
+		<enumeration value="GE"/>
+		<enumeration value="LE"/>
+		<enumeration value="NE"/>
+		<enumeration value="Match"/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Get OperatorType
+	It could be one of: Sort, Tros, Count, Sum, Average, Max, Min, GroupBy
+=============================================================================-->
+
+<simpleType name="GetOperatorType">
+	<restriction base="string">
+		<enumeration value="Sort"/>
+		<enumeration value="Tros"/>
+		<enumeration value="Count"/>
+		<enumeration value="Sum"/>
+		<enumeration value="Average"/>
+		<enumeration value="Max"/>
+		<enumeration value="Min"/>
+		<enumeration value="GroupBy"/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Set OperatorType
+	It could be one of: Assign, Inc, Dec
+=============================================================================-->
+
+<simpleType name="SetOperatorType">
+	<restriction base="string">
+		<enumeration value="Assign"/>
+		<enumeration value="Inc"/>
+		<enumeration value="Dec"/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Option OperatorType
+	It could be one of: Not
+=============================================================================-->
+
+<simpleType name="OptionOperatorType">
+	<restriction base="string">
+		<enumeration value="Not"/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Conjunction Type
+	It could be one of: And, Or, AndNot, OrNot
+=============================================================================-->
+
+<simpleType name="ConjunctionType">
+	<restriction base="string">
+		<enumeration value="And"/>
+		<enumeration value="Or"/>
+		<enumeration value="AndNot"/>
+		<enumeration value="OrNot"/>
+	</restriction>
+</simpleType>
+
+<!--============================================================================
+	The Data Type can be one of: xml, binary, string, int
+=============================================================================-->
+
+<simpleType name="TypeType">
+	<restriction base="string">
+		<enumeration value="xml"/>
+		<enumeration value="binary"/>
+		<enumeration value="string"/>
+		<enumeration value="int"/>
+		<enumeration value="text"/>
+		<enumeration value="html"/>
+	</restriction>
+</simpleType>
+
+<attribute name="type" type="sssrmap:TypeType"/>
+
+</schema>

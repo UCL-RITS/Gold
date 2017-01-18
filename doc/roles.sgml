@@ -1,0 +1,321 @@
+  <chapter id="Roles">
+    <title>Managing Roles</title>
+    <para>
+Gold uses instance-level role based access controls to determine what users can perform what functions. Named roles are created, privileges are associated with the roles, and users are assigned to these roles.
+    </para>
+
+    <sect1 id="RoleQuery">
+      <title>Querying Roles</title>
+      <para>
+To display the currently defined roles, use the command <command>goldsh Role Query</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Role Query</command>
+        <arg>Show:=<replaceable>&lt;"Field1,Field2,..."&gt;</replaceable></arg>
+        <arg>Name==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Description==<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all roles</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Role Query
+          </userinput>
+        </para>
+        <screen>
+Name         Description                                     
+------------ -----------------------------------------------
+SystemAdmin  Can update or view any object                   
+Anonymous    Things that can be done by anybody              
+OVERRIDE     A custom authorization method will be invoked   
+ProjectAdmin Can update or view a project they are admin for 
+UserServices User Services                                   
+Scheduler    Scheduler relevant Transactions                 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleUserQuery">
+      <title>Querying Role Users</title>
+      <para>
+To list what users can perform what roles, use the command <command>goldsh RoleUser Query</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleUser Query</command>
+        <arg>Show:=<replaceable>&lt;"Field1,Field2,..."&gt;</replaceable></arg>
+        <arg>Role==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Name==<replaceable>&lt;User Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all role users</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleUser Query
+          </userinput>
+        </para>
+        <screen>
+Role         Name 
+------------ ---- 
+SystemAdmin  gold 
+Anonymous    ANY  
+OVERRIDE     ANY  
+Scheduler    maui 
+SystemAdmin  root 
+UserServices amy  
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleActionQuery">
+      <title>Querying Role Actions</title>
+      <para>
+To list what actions can be performed by what roles, use the command <command>goldsh RoleAction Query</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleAction Query</command>
+        <arg>Show:=<replaceable>&lt;"Field1,Field2,..."&gt;</replaceable></arg>
+        <arg>Role==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Object==<replaceable>&lt;Object Name&gt;</replaceable></arg>
+        <arg>Name==<replaceable>&lt;Action Name&gt;</replaceable></arg>
+        <arg>Instance==<replaceable>&lt;Instance Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all role actions</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleAction Query
+          </userinput>
+        </para>
+        <screen>
+Role         Object         Name    Instance 
+------------ -------------- ------- -------- 
+Anonymous    ANY            Query   ANY      
+Anonymous    Account        Balance ANY      
+Anonymous    Password       ANY     SELF     
+OVERRIDE     Account        Balance ANY      
+ProjectAdmin Project        ANY     ADMIN    
+Scheduler    Job            Charge  ANY      
+Scheduler    Job            Quote   ANY      
+Scheduler    Job            Reserve ANY      
+SystemAdmin  ANY            ANY     ANY      
+UserServices Job            Refund  ANY      
+UserServices Machine        ANY     ANY      
+UserServices Project        ANY     ANY      
+UserServices ProjectMachine ANY     ANY      
+UserServices ProjectUser    ANY     ANY      
+UserServices User           ANY     ANY    
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleCreate">
+      <title>Creating Roles</title>
+      <para>
+To create a new role, use the command <command>goldsh Role Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Role Create</command>
+        <arg choice="plain">Name=<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Description=<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Creating a Manager role</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Role Create Name=Manager Description="Manages Roles and Responsibilities"
+          </userinput>
+        </para>
+        <screen>
+Name    Description                        
+------- ----------------------------------
+Manager Manages Roles and Responsibilities 
+Successfully created 1 Role
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleActionCreate">
+      <title>Associating an Action with a Role</title>
+      <para>
+To add an action to a role, use the command <command>goldsh RoleAction Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleAction Create</command>
+        <arg choice="plain">Role=<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg choice="plain">Object=<replaceable>&lt;Object Name&gt;</replaceable></arg>
+        <arg choice="plain">Name=<replaceable>&lt;Action Name&gt;</replaceable></arg>
+        <arg>Instance=<replaceable>&lt;Instance Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <literallayout>
+The Instance indicates which specific instances of the object the action(s) can be performed on. Instances are interpreted as the value of the solitary primary key for an object. Unless otherwise specified, the instance will default to a value of ANY.
+
+Valid values for Instance include:
+
+ANY         Any or all of the object instances
+NONE        No object instances
+SELF        Only objects identified with myself (like my own username)
+ADMIN       Only object instances that I am an admin for
+&lt;specific&gt;  A specific named instance
+      
+For example, the Role Action:
+      </literallayout>
+      <screen>
+Role           Object         Name    Instance 
+-------------- -------------- ------- --------- 
+ChemistryAdmin Project        Modify  Chemistry
+      </screen>
+      <literallayout>
+allows users having the ChemistryAdmin role to modify the Chemistry Project.
+      </literallayout>
+      <example>
+        <title>Allow the Manager to change role responsibilities</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleAction Create Role=Manager Object=RoleAction Name=ANY
+          </userinput>
+        </para>
+        <screen>
+Role    Object     Name Instance 
+------- ---------- ---- ---------
+Manager RoleAction ANY  ANY      
+Successfully created 1 RoleAction
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleUserCreate">
+      <title>Adding a Role to a User</title>
+      <para>
+To associate a user with a role, use the command <command>goldsh RoleUser Create</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleUser Create</command>
+        <arg choice="plain">Role=<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg choice="plain">Name=<replaceable>&lt;User Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <example>
+        <title>Adding a user to the Manager role</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleUser Create Role=Manager Name=dave
+          </userinput>
+        </para>
+        <screen>
+Role    Name 
+------- ---- 
+Manager dave 
+Successfully created 1 RoleUser
+        </screen>
+      </example>
+      <note>
+        <para>
+A user must first be defined to Gold before they can be added to a role (see <link linkend="UserCreate">Creating Users</link>).
+        </para>
+      </note>
+    </sect1>
+
+    <sect1 id="RoleActionDelete">
+      <title>Removing an Action from a Role</title>
+      <para>
+To disassociate an action from a role, use the command <command>goldsh RoleAction Delete</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleAction Delete</command>
+        <arg>Role==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Object==<replaceable>&lt;Object Name&gt;</replaceable></arg>
+        <arg>Name==<replaceable>&lt;Action Name&gt;</replaceable></arg>
+        <arg>Instance==<replaceable>&lt;Instance Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <caution> 
+        <para>
+The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent deletion of all role actions.
+        </para>
+      </caution>
+      <example>
+        <title>Don't let UserServices Create or Update Projects</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleAction Delete Role==UserServices Object==Project Name==ANY
+          </userinput>
+        </para>
+        <screen>
+Role         Object  Name Instance 
+------------ ------- ---- --------
+UserServices Project ANY  ANY      
+Successfully deleted 1 RoleActions
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleUserDelete">
+      <title>Removing a Role from a User</title>
+      <para>
+To disassociate a user and a role, use the command <command>goldsh RoleUser Delete</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh RoleUser Delete</command>
+        <arg>Role==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Name==<replaceable>&lt;User Name&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <caution> 
+        <para>
+The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent deletion of all role users.
+        </para>
+      </caution>
+      <example>
+        <title>Removing dave as a Manager</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh RoleUser Delete Role==Manager Name==dave
+          </userinput>
+        </para>
+        <screen>
+Role    Name 
+------- ---- 
+Manager dave 
+Successfully deleted 1 RoleUser
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="RoleDelete">
+      <title>Deleting Roles</title>
+      <para>
+To delete a role, use the command <command>goldsh Role Delete</command>:
+      </para>
+      <cmdsynopsis>
+        <command>goldsh Role Delete</command>
+        <arg>Name==<replaceable>&lt;Role Name&gt;</replaceable></arg>
+        <arg>Description==<replaceable>&lt;Description&gt;</replaceable></arg>
+        <arg>ShowUsage:=True</arg>
+      </cmdsynopsis>
+      <caution> 
+        <para>
+The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent modification of all roles.
+        </para>
+      </caution>
+      <example>
+        <title>Deleting the Manager role</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh Role Delete Name==Manager
+          </userinput>
+        </para>
+        <screen>
+Name    Description                        
+------- ----------------------------------
+Manager Manages Roles and Responsibilities 
+Successfully deleted 1 Roles and 3 associations
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

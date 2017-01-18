@@ -1,0 +1,42 @@
+# Gold Server Config File
+
+super.user = @USER@
+
+server.host = @HOSTNAME@
+# server.port = 7112
+
+database.datasource = @DB_DATASOURCE@
+# database.user = NONE
+# database.password = NONE
+
+response.chunksize = 100000
+# currency.precision = 0
+
+# security.authentication = true
+# security.encryption = false
+
+# account.autogen = true
+# allocation.autogen = true
+# machine.autogen = false
+# machine.default = NONE
+# project.autogen = false
+# project.default = NONE
+# user.autogen = false
+# user.default = NONE
+
+# Log4perl configuration
+log4perl.logger = TRACE, Log, Screen
+log4perl.appender.Log.Threshold = TRACE
+log4perl.appender.Screen.Threshold = FATAL
+#log4perl.logger.Message = TRACE, Screen
+#log4perl.appender.Log = Log::Log4perl::Appender::File
+log4perl.appender.Log = Log::Dispatch::FileRotate
+log4perl.appender.Log.filename = @LOG_DIR@/goldd.log
+log4perl.appender.Log.mode = append
+log4perl.appender.Log.size = 10000000
+log4perl.appender.Log.max = 7
+log4perl.appender.Log.layout = PatternLayout
+log4perl.appender.Log.layout.ConversionPattern = %d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %M  %m%n
+log4perl.appender.Screen = Log::Log4perl::Appender::Screen
+log4perl.appender.Screen.layout = PatternLayout
+log4perl.appender.Screen.layout.ConversionPattern = %d{yyyy-MM-dd HH:mm:ss.SSS} %-5p %M [%F:%L]  %m%n

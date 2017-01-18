@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Multi-Object Queries</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Using the Gold Shell (goldsh)"
+HREF="c3410.htm"><LINK
+REL="PREVIOUS"
+TITLE="Common Actions Available for most Objects"
+HREF="x3594.htm"><LINK
+REL="NEXT"
+TITLE="Customizing Gold Objects"
+HREF="c3708.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3594.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Using the Gold Shell (goldsh)</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3708.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MULTIOBJECTQUERIES"
+>Multi-Object Queries</A
+></H1
+><P
+>Gold supports multi-object queries (table joins). Multiple objects are specified via a comma-separated list and attributes need to be prefixed by the associated object.
+	    </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3696"
+></A
+><P
+><B
+>Example 18-13. Print the current and total allocation summed by project</B
+></P
+><P
+>	        <KBD
+CLASS="USERINPUT"
+>            <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> Allocation,AccountProject Query Show:="GroupBy(AccountProject.Name),Sum(Allocation.Amount),Sum(Allocation.Deposited)" Allocation.Account==AccountProject.Account Allocation.Active==True
+	        </KBD
+>
+	      </P
+><PRE
+CLASS="SCREEN"
+>Name      Amount    Deposited 
+--------- --------- --------- 
+biology   193651124 360000000 
+chemistry 296167659 360000000 
+	      </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3702"
+></A
+><P
+><B
+>Example 18-14. Show all active projects for amy or bob</B
+></P
+><P
+>	        <KBD
+CLASS="USERINPUT"
+>            <SAMP
+CLASS="PROMPT"
+>gold&gt;</SAMP
+> Project,ProjectUser Query Show:="Project.Name" ( ProjectUser.Name==bob || ProjectUser.Name==amy ) &#38;&#38; Project.Name==ProjectUser.Project &#38;&#38; Project.Active==True Unique:=True
+	        </KBD
+>
+	      </P
+><PRE
+CLASS="SCREEN"
+>Name      
+--------- 
+biology   
+chemistry 
+	      </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3594.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3708.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Common Actions Available for most Objects</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3410.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Customizing Gold Objects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

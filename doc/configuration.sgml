@@ -1,0 +1,421 @@
+<chapter id="Configuration">
+  <title>Configuration Files</title>
+  <para>
+Gold uses two configuration files: one for the server (goldd.conf) and one for the clients (gold.conf). For configuration parameters that have hard-coded defaults, the default value is specified within brackets.
+  </para>
+
+  <sect1 id="ServerConfig">
+    <title>Server Configuration</title>
+
+    <para>
+The following configuration parameters may be set in the server configuration file (goldd.conf).
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>account.autogen</guilabel> [true] &mdash;
+If set to true, when a new project is created Gold will automatically create an associated default account. Additionally, if you try to make a deposit and no accounts match the specifications, an account will be created using the specified criteria and a deposit will be made into that account.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>allocation.autogen</guilabel> [true] &mdash;
+If set to true, when a new account is created Gold will automatically create an associated default allocation with zero credits.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>database.datasource</guilabel> [DBI:Pg:dbname=gold;host=localhost] &mdash;
+The Perl DBI data source name for the database you wish to connect to.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>database.password</guilabel> &mdash;
+The password to be used for the database connection (if any).
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>database.user</guilabel> &mdash;
+The username to be used for the database connection (if any).
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>response.chunksize</guilabel> [0] &mdash;
+Indicates the line length in the data response that will trigger message segmentation (or truncation). A value of 0 (zero) means unlimited, i.e. that the server will not truncate or segment large responses unless overriden by a chunksize specification in a client request. The response chunksize will be taken to be the smaller of the client and server chunksize settings.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>currency.precision</guilabel> [0] &mdash;
+Indicates the number of decimal places in the resource credit currency. For example, if you are will be dealing with processor-seconds of an integer resource unit, use 0 (which is the default). If you will be charging dollars and cents, then use 2. This parameter should be the same in the goldd.conf and gold.conf files.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.filename</guilabel> &mdash;
+Used by log4perl to set the base name of the log file.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.max</guilabel> &mdash;
+Used by log4perl to set the number of rolling backup logs.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.size</guilabel> &mdash;
+Used by log4perl to set the size the log will grow to before it is rotated.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.Threshold</guilabel> &mdash;
+Used by log4perl to set the debug level written to the log. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Screen.Threshold</guilabel> &mdash;
+Used by log4perl to set the debug level written to the screen. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>machine.autogen</guilabel> [false] &mdash;
+If set to true, Gold will automatically create new machines when they are first encountered in a job function (charge, reserve, or quote). Additionally, a new machine will be automatically created if you try to add an undefined machine as a member of a project or account.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>machine.default</guilabel> [NONE] &mdash;
+If not set to NONE, Gold will use the specified default for the machine in a job function (charge, reserve, or quote) in which a machine was not specified.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>project.autogen</guilabel> [false] &mdash;
+If set to true, Gold will automatically create new projects when they are first encountered in a job function (charge, reserve, or quote). Additionally, a new project will be automatically created if you try to add an undefined project as a member of an account.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>project.default</guilabel> [NONE] &mdash;
+If not set to NONE, Gold will use the specified default for the project in a job function (charge, reserve, or quote) in which a project was not specified and no default project can be found for the user.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>security.authentication</guilabel> [true] &mdash;
+Indicates whether incoming message authentication is required.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>security.encryption</guilabel> [false] &mdash;
+Indicates whether incoming message encryption is required.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>server.host</guilabel> [localhost] &mdash;
+The hostname on which the gold server runs.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>server.port</guilabel> [7112] &mdash;
+The port the gold server listens on.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>super.user</guilabel> [root] &mdash;
+The primary gold system admin which by default can perform all actions on all objects. The super user is sometimes used as the actor in cases where an action is invoked from within another action.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>user.autogen</guilabel> [false] &mdash;
+If set to true, Gold will automatically create new users when they are first encountered in a job function (charge, reserve, or quote). Additionally, a new user will be automatically created if you try to add an undefined user as a member of a project or account.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>user.default</guilabel> [NONE] &mdash;
+If not set to NONE, Gold will use the specified default for the user in a job function (charge, reserve, or quote) in which a user was not specified.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  
+  </sect1>
+
+  <sect1 id="ClientConfig">
+    <title>Client Configuration</title>
+
+    <para>
+The following configuration parameters may be set in the client configuration file (gold.conf).
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.filename</guilabel> &mdash;
+Used by log4perl to set the base name of the log file.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.max</guilabel> &mdash;
+Used by log4perl to set the number of rolling backup logs.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.size</guilabel> &mdash;
+Used by log4perl to set the size the log will grow to before it is rotated.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Log.Threshold</guilabel> &mdash;
+Used by log4perl to set the debug level written to the log. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>log4perl.appender.Screen.Threshold</guilabel> &mdash;
+Used by log4perl to set the debug level written to the screen. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>response.chunking</guilabel> [true] &mdash;
+Indicates whether large responses should be chunked (segmented). If set to false, large responses will be truncated.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>response.chunksize</guilabel> [0] &mdash;
+Indicates the line length in the data response that will trigger message segmentation (or truncation). A value of 0 (zero) means unlimited, i.e. that the client will accept the chunksize set by the server. The response chunksize will be taken to be the smaller of the client and server chunksize settings.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>currency.precision</guilabel> [0] &mdash;
+Indicates the number of decimal places in the resource credit currency. For example, if you are will be dealing with processor-seconds of an integer resource unit, use 0 (which is the default). If you will be charging dollars and cents, then use 2. This parameter should be the same in the goldd.conf and gold.conf files.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>security.authentication</guilabel> [true] &mdash;
+Indicates whether outgoing message are signed.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>security.encryption</guilabel> [false] &mdash;
+Indicates whether outgoing messages are encrypted.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>security.token.type</guilabel> [Symmetric] &mdash;
+Indicates the default security token type to be used in both authentication and encryption.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>server.host</guilabel> [localhost] &mdash;
+The hostname on which the gold server runs.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+<guilabel>server.port</guilabel> [7112] &mdash;
+The port the gold server listens on.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+  </sect1>
+
+</chapter>

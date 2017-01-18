@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Upgrading</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Accessing the GUI"
+HREF="x431.htm"><LINK
+REL="NEXT"
+TITLE="Configuration"
+HREF="x457.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x431.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x457.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="UPGRADE"
+></A
+>Chapter 3. Upgrading</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c442.htm#UPGRADEPREPARATION"
+>Preparation</A
+></DT
+><DT
+><A
+HREF="x457.htm"
+>Configuration</A
+></DT
+><DT
+><A
+HREF="x463.htm"
+>Compilation</A
+></DT
+><DT
+><A
+HREF="x473.htm"
+>Server Shutdown</A
+></DT
+><DT
+><A
+HREF="x479.htm"
+>Installation</A
+></DT
+><DT
+><A
+HREF="x489.htm"
+>Server Startup</A
+></DT
+></DL
+></DIV
+><P
+>Gold uses the standard configure, make and make install steps for upgrades. This document assumes that you are updating Gold to a new maintenance or fix level within the same major and minor release. Instructions for migrating to a new minor or major release can be found in the release notes (see RELEASENOTES or doc/releasenotes.pdf). This document provides a number of sample steps referenced to a particular installation on a Linux platform using the bash shell. These steps indicate the userid in brackets performing the step. The exact commands to be performed and the user that issues them will vary based on the platform, shell, installation preferences, etc.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="UPGRADEPREPARATION"
+>Preparation</A
+></H1
+><P
+>To build and update Gold, you first need to unpack the tar archive and change directory into the top directory of the distribution.
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+cd ~/src
+        </KBD
+>
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+tar -zxvf gold-2.2.0.5.tar.gz
+        </KBD
+>
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+cd gold-2.2.0.5
+        </KBD
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x431.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x457.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Accessing the GUI</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Configuration</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

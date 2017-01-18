@@ -1,0 +1,25 @@
+# Usage: goldsh < info.gold.sh
+
+# Machine
+Object Create Name=Machine Description="Cluster or SMP System"
+Attribute Create Object=Machine Name=Name PrimaryKey=True DataType=String Description="Machine Name" NoRefresh:=True
+Attribute Create Object=Machine Name=Active DataType=Boolean DefaultValue=True Description="Is the Machine Active?" NoRefresh:=True
+Attribute Create Object=Machine Name=Architecture DataType=String Description="System Architecture" NoRefresh:=True
+Attribute Create Object=Machine Name=OperatingSystem DataType=String Description="Operating System" NoRefresh:=True
+Attribute Create Object=Machine Name=ConfiguredDisk DataType=String Description="Configured Disk" NoRefresh:=True
+Attribute Create Object=Machine Name=AvailableDisk DataType=String Description="Available Disk" NoRefresh:=True
+Attribute Create Object=Machine Name=ConfiguredMemory DataType=String Description="Configured Memory" NoRefresh:=True
+Attribute Create Object=Machine Name=AvailableMemory DataType=String Description="Available Memory" NoRefresh:=True
+Attribute Create Object=Machine Name=ConfiguredProcessors DataType=String Description="Configured Processors" NoRefresh:=True
+Attribute Create Object=Machine Name=AvailableProcessors DataType=String Description="Available Processors" NoRefresh:=True
+Attribute Create Object=Machine Name=ConfiguredSwap DataType=String Description="Configured Swap" NoRefresh:=True
+Attribute Create Object=Machine Name=AvailableSwap DataType=String Description="Available Swap" NoRefresh:=True
+Attribute Create Object=Machine Name=Description Sequence=900 DataType=String Description="Description" NoRefresh:=True
+Action Create Object=Machine Name=Create Display=True Description=Create NoRefresh:=True
+Action Create Object=Machine Name=Query Display=True Description=Query NoRefresh:=True
+Action Create Object=Machine Name=Modify Display=True Description=Modify NoRefresh:=True
+Action Create Object=Machine Name=Delete Display=True Description=Delete NoRefresh:=True
+Action Create Object=Machine Name=Undelete Display=True Description=Undelete NoRefresh:=True
+
+# Done -- Bail out
+quit

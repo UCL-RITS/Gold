@@ -1,0 +1,603 @@
+  <chapter id="GettingStarted">
+    <title>Getting Started</title>
+    <para>
+In order to prepare Gold for use as an allocation and accounting manager, you will need to perform some initial steps to define users, machines and projects, make deposits, etc. This chapter proceeds by offering a number of examples in performing these steps. These steps may be used as a guide, substituting values and options appropriate for your system.
+    </para>
+    <para>
+It is assumed that you have already installed and bootstrapped Gold as an allocation and accounting manager and started the gold server before performing the steps suggested in this section.
+    </para>
+
+    <important>
+      <para>
+You will need to be a Gold System Adminstrator to perform the tasks in this chapter!
+      </para>
+    </important>
+
+    <sect1 id="UserDefine">
+      <title>Define Users</title>
+      <para>
+First, you will need to define the users that will use, manage or administer the resources (see <link linkend="UserCreate">Creating Users</link>).
+      </para>
+      <example>
+        <title>Let's add the users amy, bob and dave.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkuser -n "Wilkes, Amy" -E "amy@western.edu" amy
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 User
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkuser -n "Smith, Robert F." -E "bob@western.edu" bob
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 User
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkuser -n "Miller, David" -E "dave@western.edu" dave
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 User
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsuser
+          </userinput>
+        </para>
+        <screen>
+Name Active CommonName       PhoneNumber EmailAddress     DefaultProject Description 
+---- ------ ---------------- ----------- ---------------- -------------- ----------- 
+gold True                                                                             Gold Admin  
+amy  True   Wilkes, Amy                  amy@western.edu                                          
+bob  True   Smith, Robert F.             bob@western.edu                                          
+dave True   Miller, David                dave@western.edu
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="MachineDefine">
+      <title>Define Machines</title>
+      <para>
+You will also need to add the names of the machines that provide resources (see <link linkend="MachineCreate">Creating Machines</link>).
+      </para>
+      <example>
+        <title>Let's define machines called colony and blue.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkmachine -d "Linux Cluster" colony
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Machine
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkmachine -d "IBM SP2" blue
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Machine
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsmachine
+          </userinput>
+        </para>
+        <screen>
+Name   Active Architecture OperatingSystem Description   
+------ ------ ------------ --------------- ------------- 
+colony True                                Linux Cluster 
+blue   True                                IBM SP2       
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectDefine">
+      <title>Define Projects</title>
+      <para>
+Next you should create the projects that will use the resources (see <link linkend="ProjectCreate">Creating Projects</link>).
+      </para>
+      <note>
+        <para>
+In these examples we assume that the account.autogen configuration parameter is set to automatically create a default account for each project (see <link linkend="ServerConfig">Server Configuration</link>).
+        </para>
+      </note>
+      <example>
+        <title>We will define the projects biology and chemistry.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Biology Department" biology
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+Auto-generated Account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Chemistry Department" chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+Auto-generated Account 2
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject
+          </userinput>
+        </para>
+        <screen>
+Name      Active Users Machines Description          
+--------- ------ ----- -------- --------------------
+biology   True                  Biology Department   
+chemistry True                  Chemistry Department 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectUsers">
+      <title>Add Users to the Projects</title>
+      <para>
+Although this could have been done at the project creation step, you can now assign users to be members of your projects (see <link linkend="ProjectModify">Modifying Projects</link>).
+      </para>
+      <example>
+        <title>Adding users to our projects.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchproject &mdash;addUsers amy,bob biology
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ProjectUser
+Successfully created 1 ProjectUser
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchproject &mdash;addUsers amy,bob,dave chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ProjectUser
+Successfully created 1 ProjectUser
+Successfully created 1 ProjectUser
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject
+          </userinput>
+        </para>
+        <screen>
+Name      Active Users        Machines Description          
+--------- ------ ------------ -------- --------------------
+biology   True   amy,bob               Biology Department   
+chemistry True   amy,dave,bob          Chemistry Department 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="MakeDeposits">
+      <title>Make Deposits</title>
+      <para>
+Now you can make some deposits (see <link linkend="AccountDeposit">Making Deposits</link>).
+      </para>
+      <example>
+        <title>Let's add 360000000 credits to each project. We will cause them both to be valid just for the fiscal year 2005.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 360000000 -p biology
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 360000000 credits into account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 360000000 -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 360000000 credits into account 2
+        </screen>
+        <para>
+Let's examine the allocations we just created
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+1  1       2005-01-01 2006-01-01 360000000           0 360000000
+2  2       2005-01-01 2006-01-01 360000000           0 360000000
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Balance">
+      <title>Check The Balance</title>
+      <para>
+You can verify the resulting balance (see <link linkend="AccountBalance">Querying The Balance</link>).
+      </para>
+      <example>
+        <title>Let's look at amy's balance</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy
+          </userinput>
+        </para>
+        <screen>
+Id Name      Amount    Reserved Balance   CreditLimit Available
+-- --------- --------- -------- --------- ----------- ---------
+1  biology   360000000 0        360000000 0           360000000
+2  chemistry 360000000 0        360000000 0           360000000
+        </screen>
+      </example>
+      <example>
+        <title>You may just want the total balance for a certain project and machine</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy -p chemistry -m colony &mdash;total
+          </userinput>
+        </para>
+        <screen>
+Balance   
+---------
+360000000 
+The account balance is 360000000 credits
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Integrate">
+      <title>Integrate Gold with your Resource Management System</title>
+      <para>
+Now you are ready to run some jobs. Before doing so you will need to integrate Gold with your Resource Management System (see <link linkend="Integration">Integrating with the Resource Management System</link>).
+      </para>
+      <para>
+Although the quotation, reservation and charge steps will most likely be invoked automatically by your resource management system, it is useful to understand their effects by invoking them manually.
+      </para>
+      <para>
+Let's simulate the lifecycle of a job.
+      </para>
+      <example>
+      <title>We'll assume our job has the following characteristics:</title>
+        <screen>
+Job Id:               PBS.1234.0
+Job Name:             heavywater
+User Name:            amy
+Project Name:         chemistry
+Machine Name:         colony
+Requested Processors: 16
+Estimated WallClock:  3600 seconds
+Actual WallClock:     1234 seconds
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Quote">
+      <title>Obtain A Job Quote</title>
+      <para>
+When a job is submitted, it is useful to check that the user's account has enough funds to run the job. This will be verified when the job starts, but by that point the job may have waited some time in the queue only to find out it never could have run in the first place. The job quotation step (see <link linkend="JobQuote">Obtaining Job Quotes</link>) can fill this function. Additionally, the quote can be used to determine the cheapest place to run, and to guarantee the current rates will be used when the job is charged.
+      </para>
+      <example>
+        <title>Let's see how much it will cost to run our job.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gquote -p chemistry -u amy -m colony -P 16 -t 3600
+          </userinput>
+        </para>
+        <screen>
+Successfully quoted 57600 credits
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Reserve">
+      <title>Make A Job Reservation</title>
+      <para>
+When a job starts, the resource management system creates a reservation (or pending charge) against the appropriate allocations based on the estimated wallclock limit specified for the job (see <link linkend="JobReserve">Making a Job Reservation</link>).
+      </para>
+      <example>
+        <title>Make a reservation for our job.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+greserve -J PBS.1234.0 -p chemistry -u amy -m colony -P 16 -t 3600
+          </userinput>
+        </para>
+        <screen>
+Successfully reserved 57600 credits for job PBS.1234.0
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsres
+          </userinput>
+        </para>
+        <screen>
+Id Account Amount Name       Job User Project   Machine EndTime                Type   Description 
+-- ------- ------ ---------- --- ---- --------- ------- ---------------------- ------ ----------- 
+1  2       57600  PBS.1234.0 1   amy  chemistry colony  2005-08-03 15:29:30-07 Normal            
+        </screen>
+        <para>
+This reservation will decrease our balance by the amount reserved.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -p chemistry &mdash;total &mdash;quiet
+          </userinput>
+        </para>
+        <screen>
+359942400
+        </screen>
+        <para>
+Although our allocation has not changed.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+2  2       2005-01-01 2006-01-01 360000000           0 360000000
+        </screen>
+        <para>
+This is best illustrated by the detailed balance listing:
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Id Name      Amount    Reserved Balance   CreditLimit Available 
+-- --------- --------- -------- --------- ----------- --------- 
+2  chemistry 360000000 57600    359942400 0           359942400 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Charge">
+      <title>Charge for a Job</title>
+      <para>
+After a job completes, any associated reservations are removed and a charge is issued against the appropriate allocations based on the actual wallclock time used by the job (see <link linkend="JobCharge">Charging Jobs</link>).
+      </para>
+      <example>
+        <title>Issue the charge for our job.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gcharge -J PBS.1234.0 -u amy -p chemistry -m colony -P 16 -t 1234 -X WallDuration=1234
+          </userinput>
+        </para>
+        <screen>
+Successfully charged job PBS.1234.0 for 19744 credits
+1 reservations were removed
+        </screen>
+        <para>
+Your allocation will now have gone down by the amount of the charge.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+2  2       2005-01-01 2006-01-01 359980256           0 360000000
+        </screen>
+        <para>
+However, your balance actually goes up (because the reservation that was removed was larger than the actual charge).
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -p chemistry &mdash;total
+          </userinput>
+        </para>
+        <screen>
+Balance   
+---------
+359980256 
+The account balance is 359980256 credits
+        </screen>
+        <para>
+A job record was created for the job as a side-effect of the charge (see <link linkend="JobQuery">Querying Jobs</link>).
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob
+          </userinput>
+        </para>
+        <screen>
+Id JobId      User Project   Machine Charge Class Type   Stage  QualityOfService Nodes Processors Executable Application StartTime EndTime WallDuration QuoteId Description 
+-- ---------- ---- --------- ------- ------ ----- ------ ------ ---------------- ----- ---------- ---------- ----------- --------- ------- ------------ ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony  19744        Normal Charge                        16                                                  1234         1                  
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="Refund">
+      <title>Refund a Job</title>
+      <para>
+Now, since this was an imaginary job, you had better refund the user's account (see <link linkend="JobRefund">Issuing Job Refunds</link>).
+      </para>
+      <example>
+        <title>Let's isse a refund for our job.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grefund -J PBS.1234.0
+          </userinput>
+        </para>
+        <screen>
+Successfully refunded 19744 credits for job PBS.1234.0
+        </screen>
+        <para>
+Our balance is back as it was before the job ran.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -p chemistry &mdash;total
+          </userinput>
+        </para>
+        <screen>
+Balance   
+--------- 
+360000000 
+The account balance is 360000000 credits
+        </screen>
+        <para>
+The allocation, of course, is likewise restored.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc -p chemistry
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+2  2       2005-01-01 2006-01-01 360000000           0 360000000
+        </screen>
+        <para>
+Notice that the job charge is now zero because the job has been fully refunded.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob
+          </userinput>
+        </para>
+        <screen>
+Id JobId      User Project   Machine Charge Class Type   Stage  QualityOfService Nodes Processors Executable Application StartTime EndTime WallDuration QuoteId Description 
+-- ---------- ---- --------- ------- ------ ----- ------ ------ ---------------- ----- ---------- ---------- ----------- --------- ------- ------------ ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony  0            Normal Charge                        16                                                  1234         1                  
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="QueryTransactions">
+      <title>List Transactions</title>
+      <para>
+You can now check the resulting transaction records (see <link linkend="TransactionQuery">Querying Transactions</link>).
+      </para>
+      <example>
+        <title>Let's list all the job transactions</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -O Job &mdash;show="RequestId,TransactionId,Object,Action,JobId,Project,User,Machine,Amount"
+          </userinput>
+        </para>
+        <screen>
+RequestId TransactionId Object Action  JobId      Project   User Machine Amount 
+--------- ------------- ------ ------- ---------- --------- ---- ------- ------ 
+298       299           Job    Create                                           
+298       303           Job    Quote              chemistry amy  colony  57600  
+299       304           Job    Modify                                           
+299       307           Job    Reserve PBS.1234.0 chemistry amy  colony  57600  
+300       311           Job    Charge  PBS.1234.0 chemistry amy  colony  19744  
+300       312           Job    Modify                                           
+301       314           Job    Refund  PBS.1234.0                               
+301       315           Job    Modify                   
+        </screen>
+      </example>
+      <example>
+        <title>It may also be illustrative to examine what transactions actually composed our charge request...</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -R 655 &mdash;show="Id,Object,Action,Name,JobId,Amount,Account,Delta"
+          </userinput>
+        </para>
+        <screen>
+Id  Object      Action Name       JobId      Amount Account Delta  
+--- ----------- ------ ---------- ---------- ------ ------- ------ 
+308 Usage       Create                                             
+309 Reservation Delete PBS.1234.0                                  
+310 Allocation  Modify 2                                           
+311 Job         Charge 1          PBS.1234.0 19744  2       -19744 
+312 Job         Modify 1                                          
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ExamineStatement">
+      <title>Examine Account Statement</title>
+      <para>
+Finally, you can examine the account statement for our activities (see <link linkend="AccountStatement">Obtaining an Account Statement</link>).
+      </para>
+      <example>
+        <title>We can request an itemized account statement over all time for the chemistry project (account 2)</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gstatement -p chemistry
+          </userinput>
+        </para>
+        <screen>
+################################################################################
+#
+# Statement for account 2 (chemistry) generated on Tue Aug  3 16:06:15 2005.
+#
+# Reporting account activity from -infinity to now.
+#
+################################################################################
+
+Beginning Balance:                    0
+------------------ --------------------
+Total Credits:                360019744
+Total Debits:                    -19744
+------------------ --------------------
+Ending Balance:               360000000
+
+############################### Credit Detail ##################################
+
+Object  Action  JobId      Amount    Time
+------- ------- ---------- --------- ----------------------
+Account Deposit            360000000 2005-08-03 16:01:15-07
+Job     Refund  PBS.1234.0 19744     2005-08-03 16:04:02-07
+
+############################### Debit Detail ###################################
+
+Object     Action     JobId      Project   User Machine Amount Time
+---------- ---------- ---------- --------- ---- ------- ------ ----------------------
+Job        Charge     PBS.1234.0 chemistry amy  colony  -19744 2005-08-03 16:03:39-07
+
+
+############################### End of Report ##################################
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ExamineUsage">
+      <title>Examine Project Usage</title>
+      <para>
+An additional report examines the charge totals for each user that completed jobs (see <link linkend="ProjectUsage">Project Usage Summary</link>).
+      </para>
+      <example>
+        <title>Display usage by user for the chemistry project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gusage -p chemistry
+          </userinput>
+        </para>
+        <screen>
+################################################################################
+#
+# Usage Summary for project chemistry
+# Generated on Tue Feb  8 11:05:06 2005.
+# Reporting user charges from 2006-07-01 to 2006-10-01
+#
+################################################################################
+User Amount
+---- ------
+amy   19744
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

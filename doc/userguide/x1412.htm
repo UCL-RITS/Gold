@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Modifying Projects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Projects"
+HREF="c1298.htm"><LINK
+REL="PREVIOUS"
+TITLE="Querying Projects"
+HREF="x1363.htm"><LINK
+REL="NEXT"
+TITLE="Deleting Projects"
+HREF="x1497.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1363.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Managing Projects</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1497.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PROJECTMODIFY"
+>Modifying Projects</A
+></H1
+><P
+>To modify a project, use the command <B
+CLASS="COMMAND"
+>gchproject</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gchproject</B
+>  [-A | -I] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [&mdash;addUser(s)  [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+> [, [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>...]] [&mdash;addMachines(s)  [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+> [, [+ | -]<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>...]] [&mdash;delUser(s) <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>...]] [&mdash;delMachines(s) <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>...]] [&mdash;actUser(s) <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>...]] [&mdash;actMachines(s) <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>...]] [&mdash;deactUser(s) <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>...]] [&mdash;deactMachines(s) <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>...]] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] {[-p] <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>}</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1479"
+></A
+><P
+><B
+>Example 8-6. Deactivating a project</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchproject -I chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully modified 1 Project
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1485"
+></A
+><P
+><B
+>Example 8-7. Adding users as members of a project</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchproject &mdash;addUsers jsmith,barney chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 2 ProjectUsers
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1491"
+></A
+><P
+><B
+>Example 8-8. Adding machines as members of a project</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gchproject &mdash;addMachines colony chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 ProjectMachines
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1363.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1497.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Querying Projects</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1298.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Deleting Projects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

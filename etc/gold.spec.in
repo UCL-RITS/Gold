@@ -1,0 +1,163 @@
+# RPM Spec file for Gold
+
+%define  name     @PACKAGE_TARNAME@
+%define  ver      @PACKAGE_VERSION@
+%define  rel      1
+%define  basedir   %{name}-%{ver}
+%define  prefix    @prefix@
+%define  profiled  /etc/profile.d
+%define  cgi_bin   /var/www/cgi-bin/gold
+
+Summary: An Accounting and Allocation Manager
+Name: %{name}
+Version: %{ver}
+Release: %{rel}
+License: BSD Open Source License. See LICENSE file.
+Group: Applications
+Source0: %{name}-%{ver}.tar.gz
+URL: http://sss.scl.ameslab.gov/gold.shtml
+Distribution: SSS
+Vendor: PNNL
+Packager: PNNL
+BuildRoot: %{_tmppath}/%{name}-%{ver}-root
+Prefix: %{prefix}
+
+Requires: perl >= 5.6.1
+Requires: perl-suidperl >= 5.6.1
+Requires: libxml2 >= 2.4.25
+
+#BuildPreReq: openssl-devel
+AutoReqProv: no
+
+%description
+Gold is a unique open source dynamically customizable information service. It has built-in support to function as a dynamic reservation-based Accounting and Allocation Management System that manages the utilization of computational resources in a multi-project environment. It is used in conjunction with a resource management (batch) system allowing an organization to guarantee greater fairness and enforce mission priorities. It does this by associating a charge with the use of computational resources and allocating resource credits which limit how much of the resources may be used at what time and by whom. It tracks resource utilization and allows for insightful planning.
+
+
+#############################################################################
+#   The items marked 'profiled' are for the auxillary RPM that is gen'd
+#    containing the profile.d/qbank.[csh,sh] scripts.  The stock
+#    gold-<ver>.rpm doesn't depend on these, but the gold-profiled require
+#    does require that gold-oscar is installed.  These setup the PATH and
+#    any other necessary EnvVars for each interactive shell (i.e. don't work
+#    for ssh/rsh shells).
+#############################################################################
+%package profiled
+Summary: Gold Accounting and Allocation Manager - profile.d scripts
+Group: Applications
+Requires: gold-oscar
+
+%description profiled
+This rpm contains the Gold Accounting and Allocation Manager profile.d
+entries necessary to establish the proper Gold environment.
+
+
+#---------------------------------------------------------------------
+# Prep install section
+#---------------------------------------------------------------------
+
+%prep
+rm -rf $RPM_BUILD_ROOT
+
+# Extract tarball
+%setup -n gold-%{ver}
+
+
+#---------------------------------------------------------------------
+# Build section - Actually configure/build in BUILD_ROOT area
+#---------------------------------------------------------------------
+   
+%build
+./configure --prefix %{prefix} --with-db=SQLite
+make build_root=$RPM_BUILD_ROOT
+make build_root=$RPM_BUILD_ROOT gui
+
+
+#---------------------------------------------------------------------
+# Install section - install things as they should be on target machine
+#                   by placing them in the BUILD_ROOT area accordingly
+#---------------------------------------------------------------------
+
+%install
+#mkdir -p $RPM_BUILD_ROOT/%{prefix}
+make build_root=$RPM_BUILD_ROOT deps
+make build_root=$RPM_BUILD_ROOT install
+make build_root=$RPM_BUILD_ROOT install-gui
+cp bank.gold base.sql bank.sql sssrmap3.xsd ${RPM_BUILD_ROOT}%{prefix}
+cp src/gold_init.pl ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
+chmod +x ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
+mkdir -p $RPM_BUILD_ROOT/etc/init.d
+cp etc/gold.d ${RPM_BUILD_ROOT}/etc/init.d/gold
+touch ${RPM_BUILD_ROOT}%{prefix}/etc/auth_key
+# Remove the docs so they can be installed in the defaultdocdir
+rm -rf ${RPM_BUILD_ROOT}%{prefix}/doc
+
+mkdir -p $RPM_BUILD_ROOT/%{profiled}
+%__cp -f etc/gold.sh $RPM_BUILD_ROOT/%{profiled}/gold.sh
+%__cp -f etc/gold.csh $RPM_BUILD_ROOT/%{profiled}/gold.csh
+
+
+#---------------------------------------------------------------------
+# Post section - Post install script runs on local system after install
+#---------------------------------------------------------------------
+
+#%post
+#HOSTNAME=`hostname -s`
+#sed "s/clay/$HOSTNAME/" $RPM_INSTALL_PREFIX/lib/qbank.ph >$RPM_INSTALL_PREFIX/lib/qbank.ph.mod
+#%__mv $RPM_INSTALL_PREFIX/lib/qbank.ph.mod $RPM_INSTALL_PREFIX/lib/qbank.ph
+
+#---------------------------------------------------------------------
+# Clean section
+#---------------------------------------------------------------------
+
+#%clean
+# Get rid of any tmp files in RPM land, ie. '/usr/src/redhat/BUILD/...', etc.
+#%__rm -rf $RPM_BUILD_DIR/%{basedir}
+#%__rm -rf $RPM_BUILD_ROOT
+
+
+#---------------------------------------------------------------------
+# Files section
+#---------------------------------------------------------------------
+
+#############################################################################
+#   the %files area list the dirs to end up on target machine
+#   and it looks in the BUILD_ROOT area and snags that dir & all sub-dirs
+#   so all files don't have to be listed explicitly.
+#############################################################################
+
+%files
+%defattr(-,root,root)
+%{prefix}/bin
+%{prefix}/lib
+%{prefix}/sbin
+%{prefix}/bank.gold
+%{prefix}/base.sql
+%{prefix}/bank.sql
+%{prefix}/sssrmap3.xsd
+%{cgi_bin}
+%config %{prefix}/etc/gold.conf
+%config %{prefix}/etc/goldg.conf
+%config %{prefix}/etc/goldd.conf
+%attr(0755,root,root) /etc/init.d/gold
+%doc doc/userguide.pdf README INSTALL LICENSE CHANGES
+%doc %dir doc/userguide
+%ghost %{prefix}/etc/auth_key
+
+%files profiled
+%defattr(0755,root,root)
+%{profiled}/*
+
+
+#---------------------------------------------------------------------
+# ChangeLog section
+#---------------------------------------------------------------------
+%changelog
+* Thu Feb 17 2005  12:11:55AM    Scott Jackson <Scott.Jackson@pnl.gov>
+- Updated RPM for Gold Second Beta Release
+* Wed Sep 22 2004  12:01:22AM    Scott Jackson <Scott.Jackson@pnl.gov>
+- Updated RPM for Gold Pre-Beta Release
+* Mon Feb 23 2004  11:25:00AM    Scott Jackson <Scott.Jackson@pnl.gov>
+- Updated RPM for Gold Alpha (Java) Release
+* Mon Nov 03 2003  10:00:08AM    Scott Jackson <Scott.Jackson@pnl.gov>
+- Created RPM for Gold Pre-Alpha Release
+

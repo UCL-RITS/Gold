@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Database Setup</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="PREVIOUS"
+TITLE="General Setup"
+HREF="x320.htm"><LINK
+REL="NEXT"
+TITLE="Web Server Setup"
+HREF="x374.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x320.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x374.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="DATABASESETUP"
+>Database Setup</A
+></H1
+><P
+>If you have chosen to use PostgreSQL or MySQL you will need to define a database user, create the gold database, and configure the database server to support transactions and connections from the Gold server host. No setup is needed if you are using SQLite.
+      </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CONFIGURETRUSTEDCONNECTIONS"
+>Configure trusted connections</A
+></H2
+><P
+>For PostgreSQL, add the IP ADDRESS of the host where the Gold server will run (even if it is the same host as the database server).
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[postgres]$ </SAMP
+>
+vi /etc/postgresql/8.4/main/pg_hba.conf
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>host    all         all         192.168.1.99/16       trust
+          </PRE
+>
+        </P
+><P
+>For PostgreSQL, configure postgres to accept connections from your host.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[postgres]$ </SAMP
+>
+vi /etc/postgresql/8.4/main/postgresql.conf
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>listen_addresses = 'mygoldserver,localhost' # what IP address(es) to listen on;
+          </PRE
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="ENABLETRANSACTIONS"
+>Enable support for transactions</A
+></H2
+><P
+>If you are using the MySQL database you will need to configure the server to
+support transactions (MySQL 5.5.5 and later supports transactions by default).
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]$ </SAMP
+>
+vi /etc/mysql/my.cnf
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>default-storage-engine = INNODB   # Place under the [mysqld] section
+          </PRE
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CREATEGOLDADMIN"
+>Add the "gold" user as a database administrator</A
+></H2
+><P
+>For PostgreSQL database:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[postgres]$ </SAMP
+>
+createuser gold
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>Shall the new role be a superuser? (y/n) y
+          </PRE
+>
+        </P
+><P
+>For MySQL database:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[mysql]$ </SAMP
+>
+mysql
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>create user gold;
+grant all on *.* to 'gold'@'localhost';
+          </PRE
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="CREATEGOLDDATABASE"
+>Create the gold database (as the gold user)</A
+></H2
+><P
+>For PostgreSQL database:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+createdb gold
+          </KBD
+>
+        </P
+><P
+>For MySQL database:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[gold]$ </SAMP
+>
+mysql
+          </KBD
+>
+          <PRE
+CLASS="SCREEN"
+>create database gold;
+          </PRE
+>
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x320.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x374.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>General Setup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Web Server Setup</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

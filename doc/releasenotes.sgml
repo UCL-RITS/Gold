@@ -1,0 +1,71 @@
+<!--
+  This is the sgml source document for the Moab Release Notes.
+  For pdf use `db2pdf -d releasenotes.dsl releasenotes.sgml`
+  For chunked html use `db2html -d releasenotes.dsl#html releasenotes.sgml`
+  For unchunked html use `db2html -u -d releasenotes.dsl#html releasenotes.sgml`
+  For text use `db2html -u -d none releasenotes.sgml; links -dump releasenotes/releasenotes.html > releasenotes.txt`
+-->
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!ENTITY PRODUCT "Gold Allocation Manager"> <!-- change product name here -->
+<!ENTITY VERSION "2.2.0">                 <!-- change product version here -->
+<!ENTITY copyright SYSTEM "adaptivecopyright.sgml">
+<!ENTITY legalnotice SYSTEM "adaptivelegalnotice.sgml">
+<!ENTITY overview SYSTEM "relnotesoverview.sgml">
+<!ENTITY features SYSTEM "features.sgml">
+<!ENTITY fixes SYSTEM "fixes.sgml">
+<!ENTITY migration SYSTEM "migration.sgml">
+<!ENTITY support SYSTEM "support.sgml">
+<!ENTITY contact SYSTEM "contact.sgml">
+]>
+
+<article>
+
+<!-- Metadata -->
+
+  <articleinfo>
+    <title>Release Notes</title>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="gold_logo_globe.png" format="png" align="center">
+      </imageobject>
+    </mediaobject>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="logo2.png" format="png" align="center">
+      </imageobject>
+    </mediaobject>
+    <subtitle>&PRODUCT;</subtitle>
+    <subtitle>Version &VERSION;</subtitle>
+    <subtitle></subtitle>
+    <!-- <author>
+      <firstname>Scott</firstname>
+      <surname>Jackson</surname>
+      <affiliation><orgname>Cluster Resources, Inc.</orgname></affiliation>
+      <address><email>Scott.Jackson@pnl.gov</email></address>
+    </author> -->
+    &copyright;
+
+<!-- Abstract -->
+
+  <abstract>
+    <para>
+This document provides an overview of the changes made in a minor release of &PRODUCT;. A minor release will generally include new functionality and features that can break compatibility with previous versions. See the <link linkend="Migration">Migration</link> section for migration procedures.
+    </para>
+  </abstract>
+  </articleinfo>
+
+<!-- Table of contents toggled in releasenotes.dsl -->
+
+<!-- Sections -->
+
+<!--  &legalnotice; -->
+  &overview;
+  &features;
+  &migration;
+<!--  &fixes; -->
+
+<!-- End of Article -->
+
+</article>
+

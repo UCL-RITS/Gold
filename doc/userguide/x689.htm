@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Refund a Job</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting Started"
+HREF="c495.htm"><LINK
+REL="PREVIOUS"
+TITLE="Charge for a Job"
+HREF="x663.htm"><LINK
+REL="NEXT"
+TITLE="List Transactions"
+HREF="x714.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x663.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Getting Started</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x714.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="REFUND"
+>Refund a Job</A
+></H1
+><P
+>Now, since this was an imaginary job, you had better refund the user's account (see <A
+HREF="x2850.htm"
+>Issuing Job Refunds</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN693"
+></A
+><P
+><B
+>Example 4-12. Let's isse a refund for our job.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+grefund -J PBS.1234.0
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully refunded 19744 credits for job PBS.1234.0
+        </PRE
+><P
+>Our balance is back as it was before the job ran.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gbalance -p chemistry &mdash;total
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Balance   
+--------- 
+360000000 
+The account balance is 360000000 credits
+        </PRE
+><P
+>The allocation, of course, is likewise restored.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsalloc -p chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+2  2       2005-01-01 2006-01-01 360000000           0 360000000
+        </PRE
+><P
+>Notice that the job charge is now zero because the job has been fully refunded.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsjob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id JobId      User Project   Machine Charge Class Type   Stage  QualityOfService Nodes Processors Executable Application StartTime EndTime WallDuration QuoteId Description 
+-- ---------- ---- --------- ------- ------ ----- ------ ------ ---------------- ----- ---------- ---------- ----------- --------- ------- ------------ ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony  0            Normal Charge                        16                                                  1234         1                  
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x663.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x714.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Charge for a Job</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c495.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>List Transactions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

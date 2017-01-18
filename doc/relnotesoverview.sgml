@@ -1,0 +1,6 @@
+<sect1 id="Overview">
+  <title>Overview</title>
+  <para>
+This release of &PRODUCT; features enhanced charge rate types that give more flexibility in the way charges can be calculated. Other changes were made to allow for better support of incremental charging and cost determination. Command-line clients were added that aid in the importing and manipulation of job records.
+  </para>
+</sect1>

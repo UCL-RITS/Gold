@@ -1,0 +1,5 @@
+#!/bin/bash
+
+db2pdf -d style.dsl releasenotes.sgml
+db2html -u -d style.dsl#html releasenotes.sgml
+db2html -u -d none releasenotes.sgml; links -dump releasenotes/releasenotes.html >releasenotes.txt

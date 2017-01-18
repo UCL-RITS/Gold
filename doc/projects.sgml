@@ -1,0 +1,290 @@
+  <chapter id="Projects">
+    <title>Managing Projects</title>
+    <para>
+A project is a research interest or activity requiring the use of computational resources for a common purpose. Users may be designated as members of a project and allowed to share its allocations. The project user list will be honored within accounts including the project that specify MEMBERS in the user list. Machines may also be designated as members of a project as a default resource pool. The project machine list will be honored within accounts including the project that specify MEMBERS in the machine list.
+    </para>
+
+    <sect1 id="ProjectCreate">
+      <title>Creating Projects</title>
+      <para>
+To create a new project, use the command <command>gmkproject</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gmkproject</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-u <group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable></arg></arg>
+        <arg>-m <group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable></arg></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;createAccount=True|False</arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-p</arg> <replaceable>project_name</replaceable></arg>
+      </cmdsynopsis>
+      <note>
+        <para>
+If the account.autogen configuration parameter is set to true (see <link linkend="ServerConfig">Server Configuration</link>), an account will be automatically created for the project (unless overridden with the &mdash;createAccount option). The auto-generated account will be associated with the new project, the user MEMBERS of the project and ANY machine.
+        </para>
+      </note>
+      <note>
+        <para>
+It is possible to have projects be created automatically when first encountered in a job function (charge, reserve or quote) by setting the project.autogen configuration parameter to true (see <link linkend="ServerConfig">Server Configuration</link>). It is also possible to establish a system default project (project.default) to be used in job functions (charge, reserve, quote) when the project is unspecified and the user does not have a default project.
+        </para>
+      </note>
+      <example>
+        <title>Creating a project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Chemistry Department" chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+        </screen>
+      </example>
+      <example>
+        <title>Creating a project and specifying user members at the same time</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Chemistry Department" -u amy,bob,dave chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectQuery">
+      <title>Querying Projects</title>
+      <para>
+To display project information, use the command <command>glsproject</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsproject</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable><arg rep="repeat">,<replaceable>attribute_name</replaceable></arg></arg>
+        <arg>&mdash;showHidden</arg>
+        <arg>&mdash;showSpecial</arg>
+        <group>
+          <arg>-l</arg>
+          <arg>&mdash;long</arg>
+        </group>
+        <group>
+          <arg>-w</arg>
+          <arg>&mdash;wide</arg>
+        </group>
+        <arg>&mdash;raw</arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <arg choice="opt"><arg>-p</arg> <replaceable>project_pattern</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all info about all projects</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject
+          </userinput>
+        </para>
+        <screen>
+Name      Active Users        Machines Description          
+--------- ------ ------------ -----------------------------
+biology   True   amy,bob      colony   Biology Department   
+chemistry True   amy,dave,bob          Chemistry Department 
+        </screen>
+      </example>
+      <example>
+        <title>Displaying the name and user members of a project in long format</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject &mdash;show Name,Users -l chemistry
+          </userinput>
+        </para>
+        <screen>
+Name      Users 
+--------- -----
+chemistry bob   
+          dave  
+          amy   
+        </screen>
+      </example>
+      <example>
+        <title>Listing all project names</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject &mdash;show Name &mdash;quiet
+          </userinput>
+        </para>
+        <screen>
+biology
+chemistry
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectModify">
+      <title>Modifying Projects</title>
+      <para>
+To modify a project, use the command <command>gchproject</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchproject</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;addUser(s) <group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;addMachines(s) <group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable><arg rep="repeat">,<group><arg>+</arg><arg>-</arg></group><replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;delUser(s) <replaceable>user_name</replaceable><arg rep="repeat">,<replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;delMachines(s) <replaceable>machine_name</replaceable><arg rep="repeat">,<replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;actUser(s) <replaceable>user_name</replaceable><arg rep="repeat">,<replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;actMachines(s) <replaceable>machine_name</replaceable><arg rep="repeat">,<replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;deactUser(s) <replaceable>user_name</replaceable><arg rep="repeat">,<replaceable>user_name</replaceable></arg></arg>
+        <arg>&mdash;deactMachines(s) <replaceable>machine_name</replaceable><arg rep="repeat">,<replaceable>machine_name</replaceable></arg></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-p</arg> <replaceable>project_name</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Deactivating a project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchproject -I chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Project
+        </screen>
+      </example>
+      <example>
+        <title>Adding users as members of a project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchproject &mdash;addUsers jsmith,barney chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 2 ProjectUsers
+        </screen>
+      </example>
+      <example>
+        <title>Adding machines as members of a project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchproject &mdash;addMachines colony chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ProjectMachines
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectDelete">
+      <title>Deleting Projects</title>
+      <para>
+To delete a project, use the command <command>grmproject</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmproject</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-p</arg> <replaceable>project_name</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting a project</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmproject chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Project
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ProjectUsage">
+      <title>Project Usage Summary</title>
+      <para>
+To generate a project usage summary broken down by user, use the command <command>gusage</command>. This report lists the total charges by each of the active users during the specified time frame.
+      </para>
+      <cmdsynopsis>
+        <command>gusage</command>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg choice="req"><arg>-p</arg> <replaceable>project_name</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Displaying a usage summary for the chemistry project during the third quarter of 2006</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gusage -p chemistry -s 2006-07-01 -e 2006-10-01
+          </userinput>
+        </para>
+        <screen>
+################################################################################
+#
+# Usage for project chemistry
+# Generated on Tue Feb  8 11:05:06 2005.
+# Reporting user charges from 2006-07-01 to 2006-10-01
+#
+################################################################################
+
+User Amount 
+---- ------ 
+amy   19744 
+bob   36078
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

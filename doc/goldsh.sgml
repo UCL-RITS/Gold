@@ -1,0 +1,750 @@
+  <chapter id="Goldsh">
+    <title>Using the Gold Shell (goldsh)</title>
+    <para>
+<command>goldsh</command> is an interactive control program that can access all of the advanced functionality in Gold.
+    </para>
+    <caution> 
+      <para>
+The goldsh control program allows you to make powerful and sweeping modifications to many objects with a single command. Inadvertant mistakes could result in modifications that are very difficult to reverse.
+      </para>
+    </caution>
+
+    <sect1 id="GoldshUsage">
+      <title>Usage</title>
+      <para>
+Gold commands can be invoked directly from the command line as arguments, or read from stdin (interactively or redirected from a file).
+      </para>
+        <cmdsynopsis>
+          <command>goldsh</command>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>--man</arg>
+          <arg>&mdash;raw</arg>
+          <arg>&mdash;quiet</arg>
+          <group>
+            <arg>-v</arg>
+            <arg>&mdash;verbose</arg>
+          </group>
+          <arg><replaceable>&lt;Command&gt;</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Specifying the command as direct arguments</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh System Query
+          </userinput>
+        </para>
+        <screen>
+Name Version  Organization Description  
+---- -------- ------------ ------------
+Gold 2.0.b1.0              Beta Release 
+        </screen>
+      </example>
+      <example>
+        <title>Using the interactive prompt</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh
+          </userinput>
+        </para>
+        <para>
+<prompt>gold&gt;</prompt> System Query 
+        </para>
+        <screen>
+Name Version  Organization Description  
+---- -------- ------------ ------------ 
+Gold 2.0.b1.0              Beta Release 
+        </screen>
+        <para>
+<prompt>gold&gt;</prompt> quit
+        </para>
+      </example>
+      <example>
+        <title>Reading commands from a file</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+cat &gt;commands.gold &lt;&lt;EOF
+          </userinput>
+          <literallayout>
+System Query
+quit
+EOF
+          </literallayout>
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh &lt;commands.gold
+          </userinput>
+        </para>
+        <screen>
+Name Version  Organization Description  
+---- -------- ------------ ------------
+Gold 2.0.b1.0              Beta Release 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="CommandSyntax">
+      <title>Command Syntax</title>
+      <para>
+Gold commands are of the form:
+      </para>
+      <cmdsynopsis>
+        <arg choice="plain"><replaceable>&lt;Object&gt;</replaceable>
+          <arg rep="repeat">,<replaceable>&lt;Object&gt;</replaceable></arg>
+        </arg>
+        <arg choice="plain"><replaceable>&lt;Action&gt;</replaceable></arg>
+        <arg choice="opt" rep="repeat">
+          <arg choice="opt"><replaceable>&lt;Conjunction&gt;</replaceable></arg>
+          <arg choice="opt" rep="repeat"><replaceable>&lt;Open_Parenthesis&gt;</replaceable></arg>
+          <arg choice="plain">
+            <arg choice="opt"><replaceable>&lt;Object&gt;.</replaceable></arg>
+            <replaceable>&lt;Name&gt;</replaceable>
+          </arg>
+          <arg choice="plain"><replaceable>&lt;Operator&gt;</replaceable></arg>
+          <arg choice="plain">
+            <arg choice="opt"><replaceable>&lt;Object&gt;.</replaceable></arg>
+            <replaceable>&lt;Value&gt;</replaceable>
+          </arg>
+          <arg choice="opt" rep="repeat"><replaceable>&lt;Close_Parenthesis&gt;</replaceable></arg>
+        </arg>
+      </cmdsynopsis>
+      <para>
+The basic form of a command is &lt;Object&gt; &lt;Action&gt; [&lt;Name&gt;&lt;Operator&gt;&lt;Value&gt;]*. When an action is performed on more than one object, such as in a multi-object query, the objects are specified in a comma-separated list. Commands may accept zero or more predicates which may function as fields to return, conditions, update values, processing options, etc. Predicates, in their simplest form, are expressed as Name, Operator, Value tuples. Predicates may be combined via conjunctions with grouping specified with parentheses. When performing multi-object queries, names and values may need to be associated with their respective objects.
+      </para>
+      <para>
+Valid conjunctions include:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>&amp;&amp;</term>
+          <listitem>
+            <para>
+and
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>||</term>
+          <listitem>
+            <para>
+or
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>&amp;!</term>
+          <listitem>
+            <para>
+and not
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>|!</term>
+          <listitem>
+            <para>
+or not
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+Open parentheses may be any number of literal open parentheses '('.
+      </para>
+      <para>
+Name is the name of the condition, assignment, or option. When performing a multi-object query, a name may need to be prepended by its associated object separated by a period.
+      </para>
+      <para>
+Valid operators include:
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>==</term>
+          <listitem>
+            <para>
+equals
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>&lt;</term>
+          <listitem>
+            <para>
+less than
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>&gt;</term>
+          <listitem>
+            <para>
+greater than
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>&lt;=</term>
+          <listitem>
+            <para>
+less than or equal to
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>&gt;=</term>
+          <listitem>
+            <para>
+greater than or equal to
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>!=</term>
+          <listitem>
+            <para>
+not equal to
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>~</term>
+          <listitem>
+            <para>
+matches
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>=</term>
+          <listitem>
+            <para>
+is assigned
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>+=</term>
+          <listitem>
+            <para>
+is incremented by
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>-=</term>
+          <listitem>
+            <para>
+is decremented by
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>:=</term>
+          <listitem>
+            <para>
+option
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>:!</term>
+          <listitem>
+            <para>
+not option
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      <para>
+Value is the value of the selection list, condition, assignment, or option. When performing a multi-object query, a value may need to be prepended by its associated object (called the subject) separated by a period.
+      </para>
+      <para>
+Close parentheses may be any number of literal closing parentheses ')'.
+      </para>
+    </sect1>
+
+    <sect1 id="ValidObjects">
+      <title>Valid Objects</title>
+      <para>
+To list the objects available for use in Gold commands, issue the gold command: Object Query
+      </para>
+      <example>
+        <title>Listing all objects</title>
+        <para>
+          <userinput>
+            <prompt>gold&gt;</prompt> Object Query Show:="Sort(Name)"
+          </userinput>
+        </para>
+        <screen>
+Name                
+------------------- 
+ANY                 
+Account             
+AccountAccount      
+AccountMachine      
+AccountOrganization 
+AccountProject      
+AccountUser         
+Action              
+Allocation          
+Attribute           
+ChargeRate          
+Job                 
+Machine             
+NONE                
+Object              
+Organization        
+Password            
+Project             
+ProjectMachine      
+ProjectUser         
+Quotation           
+QuotationChargeRate 
+Reservation         
+Role                
+RoleAction          
+RoleUser            
+System              
+Transaction         
+Usage               
+User                
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ValidActions">
+      <title>Valid Actions for an Object</title>
+      <para>
+To list the actions that can be performed on an object, use the gold command: Action Query
+      </para>
+      <example>
+        <title>Listing all actions associated with the Account object</title>
+        <para>
+          <userinput>
+            <prompt>gold&gt;</prompt> Action Query Object==Account Show:="Sort(Name)"
+          </userinput>
+        </para>
+        <screen>
+Name     
+-------- 
+Balance  
+Create   
+Delete   
+Deposit  
+Modify   
+Query    
+Transfer 
+Undelete 
+Withdraw 
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ValidPredicates">
+      <title>Valid Predicates for an Object and Action</title>
+      <para>
+By appending the option "ShowUsage:=True" to a command, the syntax of the command is returned, expressed in SSSRMAP XML Message Format. 
+      </para>
+      <example>
+        <title>Show the usage for Allocation Query</title>
+        <para>
+          <userinput>
+            <prompt>gold&gt;</prompt> Allocation Query ShowUsage:=True
+          </userinput>
+        </para>
+        <screen>
+&lt;Request action="Query"&gt;
+    &lt;Object&gt;Allocation&lt;Object&gt;
+    [&lt;Get name="Id" [op="Sort|Tros|Count|GroupBy|Max|Min"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="Account" [op="Sort|Tros|Count|GroupBy|Max|Min"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="StartTime" [op="Sort|Tros|Count|GroupBy|Max|Min"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="EndTime" [op="Sort|Tros|Count|GroupBy|Max|Min"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="Amount" [op="Sort|Tros|Count|GroupBy|Max|Min|Sum|Average"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="Deposited" [op="Sort|Tros|Count|GroupBy|Max|Min|Sum|Average"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="Active" [op="Sort|Tros|Count|GroupBy"]&gt;&lt;/Get&gt;]
+    [&lt;Get name="Description" [op="Sort|Tros|Count|GroupBy|Max|Min"]&gt;&lt;/Get&gt;]
+    [&lt;Where name="Id" [op="EQ|NE|GT|GE|LT|LE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;Integer Number}&lt;/Where&gt;]
+    [&lt;Where name="Account" [op="EQ|NE|GT|GE|LT|LE|Match (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;Account Name}&lt;/Where&gt;]
+    [&lt;Where name="StartTime" [op="EQ|NE|GT|GE|LT|LE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;YYYY-MM-DD [hh:mm:ss]|-infinity|infinity|now&lt;/Where&gt;]
+    [&lt;Where name="EndTime" [op="EQ|NE|GT|GE|LT|LE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;YYYY-MM-DD [hh:mm:ss]|-infinity|infinity|now&lt;/Where&gt;]
+    [&lt;Where name="Amount" [op="EQ|NE|GT|GE|LT|LE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;Decimal Number}&lt;/Where&gt;]
+    [&lt;Where name="Deposited" [op="EQ|NE|GT|GE|LT|LE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;Decimal Number}&lt;/Where&gt;]
+    [&lt;Where name="Active" [op="EQ|NE (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;True|False&lt;/Where&gt;]
+    [&lt;Where name="Description" [op="EQ|NE|GT|GE|LT|LE|Match (EQ)"] [conj="And|Or (And)"] [group="&lt;Integer Number&gt;Description}&lt;/Where&gt;]
+    [&lt;Option name="ShowHidden"&gt;True|False (False)&lt;/Option&gt;]
+    [&lt;Option name="ShowUsage"&gt;True|False (False)&lt;/Option&gt;]
+    [&lt;Option name="Time"&gt;YYYY-MM-DD [hh:mm:ss]&lt;/Option&gt;]
+    [&lt;Option name="Unique"&gt;True|False (False)&lt;/Option&gt;]
+    [&lt;Option name="Limit"&gt;Integer Number}&lt;/Option&gt;]
+&lt;Request&gt;
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="CommonOptions">
+      <title>Common Options</title>
+      <para>
+There are a number of options that may be specified for all commands. These options include: ShowUsage
+      </para>
+      <variablelist>
+        <varlistentry>
+          <term>ShowUsage</term>
+          <listitem>
+            <para>
+This option may be included with any command to cause the command to return a usage message in SSSRMAP XML Message Format.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </sect1>
+
+    <sect1 id="CommonActions">
+      <title>Common Actions Available for most Objects</title>
+      <para>
+There are a number of actions that are available for most objects. These actions include Query, Create, Modify, Delete and Undelete. Commands involving these actions inherit some common structure unique to the action type.
+      </para>
+
+	    <sect2 id="QueryAction">
+	      <title>Query Action</title>
+	      <para>
+The Query action is used to query objects. It accept predicates that describe the attributes (fields) to return (including aggregation operations on those attributes), conditions that select which objects to return the attributes for, and other options unique to queries.
+	      </para>
+        <variablelist>
+          <varlistentry>
+            <term><guilabel>Selections</guilabel></term>
+            <listitem>
+              <literallayout>
+Selections use the Show option to specify a list of the attributes to return for the selected object. If selections are not specified, a default set of attributes (those not marked as hidden) will be returned.
+
+Name  =   Show
+Op    =   :=
+Value =   "attribute1,attribute2,attribute3,..."
+
+Aggregation operators may be applied to attributes by enclosing the target attribute in parenthesis and prepending the name of the desired operator. The aggregation operators that can be applied depend on the datatype of the attribute.
+
+Valid selection operators include:
+
+Sort      Ascending sort
+Tros      Descending sort
+Count     Count
+Max       Maximum value
+Min       Minimum value
+Average   Average value
+Sum       Sum
+GroupBy   Group other aggregations by this attribute
+
+For example: Allocation Query Show:="Sum(Amount),GroupBy(Account)"
+              </literallayout>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><guilabel>Conditions</guilabel></term>
+            <listitem>
+              <literallayout>
+Conditions are used to select which objects the action is to be performed on.
+
+Name  =   Name of the attribute to be tested
+Op    =   conditional operator
+Value =   The object or value against which the attribute is tested
+
+Valid condition operators include:
+
+==        Equal to
+!=        Not equal to
+&lt;         Less than
+&gt;         Greater than
+&lt;=        Less than or equal to
+&gt;=        Greater than or equal to
+~         Matches
+
+Matching uses the wildcards * and ? (equivalent to SQL % and _ respectively) in a manner similar to file globbing. * matches zero or more unspecified characters and ? matches exactly one unspecified character. For example mscf* matches objects having the specified attributes whose values start with the letters mscf, while mscf? matches objects having the specified attributes whose values start with mscf and have a total of exactly five characters.
+              </literallayout>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><guilabel>Options</guilabel></term>
+            <listitem>
+              <literallayout>
+Options indicate processing options that affect the result.
+
+Name  =   Name of the option
+Op    =   :=
+Value =   Value of the option
+
+Valid options for query actions include:
+
+ShowHidden:=True|False (False)  Includes hidden attributes in the result
+Time:="YYYY-MM-DD [hh:mm:ss]"   Run the command as if it were the specified time
+Unique:=True|False (False)    Display only unique results (like DISTINCT in SQL)
+Limit:={Integer Number}     Limit the results to the number of objects specified
+              </literallayout>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+	      <example>
+	        <title>Return the number of inactive reservations</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> Reservation Query EndTime&lt;now Show:="Count(Id)"
+	          </userinput>
+	        </para>
+	        <screen>
+Id
+--
+8
+	        </screen>
+	      </example>
+	    </sect2>
+
+	    <sect2 id="CreateAction">
+	      <title>Create Action</title>
+	      <para>
+The Create action is used to create a new object. It accepts predicates that describe the values of the attributes to be set.
+	      </para>
+        <variablelist>
+          <varlistentry>
+            <term><guilabel>Assignments</guilabel></term>
+            <listitem>
+              <literallayout>
+Assignments specify values to be assigned to attributes in the new object.
+
+Name  =   Name of the attribute being assigned a value
+Op    =   = (is assigned)
+Value =   The new value being assigned to the attribute
+              </literallayout>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+	      <example>
+	        <title>Add a new project member</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> ProjectUser Create Project=chemistry Name=scottmo
+	          </userinput>
+	        </para>
+	        <screen>
+Project   Name    Active Admin 
+--------- ------- ------ ----- 
+chemistry scottmo True   False 
+Successfully created 1 ProjectUser
+	        </screen>
+	      </example>
+	    </sect2>
+
+	    <sect2 id="ModifyAction">
+	      <title>Modify Action</title>
+	      <para>
+The Modify action is used to modify existing objects. It accepts predicates that select which objects will be modified and predicates that describe the values of the attributes to be set.
+	      </para>
+        <variablelist>
+          <varlistentry>
+            <term><guilabel>Assignments</guilabel></term>
+            <listitem>
+              <literallayout>
+Assignments specify values to be assigned to attributes in the selected objects.
+
+Name  =   Name of the attribute being assigned a value
+Op    =   assignment operators {=, +=, -=}
+Value =   The value being assigned to the attribute
+
+Valid assignment operators include:
+
+=         is assigned
++=        is incremented by
+-=        is decremented by
+              </literallayout>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><guilabel>Conditions</guilabel></term>
+            <listitem>
+              <literallayout>
+Conditions are used to select which objects the action is to be performed on.
+
+Name  =   Name of the attribute to be tested
+Op    =   conditional operator
+Value =   The object or value against which the attribute is tested
+
+Valid condition operators include:
+
+==        Equal to
+!=        Not equal to
+&lt;         Less than
+&gt;         Greater than
+&lt;=        Less than or equal to
+&gt;=        Greater than or equal to
+~         Matches
+
+Matching uses the wildcards * and ? (equivalent to SQL % and _ respectively) in a manner similar to file globbing. * matches zero or more unspecified characters and ? matches exactly one unspecified character. For example mscf* matches objects having the specified attributes whose values start with the letters mscf, while mscf? matches objects having the specified attributes whose values start with mscf and have a total of exactly five characters.
+              </literallayout>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+	      <example>
+	        <title>Change/set scottmo phone number and email address</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> User Modify Name==scottmo PhoneNumber="(509) 376-2204" EmailAddress="Scott.Jackson@pnl.gov"
+	          </userinput>
+	        </para>
+	        <screen>
+Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully modified 1 Users
+	        </screen>
+	      </example>
+	      <example>
+	        <title>Extend all reservations against project chemistry by 10 days</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> Reservation Modify EndTime+="10 days" Project==chemistry
+	          </userinput>
+	        </para>
+	        <screen>
+Id Account Amount Name       Job User Project   Machine EndTime             Description 
+-- ------- ------ ---------- --- ---- --------- ------- ------------------- -----------
+1  2       57600  PBS.1234.0 1   amy  chemistry colony  2004-11-06 10:47:30             
+Successfully modified 1 Reservations
+	        </screen>
+	      </example>
+	    </sect2>
+
+	    <sect2 id="DeleteAction">
+	      <title>Delete Action</title>
+	      <para>
+The Delete action is used to delete objects. It accepts predicates that select which objects are to be deleted.
+	      </para>
+        <variablelist>
+          <varlistentry>
+            <term><guilabel>Conditions</guilabel></term>
+            <listitem>
+              <literallayout>
+Conditions are used to select which objects the action is to be performed on.
+
+Name  =   Name of the attribute to be tested
+Op    =   conditional operator
+Value =   The object or value against which the attribute is tested
+
+Valid condition operators include:
+
+==        Equal to
+!=        Not equal to
+&lt;         Less than
+&gt;         Greater than
+&lt;=        Less than or equal to
+&gt;=        Greater than or equal to
+~         Matches
+
+Matching uses the wildcards * and ? (equivalent to SQL % and _ respectively) in a manner similar to file globbing. * matches zero or more unspecified characters and ? matches exactly one unspecified character. For example mscf* matches objects having the specified attributes whose values start with the letters mscf, while mscf? matches objects having the specified attributes whose values start with mscf and have a total of exactly five characters.
+              </literallayout>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+	      <example>
+	        <title>Get rid of the pesky Jacksons</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> User Delete CommonName~"Jackson*"
+	          </userinput>
+	        </para>
+	        <screen>
+Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully deleted 1 Users and 1 associations
+	        </screen>
+	      </example>
+	    </sect2>
+
+	    <sect2 id="UndeleteAction">
+	      <title>Undelete Action</title>
+	      <para>
+The Delete action is used to restore deleted objects. It accepts predicates that select which objects are to be undeleted.
+	      </para>
+        <variablelist>
+          <varlistentry>
+            <term><guilabel>Conditions</guilabel></term>
+            <listitem>
+              <literallayout>
+Conditions are used to select which objects the action is to be performed on.
+
+Name  =   Name of the attribute to be tested
+Op    =   conditional operator
+Value =   The object or value against which the attribute is tested
+
+Valid condition operators include:
+
+==        Equal to
+!=        Not equal to
+&lt;         Less than
+&gt;         Greater than
+&lt;=        Less than or equal to
+&gt;=        Greater than or equal to
+~         Matches
+
+Matching uses the wildcards * and ? (equivalent to SQL % and _ respectively) in a manner similar to file globbing. * matches zero or more unspecified characters and ? matches exactly one unspecified character. For example mscf* matches objects having the specified attributes whose values start with the letters mscf, while mscf? matches objects having the specified attributes whose values start with mscf and have a total of exactly five characters.
+              </literallayout>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+	      <example>
+	        <title>Let's resurrect the deleted users that were active</title>
+	        <para>
+	          <userinput>
+              <prompt>gold&gt;</prompt> User Undelete Active==True
+	          </userinput>
+	        </para>
+	        <screen>
+Name    Active CommonName        PhoneNumber    EmailAddress          DefaultProject Description 
+------- ------ ----------------- -------------- --------------------- -------------- ----------- 
+scottmo True   Jackson, Scott M. (509) 376-2204 Scott.Jackson@pnl.gov           
+
+Successfully undeleted 1 Users and 1 associations
+	        </screen>
+	      </example>
+	    </sect2>
+    </sect1>
+
+	  <sect1 id="MultiObjectQueries">
+	    <title>Multi-Object Queries</title>
+	    <para>
+Gold supports multi-object queries (table joins). Multiple objects are specified via a comma-separated list and attributes need to be prefixed by the associated object.
+	    </para>
+	    <example>
+	      <title>Print the current and total allocation summed by project</title>
+	      <para>
+	        <userinput>
+            <prompt>gold&gt;</prompt> Allocation,AccountProject Query Show:="GroupBy(AccountProject.Name),Sum(Allocation.Amount),Sum(Allocation.Deposited)" Allocation.Account==AccountProject.Account Allocation.Active==True
+	        </userinput>
+	      </para>
+	      <screen>
+Name      Amount    Deposited 
+--------- --------- --------- 
+biology   193651124 360000000 
+chemistry 296167659 360000000 
+	      </screen>
+	    </example>
+	    <example>
+	      <title>Show all active projects for amy or bob</title>
+	      <para>
+	        <userinput>
+            <prompt>gold&gt;</prompt> Project,ProjectUser Query Show:="Project.Name" ( ProjectUser.Name==bob || ProjectUser.Name==amy ) && Project.Name==ProjectUser.Project && Project.Active==True Unique:=True
+	        </userinput>
+	      </para>
+	      <screen>
+Name      
+--------- 
+biology   
+chemistry 
+	      </screen>
+	    </example>
+   </sect1>
+
+  </chapter>

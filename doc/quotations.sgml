@@ -1,0 +1,153 @@
+  <chapter id="Quotations">
+    <title>Managing Quotations</title>
+    <para>
+A quotation provides a way to determine beforehand how much would be charged for a job. When a quotation is requested, the charge rates applicable to the job requesting the quote are saved and a quote id is returned. When the job makes a reservation and the final charge, the quote can be referenced to ensure that the saved chargerates are used instead of current values. A quotation has an expiration time after which it cannot be used. A quotation may also be used to verify that the given job has sufficient funds and meets the policies necessary for the charge to succeed.
+    </para>
+    <para>
+Operations include querying, modifying and deleting quotations.
+    </para>
+
+    <sect1 id="QuotationCreate">
+      <title>Creating Quotations</title>
+      <para>
+Quotations are normally created by the resource management system with the <link linkend="JobQuote">gquote</link> command (See <link linkend="JobQuote">Making Job Quotations</link>).
+      </para>
+    </sect1>
+
+    <sect1 id="QuotationQuery">
+      <title>Querying Quotations</title>
+      <para>
+To display quotation information, use the command <command>glsquote</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsquote</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg>-u <replaceable>user_name</replaceable></arg>
+        <arg>-m <replaceable>machine_name</replaceable></arg>
+        <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable><arg rep="repeat">,<replaceable>attribute_name</replaceable></arg></arg>
+        <arg>&mdash;showHidden</arg>
+        <group>
+          <arg>-l</arg>
+          <arg>&mdash;long</arg>
+        </group>
+        <group>
+          <arg>-w</arg>
+          <arg>&mdash;wide</arg>
+        </group>
+        <arg>&mdash;raw</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <arg choice="opt"><arg>-q</arg> <replaceable>quote_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing all info about all quotes for user amy on machine colony</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsquote -u amy -m colony
+          </userinput>
+        </para>
+        <screen>
+Id Amount Job Project   User Machine StartTime           EndTime             WallDuration Type   Used ChargeRates           Description 
+-- ------ --- --------- ---- ------- ------------------- ------------------- ------------ ------ ---- --------------------- -----------
+1  57600  1   chemistry amy  colony  2005-01-14 10:09:58 2005-09-10 15:27:07 3600         Normal 0    VBR:Processors:1             
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="QuotationModify">
+      <title>Modifying Quotations</title>
+      <para>
+To modify a quotation, use the command <command>gchquote</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchquote</command>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>expiration_time</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>--man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-q</arg> <replaceable>quote_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Changing the expiration time of a quotation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchquote -e "2005-03-01" 1
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Quotation
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="QuotationDelete">
+      <title>Deleting Quotations</title>
+      <para>
+To delete a quotation, use the command <command>grmquote</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmquote</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group choice="req">
+          <arg choice="plain">-I</arg>
+          <arg choice="req"><arg>-q</arg> <replaceable>quote_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting a quotation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmquote 1
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Quotation
+        </screen>
+      </example>
+      <example>
+        <title>Purging stale quotations</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmquote -I
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 2 Quotations
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

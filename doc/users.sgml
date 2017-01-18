@@ -1,0 +1,225 @@
+  <chapter id="Users">
+    <title>Managing Users</title>
+    <para>
+A user is a person authorized to submit jobs to run on a high performance computing resource. User properties include the common name, phone number, email, organization, and default project for that person. A user can be created, queried, modified and deleted.
+    </para>
+
+    <sect1 id="UserCreate">
+      <title>Creating Users</title>
+      <para>
+To create a new user, use the command <command>gmkuser</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gmkuser</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-n <replaceable>common_name</replaceable></arg>
+        <arg>-F <replaceable>phone_number</replaceable></arg>
+        <arg>-E <replaceable>email_address</replaceable></arg>
+        <arg>-p <replaceable>default_project</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>--man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-u</arg> <replaceable>user_name</replaceable></arg>
+      </cmdsynopsis>
+      <note>
+        <para>
+It is possible to have users be created automatically when first encountered in a job function (charge, reserve or quote) by setting the user.autogen configuration parameter to true (see <link linkend="ServerConfig">Server Configuration</link>). However, bear in mind that users must be defined in order to assign them as members of a project. It is also possible to establish a system default user to be used in job functions (charge, reserve, quote) when the user is unspecified (user.default parameter).
+        </para>
+      </note>
+      <example>
+        <title>Creating a user</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkuser -n "Smith, Robert F." -E "bob@western.edu" -F "(509) 555-1234" bob
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 User
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="UserQuery">
+      <title>Querying Users</title>
+      <para>
+To display user information, use the command <command>glsuser</command>:
+      </para>
+        <cmdsynopsis>
+          <command>glsuser</command>
+          <group>
+            <arg>-A</arg>
+            <arg>-I</arg>
+          </group>
+          <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable>[,<replaceable>attribute_name</replaceable>...]</arg>
+          <arg>&mdash;showHidden</arg>
+          <arg>&mdash;showSpecial</arg>
+          <group>
+            <arg>-l</arg>
+            <arg>&mdash;long</arg>
+          </group>
+          <group>
+            <arg>-w</arg>
+            <arg>&mdash;wide</arg>
+          </group>
+          <arg>&mdash;raw</arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <arg><arg>-u</arg> <replaceable>user_pattern</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Listing all info about active users</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsuser -A
+          </userinput>
+        </para>
+        <screen>
+Name Active CommonName       PhoneNumber    EmailAddress     DefaultProject Description 
+---- ------ ---------------- -------------- ---------------- -------------- ----------- 
+amy  True   Wilkes, Amy      (509) 555-8765 amy@western.edu                                          
+bob  True   Smith, Robert F. (509) 555-1234 bob@western.edu        
+        </screen>
+      </example>
+      <example>
+        <title>Displaying bob's phone number</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsuser &mdash;show PhoneNumber bob &mdash;quiet
+          </userinput>
+        </para>
+        <screen>
+(509) 555-1234
+        </screen>
+      </example>
+      <example>
+        <title>Listing all user names without the header</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsuser &mdash;show Name &mdash;quiet
+          </userinput>
+        </para>
+        <screen>
+amy
+bob
+        </screen>
+      </example>
+      <example>
+        <title>Listing a user's projects</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsuser &mdash;show Projects amy -l
+          </userinput>
+        </para>
+        <screen>
+Projects  
+--------- 
+chemistry 
+biology   
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="UserModify">
+      <title>Modifying Users</title>
+      <para>
+To modify a user, use the command <command>gchuser</command>:
+      </para>
+        <cmdsynopsis>
+          <command>gchuser</command>
+          <group>
+            <arg>-A</arg>
+            <arg>-I</arg>
+          </group>
+          <arg>-n <replaceable>common_name</replaceable></arg>
+          <arg>-F <replaceable>phone_number</replaceable></arg>
+          <arg>-E <replaceable>email_address</replaceable></arg>
+          <arg>-p <replaceable>default_project</replaceable></arg>
+          <arg>-d <replaceable>description</replaceable></arg>
+          <arg>&mdash;debug</arg>
+          <group>
+            <arg>-?</arg>
+            <arg>&mdash;help</arg>
+          </group>
+          <arg>&mdash;man</arg>
+          <arg>&mdash;quiet</arg>
+          <group>
+            <arg>-v</arg>
+            <arg>&mdash;verbose</arg>
+          </group>
+          <arg choice="req"><arg>-u</arg> <replaceable>user_name</replaceable></arg>
+        </cmdsynopsis>
+      <example>
+        <title>Activating a user</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchuser -A bob
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 User
+        </screen>
+      </example>
+      <example>
+        <title>Changing a user's email address</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchuser -E "rsmith@cs.univ.edu" bob
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 User
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="UserDelete">
+      <title>Deleting Users</title>
+      <para>
+To delete a user, use the command <command>grmuser</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmuser</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-u</arg> <replaceable>user_name</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting a user</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmuser bob
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 User
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

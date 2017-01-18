@@ -1,0 +1,273 @@
+#
+# Makefile for @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+#
+################################################################################
+#                                                                              #
+#                           Copyright (c) 2003, 2004                           #
+#                  Pacific Northwest National Laboratory,                      #
+#                         Battelle Memorial Institute.                         #
+#                             All rights reserved.                             #
+#                                                                              #
+################################################################################
+#                                                                              #
+#     Redistribution and use in source and binary forms, with or without       #
+#     modification, are permitted provided that the following conditions       #
+#     are met:                                                                 #
+#                                                                              #
+#     · Redistributions of source code must retain the above copyright         #
+#     notice, this list of conditions and the following disclaimer.            #
+#                                                                              #
+#                                                                              #
+#     · Redistributions in binary form must reproduce the above copyright      #
+#     notice, this list of conditions and the following disclaimer in the      #
+#     documentation and/or other materials provided with the distribution.     #
+#                                                                              #
+#     · Neither the name of Battelle nor the names of its contributors         #
+#     may be used to endorse or promote products derived from this software    #
+#     without specific prior written permission.                               #
+#                                                                              #
+#     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      #
+#     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        #
+#     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS        #
+#     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE           #
+#     COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,      #
+#     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,     #
+#     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;         #
+#     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER         #
+#     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT       #
+#     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN        #
+#     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          #
+#     POSSIBILITY OF SUCH DAMAGE.                                              #
+#                                                                              #
+################################################################################
+
+# Program variables
+@SET_MAKE@
+CC          = @CC@
+CFLAGS      = @CFLAGS@
+CPPFLAGS    = @CPPFLAGS@
+DEFS        = @DEFS@
+LIBS        = @LIBS@
+LDFLAGS     = @LDFLAGS@
+RM          = @RM@
+TAR         = @TAR@
+GZIP        = @GZIP@
+AUTOCONF    = @AUTOCONF@
+PERL        = @PERL@
+
+# Install variables
+build_root  =
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
+bindir      = $(build_root)@bindir@
+sbindir     = $(build_root)@sbindir@
+sysconfdir  = $(build_root)@sysconfdir@
+mandir      = $(build_root)@mandir@
+libdir      = $(build_root)@libdir@
+datadir     = $(build_root)${prefix}/data
+siteperllibdir = $(build_root)@SITE_PERL_LIB_DIR@
+logdir      = $(build_root)@LOG_DIR@
+docdir      = $(build_root)@DOC_DIR@
+DIST_DIR    = /software/dist/gold
+DIST_NAME   = @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+USER        = @USER@
+DB_TYPE     = @DB_TYPE@
+CGI_BIN     = $(build_root)@CGI_BIN@
+
+# Source variables
+BINS        = bin/gbalance bin/gchaccount bin/gcharge bin/gchjob bin/gchmachine bin/gchproject bin/gchquote bin/gchres bin/gchuser bin/gdeposit bin/glsaccount bin/glsjob bin/glsmachine bin/glsproject bin/glsquote bin/glsres bin/glstxn bin/glsuser bin/gmkaccount bin/gmkjob bin/gmkmachine bin/gmkproject bin/gquote bin/greserve bin/gmkuser bin/goldsh bin/grefund bin/grmaccount bin/grmjob bin/grmmachine bin/grmproject bin/grmquote bin/grmres bin/grmuser bin/gtransfer bin/gwithdraw bin/gstatement bin/gchalloc bin/glsalloc bin/grmalloc bin/gusage bin/gchpasswd
+CGIBINS   = cgi-bin/prestatement.cgi cgi-bin/modify.cgi cgi-bin/create.cgi cgi-bin/delete.cgi cgi-bin/unknown.cgi cgi-bin/navbar.cgi cgi-bin/premodify.cgi cgi-bin/precreate.cgi cgi-bin/predeposit.cgi cgi-bin/refund.cgi cgi-bin/gold.cgi cgi-bin/adminAction.cgi cgi-bin/prerefund.cgi cgi-bin/undelete.cgi cgi-bin/login.cgi cgi-bin/withdraw.cgi cgi-bin/statement.cgi cgi-bin/deposit.cgi cgi-bin/transfer.cgi cgi-bin/prescreen.cgi cgi-bin/list.cgi cgi-bin/precharge.cgi cgi-bin/prewithdraw.cgi cgi-bin/selectAccount.cgi cgi-bin/selectUsageRecord.cgi cgi-bin/status.cgi cgi-bin/balance.cgi cgi-bin/usage.cgi cgi-bin/pretransfer.cgi cgi-bin/welcome.cgi cgi-bin/index.cgi cgi-bin/logout.cgi
+JAVASCRIPTS = cgi-bin/scripts/autosuggest.js cgi-bin/scripts/menus.js cgi-bin/scripts/sorttable.js
+WRAPPERS    = bin/mybalance
+SBINS       = sbin/goldd sbin/sqlite
+PERLLIBS    = lib/Gold.pm lib/Gold
+CONFIGS     = etc/gold.conf etc/goldd.conf etc/goldg.conf
+DOCS        = userguide
+PERL_MODULES = DBI-1.53 Data-Properties-0.02 Digest-1.05 Digest-SHA1-2.07 Digest-HMAC-1.01 Error-0.15 Date-Manip-5.42 Params-Validate-0.74 Time-HiRes-1.65 Log-Log4perl-0.42 Module-Build-0.25 Log-Dispatch-2.10 Log-Dispatch-FileRotate-1.11 MIME-Base64-3.01@READLINE_PACKAGE@ XML-NamespaceSupport-1.08 XML-SAX-0.12 XML-LibXML-Common-0.13 XML-LibXML-1.58_1 Digest-MD5-2.33 Crypt-DES-2.03 Crypt-DES_EDE3-0.01 Crypt-CBC-2.12 Compress-Zlib-1.33@DBD_PACKAGE@ CGI-Session-3.95 CGI.pm-3.10
+
+.PHONY: all gui docs userguide upgradefile html man pdf relnotes test install install-gui auth_key uninstall dist reconfig commit clean distclean realclean
+
+# Default target
+all: $(BINS) $(WRAPPERS) $(SBINS)
+
+gui: $(CGIBINS) $(JAVASCRIPTS)
+
+$(BINS): Makefile
+	-mkdir -p bin
+	basename=`echo $@ | sed -e 's#^.*/##'`; \
+	sed '1s%#!.*%#! $(PERL) -wT%' src/$${basename}.pl | sed "s%use lib .*%use lib qw(@libdir@ @libdir@/perl5);%" >$@
+	chmod 4755 $@
+
+$(WRAPPERS): Makefile
+	basename=`echo $@ | sed -e 's#^.*/##'`; \
+	sed '1s%#!.*%#! $(PERL) -wT%' src/$${basename}.pl | sed "s%use lib .*%use lib qw(@libdir@ @libdir@/perl5);%" >$@
+	chmod 755 $@
+
+$(SBINS): Makefile
+	-mkdir -p sbin
+	basename=`echo $@ | sed -e 's#^.*/##'`; \
+	sed '1s%#!.*%#! $(PERL) -w%' src/$${basename}.pl | sed "s%use lib .*%use lib qw(@libdir@ @libdir@/perl5);%" >$@
+	chmod 755 $@
+
+$(CGIBINS): Makefile
+	basename=`echo $@ | sed -e 's#^.*/##'`; \
+	cgiroot=`echo $(CGI_BIN) | sed -e 's#.*\(/cgi.*\)#\1#'`; \
+	sed '1s%#!.*%#! $(PERL) -wT%' src/$${basename} | sed "s%use lib .*%use lib qw(@libdir@ @libdir@/perl5);%" | sed "s%/cgi-bin/gold%$${cgiroot}%" >$@
+
+$(JAVASCRIPTS): Makefile
+	basename=`echo $@ | sed -e 's#^.*/##'`; \
+	cgiroot=`echo $(CGI_BIN) | sed -e 's#.*\(/cgi.*\)#\1#'`; \
+	sed "s%/cgi-bin/gold%$${cgiroot}%" src/$${basename} >$@
+
+docs: userguide relnotes upgradefile
+
+userguide: html man pdf
+
+html: doc/userguide.sgml
+	-@rm -rf doc/userguide.junk
+	cd doc && db2html -d style.dsl#html userguide.sgml
+
+man:
+
+pdf: doc/userguide.sgml
+	-@rm doc/userguide.pdf
+	cd doc && db2pdf -d style.dsl userguide.sgml
+
+relnotes:
+	cd doc; \
+	rm releasenotes.pdf; \
+	db2pdf -d style.dsl releasenotes.sgml; \
+	rm -rf releasenotes.junk; \
+	db2html -u -d style.dsl#html releasenotes.sgml; \
+	db2html -u -d none releasenotes.sgml; \
+	links -dump releasenotes/releasenotes.html >../RELEASENOTES
+
+upgradefile:
+	cd doc; \
+	db2html -u -d none upgradefile.sgml; \
+	links -dump upgradefile/upgradefile.html >../UPGRADE
+
+test:
+
+install:
+	-mkdir -p $(build_root)$(prefix) && chown $(USER) $(build_root)$(prefix)
+	-mkdir $(libdir) && chown $(USER) $(libdir)
+	-mkdir $(libdir)/Gold && chown $(USER) $(libdir)/Gold && chmod 755 $(libdir)/Gold
+	-mkdir $(sbindir) && chown $(USER) $(sbindir)
+	-mkdir $(bindir) && chown $(USER) $(bindir)
+	-mkdir $(sysconfdir) && chown $(USER) $(sysconfdir)
+	-mkdir $(docdir) && chown $(USER) $(docdir)
+	-mkdir $(logdir) && chown $(USER) $(logdir) && chmod 777 $(logdir)
+	-[ "$(DB_TYPE)" = "SQLite" ] && mkdir $(datadir) && chown $(USER) $(datadir) && chmod 777 $(datadir)
+	-@#mkdir $(mandir) && chown $(USER) $(mandir)
+	for file in $(PERLLIBS); do \
+		basename=`echo $$file | sed -e 's#^.*/##'`; \
+		(cp -r $$file $(@LIB_INSTALL_DIR@) && \
+		cd $(@LIB_INSTALL_DIR@) && chown -R $(USER) $$basename && \
+		chmod -R 755 $$basename); \
+	done
+	cp $(BINS) $(bindir) && \
+		(cd $(bindir)/.. && chown $(USER) $(BINS) && chmod 4755 $(BINS))
+	cp $(WRAPPERS) $(bindir) && \
+		(cd $(bindir)/.. && chown $(USER) $(WRAPPERS) && chmod 755 $(WRAPPERS))
+	cp $(SBINS) $(sbindir) && \
+		(cd $(sbindir)/.. && chown $(USER) $(SBINS))
+	[ -s $(sysconfdir)/gold.conf ] || \
+		(cp etc/gold.conf.dist $(sysconfdir)/gold.conf && \
+		chown $(USER) $(sysconfdir)/gold.conf)
+	[ -s $(sysconfdir)/goldd.conf ] || \
+		(cp etc/goldd.conf.dist $(sysconfdir)/goldd.conf && \
+		chown $(USER) $(sysconfdir)/goldd.conf && \
+		chmod 600 $(sysconfdir)/goldd.conf)
+	for file in $(DOCS); do \
+		cp doc/$${file}.pdf $(docdir) && chown $(USER) $(docdir)/$${file}.pdf; \
+		cp -r doc/$$file $(docdir) && chown -R $(USER) $(docdir)/$$file; \
+	done
+
+install-gui:
+	mkdir -p $(CGI_BIN)
+	[ -s $(sysconfdir)/goldg.conf ] || \
+		(cp etc/goldg.conf.dist $(sysconfdir)/goldg.conf && \
+		chown $(USER) $(sysconfdir)/goldg.conf);
+	if [ -d "$(CGI_BIN)" ]; then \
+		cp -R cgi-bin/* $(CGI_BIN); \
+		chown -R $(USER) $(CGI_BIN)/*; \
+		chmod +x $(CGI_BIN)/*.cgi; \
+	fi
+
+deps:
+	PERL5LIB=$(libdir)/perl5:$(libdir)/perl5/site_perl; export PERL5LIB; \
+	for module_minversion in $(PERL_MODULES); do \
+		(PATH=/usr/local/bin:$${PATH}; export PATH && cd src && $(PERL) check_module.pl $${module_minversion} && module_name=`echo $$module_minversion | sed 's/-[0-9].*//'` && module_bundledpackage=`ls $${module_name}-[0-9]*.tar.gz | head -1` && module_availversion=$${module_bundledpackage%%.tar.gz} && gzip -cd $${module_availversion}.tar.gz | tar xvf - && cd $${module_availversion} && (echo; echo; echo) | $(PERL) Makefile.PL@MAKEPL_ARG@ && make && make install || :); \
+	done
+
+# Install authorization key
+auth_key:
+	@echo -n "Enter your secret key (up to 80 characters and can include spaces): "
+	@read key && echo $$key >>$(sysconfdir)/auth_key && \
+		chown $(USER) $(sysconfdir)/auth_key && chmod 400 $(sysconfdir)/auth_key
+
+uninstall:
+	for file in $(PERLLIBS); do \
+		basename=`echo $$file | sed -e 's#^.*/##'`; \
+		$(RM) -r $(@LIB_INSTALL_DIR@)/$$basename; \
+	done
+	for file in $(SBINS); do \
+		basename=`echo $$file | sed -e 's#^.*/##'`; \
+		$(RM) $(sbindir)/$$basename; \
+	done
+	for file in $(BINS); do \
+		basename=`echo $$file | sed -e 's#^.*/##'`; \
+		$(RM) $(bindir)/$$basename; \
+	done
+	for file in $(DOCS); do \
+		$(RM) $(docdir)/$${file}.pdf; \
+		$(RM) -r $(docdir)/$$file; \
+	done
+	-rmdir $(libdir)
+	-rmdir $(sbindir)
+	-rmdir $(bindir)
+	-rmdir $(sysconfdir)
+	-@#rmdir $(mandir)
+
+# Generate the distribution (tarball)
+# This will give you what is latest in the repository, not what is in the dir
+dist: realclean reconfig docs
+	-$(RM) -r $(DIST_NAME)
+	svn export svn://arc/gold/branches/2.2/gold $(DIST_NAME)
+	cp README INSTALL UPGRADE configure $(DIST_NAME)
+	cp doc/userguide.pdf doc/releasenotes.pdf $(DIST_NAME)/doc
+	cp -r doc/userguide $(DIST_NAME)/doc
+	mkdir $(DIST_NAME)/bin
+	mkdir $(DIST_NAME)/sbin
+	$(TAR) chvf - --exclude=java $(DIST_NAME) | $(GZIP) -c >$(DIST_DIR)/$(DIST_NAME).tar.gz
+	$(RM) -r $(DIST_NAME)
+
+rpm:
+	cp $(DIST_DIR)/$(DIST_NAME).tar.gz /usr/src/redhat/SOURCES
+	rpmbuild -ba etc/gold.spec
+
+reconfig:
+	$(AUTOCONF)
+	./configure -q
+
+commit: realclean
+	wget http://www.bitkeeper.com
+	-$(RM) index.html*
+	bk citool
+	-bk -r edit
+	@#bk push
+	$(AUTOCONF)
+	./configure -q
+
+clean:
+	-$(RM) bin/g* sbin/goldd userguide.pdf
+	-$(RM) -r doc/userguide/*.html doc/userguide/stylesheet-images/* doc/userguide.junk
+
+distclean: clean
+	-$(RM) bank.gold create.sql config.status config.log config.cache doc/installation.sgml doc/migration.sgml doc/upgrade.sgml doc/upgradefile.sgml doc/userguide.sgml *.tar.gz etc/gold.conf.dist etc/goldd.conf.dist etc/goldg.conf.dist etc/gold.spec etc/gold.d etc/gold.sh etc/gold.csh lib/Gold/Global.pm lib/Gold.pm Makefile src/gold_init.pl src/goldsh.pl src/goldd.pl
+
+realclean: distclean
+	-$(RM) configure README INSTALL
+

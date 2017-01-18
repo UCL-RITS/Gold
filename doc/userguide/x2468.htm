@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Querying Jobs</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Jobs"
+HREF="c2396.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Jobs"
+HREF="c2396.htm"><LINK
+REL="NEXT"
+TITLE="Modifying Jobs"
+HREF="x2516.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c2396.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 13. Managing Jobs</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2516.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="JOBQUERY"
+>Querying Jobs</A
+></H1
+><P
+>To display job information, use the command <B
+CLASS="COMMAND"
+>glsjob</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>glsjob</B
+>  [[-J] <TT
+CLASS="REPLACEABLE"
+><I
+>job_id_pattern</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-C <TT
+CLASS="REPLACEABLE"
+><I
+>queue</I
+></TT
+>] [-T <TT
+CLASS="REPLACEABLE"
+><I
+>type</I
+></TT
+>] [&mdash;stage <TT
+CLASS="REPLACEABLE"
+><I
+>stage</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [&mdash;show <TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>[,<TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>...]...] [&mdash;showHidden] [&mdash;raw] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-V | &mdash;version] [[-j] <TT
+CLASS="REPLACEABLE"
+><I
+>gold_job_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2510"
+></A
+><P
+><B
+>Example 13-2. Show specific info about jobs run by amy</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsjob &mdash;show=JobId,Project,Machine,Charge -u amy
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>JobId      Project   Machine Charge 
+---------- --------- ------- ------ 
+PBS.1234.0 chemistry colony  0      
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c2396.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2516.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Jobs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2396.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Modifying Jobs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

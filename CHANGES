@@ -1,0 +1,541 @@
+Gold changes:
+
+Fix Release 2.2.0.5
+
+  Accept will no longer die on error. Replaced die statements in goldd with
+    logwarn and logdie.
+
+  Fix Allocation Refresh to not bounce around activating and deactivating
+    allocations that start or end on the current second.
+
+Fix Release 2.2.0.4
+
+  Modify goldsh to accept lowercase attribute names.
+  Gold::Proxy->prepare now converts human readable timestamp assignment values
+    to epoch integers for you so that clients (goldsh) do not need to do this.
+  Fixed non-forking server configuration (i.e. SQLite) to keep the cache fresh.
+  Updated user guide with upgrade chapter and releasenotes with upgrade notes.
+
+Fix Release 2.2.0.3
+
+  Parallel request handling was enabled by avoiding the initial table lock on
+    the key generator.
+  Updated the installation instructions to include MySQL INNODB steps and more
+    current software installation steps.
+
+Fix Release 2.2.0.2
+
+  Bugfix to use NAME_lc when converting database attribute names since some
+    databases return the attribute names in upper case.
+  Fix bug where gbalance needed to use balance.show instead of account.show
+  Updated distributed gold config file to create gold.log world writable by
+    default.
+  Pass wall duration into calculateCharge subroutine so it can use calculated
+    values for the charge duration.
+
+Fix Release 2.2.0.1
+
+  Fix bug in GUI Modify, Delete, and Undelete where the action would affect more
+    than the specified object if it had multiple primary keys
+  Fix authentication mismatch in GUI when using numeric passwords
+  Fix GUI prefilter screen for Jobs and Transactions to not default to infinity
+  Document glsres --exact-match option in its usage and man page.
+  gcharge -r <reservation_id> is now implemented (it had not been previously)
+  Upgraded to using DBD-SQLite-1.08 to address an overflow issue in gstatement
+
+Minor Release 2.2.0.0
+
+  This release introduces some database changes in support of a new ChargeRate
+    structure:
+      VBR -- Value Based Resource (formerly Resource)
+      NBR -- Name Based Resource
+      VBU -- Value Based Usage (formerly Usage)
+      NBU -- Name Based Usage
+      VBM -- Value Based Multiplier (formerly Multiplier)
+      NBM -- Name Based Multiplier (formerly anything else)
+      VBF -- Value Based Fee
+      NBF -- Name Based Fee
+      (anything else) -- Multi-dimensional Value Based Resource
+    See ChargeRate documentation for details
+    A script is available in test/bank_2.1_to_2.2.pl to aid in the translation
+      from an existing 2.1 database and ChargeRate table.
+  Moved to using DBI-1.53 since 1.42 caused SEGV's in some recent OSes
+  It was necessary to disambiguate WallDuration, StartTime, EndTime and
+    Description for Quote, Reserve and Charge Actions. Options will now be used
+    to specify the WallDuration, StartTime and EndTime for the
+    Quote/Reservation/Charge, while Job Data Properties will be used to specify
+    the WallDuration, StartTime, EndTime and Description for the Job.
+    gquote, greserve and gcharge will use -t, -s, -e and -d options to specify
+    the charge-level values while
+    -X {WallDuration|StartTime|EndTime|Description}=<value> will need to be
+    used to pass the job-level values for accounting purposes.
+  Fixed taint checking in mybalance to allow hyphens in PATH
+  Fixed a bug introduced by a contributed patch for the GUI
+  Use of aliases for join requests since SQLite munges joined column names
+  Added taint checking in gstatement to account for change in perl 5.10 for
+    printf
+  Preload utf8 module for improved client handling performance (Stijn De Weirdt)
+  Added 3 new command line clients to import and manipulate job records:
+    (gmkjob, gchjob, grmjob)
+  Corrected a bug where recreations of a deleted Password did not encrypt it.
+  Gold now removes the associated password when a user is deleted.
+  The optionless argument in gquote, greserve and gcharge has been changed to
+    Id instead of JobId (JobId is no longer required if Id is present)
+  Removed perl taint switch from goldd since it causes problems in perl 5.10
+  Transaction descriptions are now passed in via options to distinguish from
+    object descriptions which are passed in via assignments
+  Changed the default prefix from /usr/local/gold to /opt/gold
+  Added CostOnly option to Quote that does not do balance or sanity check
+  See also the Release Notes for 2.2 for additional details
+
+Fix Release 2.1.11.1
+
+  Added a reference to JobId in failure messages within Charges and Reservations
+  Fixed --man option in grefund
+  Added an index to help ignore deleted reservations for reservation queries
+  Added taint checking for PATH in Gold.pm to avert insecure PATH error
+  Added sample prolog and epilog scripts in a new contrib directory
+  Added a Radio Button selection to display GUI statement and balance in hours
+
+Mod Release 2.1.11.0
+
+  Updated init.d file to support the status subcommand
+  Disabled g_reservation_acct_where_idx for MySQL since MySQL does not
+    support WHERE clauses in CREATE INDEX statements.
+
+Mod Release 2.1.10.0
+
+  Gold can now track both Utilized and Requested/Dedicated contexts of Memory.
+    <Memory context='Utilized'> will effectively be transformed into
+    <UtilizedMemory> while <Memory context='Dedicated'> will effectively be
+    transformed into <DedicatedMemory> and <RequestedMemory>. Charge Rates
+    and Job Attributes should be added accordingly.
+
+Mod Release 2.1.9.0
+
+  A new server parameter called allocation.autogen has been implemented.
+    If set to true, when a new account is created Gold will automatically
+    create an associated default allocation with zero credits.
+  
+Fix Release 2.1.8.1
+
+  gdeposit, gwithdraw and gtransfer would not scale by 3600 for hours option
+    if amount was specified as the sole remaining argument.
+  Disabled g_reservation_acct_where_idx for SQLite since SQLite does not
+    support WHERE clauses in CREATE INDEX statements.
+
+Mod Release 2.1.8.0
+
+  Added new support for charging an additional amount against a job that has
+    already been debited. Use gcharge -j <gold job id>.
+  A problem was fixed where a job would tend to avoid charging the allocation
+    that its reservation was placed against if there were other choices.
+  It was discovered that the charge algorithm did not subtract the jobs
+    reservation from the debitable balance (and in fact added it). This would
+    permit allocations to go negative on the first pass by twice the amount
+    of the reservation.
+  A problem was fixed where stale reservations with the same jobid could cause
+    a charge against the wrong account if the user had no valid allocations
+    to charge against (not even depleted ones).
+  When an account is autogenerated from a newly created project, we will
+    set the AccountUser to MEMBERS only if we are going to immediately add
+    users (known to gmkproject), otherwise the AccountUser will be set to ANY,
+    since if we create the AccountUser as MEMBERS and do not add any project
+    members, the account will not be viable, and a subsequent call to gdeposit
+    -p $project (which uses UseRules) will auto-generate a second account.
+  Added a new Index suggested by Brock Palen taking reservation queries down
+    to 1/50th the time for systems with many deleted reservations.
+    create index  g_reservation_acct_where_idx ON g_reservation_allocation
+     (g_account) WHERE g_deleted!='True';
+  Added Reservation Delete to the default Scheduler role.
+
+Fix Release 2.1.7.1
+
+  Sorting was fixed for multi-object join queries
+  Repaired encryption which had been broken by recent Crypt::CBC changes
+
+Mod Release 2.1.7.0
+
+  Added new support for an Incremental option for the charge command. When
+    an incremental charge occurs, any associated reservations are debited 
+    instead of removed.
+
+Fix Release 2.1.6.1
+
+  Fixed error with index creation when adding new columns
+  Removed code support for SSS Service Directory (believed to be obsolete)
+  goldsh will now exit with status code of last gold response
+
+Mod Release 2.1.6.0
+
+  There is now support for four charge rate types: Consumable Resource Charge
+    Rates, Usage Charge Rates, Name-Based Multiplier Rates and Value-Based
+    Multiplier Rates. See the chapter on Managing Charge Rates for details.
+  make deps will now test for a minimum module version but install the more
+    recent bundled module version if not installed
+  Updated Gold for latest crypto modules by explicitly setting CBC header
+  Check for predefined custom log levels to avoid warnings in later versions
+  Refreshed many bundled perl Modules with more recent versions
+
+Fix Release 2.1.5.1
+
+  Fixed the Gold GUI so that when you click on the arrows for next or previous
+    chunks of 1000, it will apply the original query filters to subsequent
+    chunks.
+
+Mod Release 2.1.5.0
+
+  Added indexes to tables to increase database performance. This improvement
+    comes as a direct result of the help of Karl Lindekugel from ASU and Brock
+    Palen from LSU who demonstrated that the use of indexes helped speed up
+    common operations such as balance, reservation, charge and bank statements
+    by as much as ten times. base.sql and bank.sql were modified to create
+    the new indexes at install time. Additionally, Gold was enhanced to create
+    indexes for the primary key fields and the deleted and transaction indexes
+    for new dynamically added objects. You may add these indexes to an existing
+    gold database and achieve the full benefit by running the "CREATE INDEX"
+    queries found in bank.sql.in within your sql prompt. For example, if you
+    are using postgres, you may do something akin to the following:
+
+    grep INDEX bank.sql.in | psql gold
+
+  Added ability to query based on NULL or NOT NULL value of object attributes.
+
+  Server will now reply with failure message instead of dropping connections
+    as it had done for certain classes of failures.
+
+Fix Release 2.1.4.2
+
+  Job Query in GUI should base starttime and endtime off of StartTime and 
+    EndTime instead of CreationTime.
+  --help should not show options
+  The Gold gui now sorts the association selection lists in Modify <Object>
+    panels.
+  Allow sorting of GUI Display Balance table output
+
+Fix Release 2.1.4.1
+
+  Not honoring project.default in charges
+
+Mod Release 2.1.4.0
+
+  Account creation can now be performed as an atomic operation such that
+    if any of the account members cannot be created, the account will not
+    be created. gmkaccount and gdeposit have been modified to make use of
+    this capabiity. gdeposit will now automatically create an account if 
+    account.autogen is set to true and no accounts match the deposit criteria.
+  Installing the gui will now set executable permissions on the .cgi files.
+  Modified CGI.pm to find config and log files at the installed prefix.
+  glsalloc now shows Active field
+  Allocation Query now causes Allocation Refresh 
+
+Mod Release 2.1.3.0
+
+  Made changes so that machine.autogen, project.autogen and user.autogen
+  will automatically create their respective entities when adding members
+  to projects and accounts.
+
+Mod Release 2.1.2.0
+
+  goldd.conf file installed with 400 permissions so others cannot read
+    the database password.
+  Parent and FairShare attributes are now taken from Account instead
+    of AccountAccount so this required simplifying changes to
+    glsaccount, gchaccount and gmkaccount.
+
+Fix Release 2.1.1.1
+
+  Corrected some errors in the style sheet for navbar.cgi
+  Added requirement for cgi-bin Alias definition in the installation docs
+
+Mod Release 2.1.1.0
+
+  gbalance can now use the --available flag to transform the Amount field into
+    available credit, even when not using the --total flag.
+  When creating new accounts with gmkaccount or Create New Account via the web
+    gui, a name will be automatically be generated if one is not specified.
+
+Fix Release 2.1.0.2
+
+  Added support for logout button in Makefile
+  Added job count to gstatement
+  Add credit limit to GUI deposit
+  Allow user and machine account filter flags to gdeposit
+  Allow account filtering flags on gchaccount
+  Fixed GUI Account Create so that special entities get created correctly --
+    also added NONE to Account Create member special entities
+  A number of undocumented modifications were made to support fairshare
+    hierarchies between accounts
+    o  Added flags -f <fairshare amount> and -a <parent account> to gmkaccount
+    o  Added support for fairshare output in glsaccount
+    o  Added ability to change fairshare amount in gchaccount (<-f <fs amount>)
+  
+Fix Release 2.1.0.1
+
+  Repaired install of CGI GUI components
+  Fixed syntax error in Bank.pm (missing declaration of $now)
+  Fixed bug in Admin Role (column "g_admin" does not exist)
+
+Minor Release 2.1.0.0
+
+  The minor version was changed only because this is the first release from
+  Cluster Resources, Inc.
+  Automated install of CGI GUI to configurable location
+  Fixed GUI bug preventing clicking arrows for next/previous chunks
+  Added logout button to web GUI
+  Dropped java GUI from distribution
+  Added support for the SOAP wire protocol
+  Install process automatically adds superuser to the Scheduler role
+  Added Reservation Synchronize action for synchronizing reservations with Moab
+
+Fix Release 2.0.0.7
+
+  Fixed splitting of charges for jobs that exceed their wallclock time
+  Added support for user names that start with numeric (non-alpha) characters
+  Fix the documentation so that it says that Postgres is optional
+  Update the installation guide to descript Perl CGI GUI install
+
+Fix Release 2.0.0.4
+
+  Fix the Makefile so that it'll do the Perl CGI based gui
+    instead of the old Java one.
+  Added code to register with a Service Directory for SSS
+
+Major release 2.0.0.0
+
+  Miscellaneous minor fixes to GUI for GA
+
+Pre release 2.b2.13.2
+
+  Fixed bug where Account Withdraw would debit from earliest expiring
+  allocation independent of whether active or not
+
+Pre release 2.b2.13.1
+
+  Created initial Perl CGI Web-based GUI to replace Java JSP GUI
+  Added install and configuration support for Perl CGI GUI and documented
+  the installation steps in INSTALL
+
+Pre release 2.b2.13.0
+
+  Initial Pre GA release
+  Moved Display attribute from Object to Action
+  Changed goldd so that restart will start the server even if it was not stopped
+  Renamed _journal tables to _log to shorten identifiers below 30 chars
+  UCC SSSRMAP attribute values
+  Bugfix -- Id is an Account Condition (not an Option as used in some clients)
+
+Maintenance release 2.b2.12.0
+
+  Added a new chapter on Customizing Gold Objects in the Gold User's Guide.
+
+Fix release 2.b2.11.1
+
+  Fixed a bug where clients accepting +/- modifiers on entity names did not
+  properly handle entity names containing spaces
+
+Maintenance release 2.b2.11.0
+
+  Fixed duplicate g_key_generator entries in bank.sql
+
+  Now if you try to recreate a deleted object, it will silently undelete it
+  and update its attributes to the newly created state, rather than failing
+  and complaining that the object exists but is deleted.
+
+  Added support for offset option. Now you can issue a query and ask for records
+  1001 through 2000 by specifying Limit:=1000 Offset:=1000
+
+Fix release 2.b2.10.2
+
+  Added a brief INSTALL section for the impatient
+  Fixed minor bug where condition value of zero was ignored
+
+Fix release 2.b2.10.1
+
+  Fix bug that allowed negative charges and reservations
+  Limit refund job matches to 20
+  Qbalance with total and hours options divided by 3600 twice
+  Fix timetravel query conflict with primary key conditions
+
+Maintenance release 2.b2.10.0
+
+  Implemented fault tolerance by adding support for a backup gold server.
+  Clients can failover to a backup gold server if defined. The database
+  can be made fault tolerant by utilizing a synchronous multi-master
+  replication system such as pgcluster.
+
+Maintenance release 2.b2.9.0
+
+  Implemented distributed accounting functionality including Forward and Back
+  Charges, Reservations and Quotations.
+
+Maintenance release 2.b2.8.0
+
+  Fixed a bug where large queries like glsjob were failing on certain systems
+  due to client resets (server gets connection reset by peer).
+
+  Added a new password client (gchpasswd) that can be used to set passwords for
+  users so that they can login to the web GUI.
+
+  Added a new extension property flag (-X | --extension) to all gmk* and gch*
+  clients to allow specification of custom field assignments.
+  
+Fix release 2.b2.7.3
+
+  Removed xalan.jar to prevent lib conflict in GUI.
+
+  Fixed glibc error when quitting goldsh on RedHat AS 3+ systems.
+
+  Fixed taint problem for --man flag on Perl 5.8.5.
+
+  Added -X (--extension) flag to add extensible job properties to gcharge,
+  greserve and gquote.
+
+  Added direct support for Organization to User, Project and Machine clients
+  (added -o flag and added Organization as a Showable field).
+
+Fix release 2.b2.7.2
+
+  When insufficient funds are available when charging, make first allocation
+  go negative for the remainder. Previously, when a charge was attempted on
+  a set of accounts with insufficient funds, the charge would fail and no
+  debit would be made and no charge recorded, etc. But since a charge occurs
+  as a result of actual usage, you should really not fail to make the charge
+  and especially not fail to record the usage. It was deemed to be better
+  to make the most specific account go negative. With careful use of
+  reservations, this condition should be preventable. If you find a negative
+  balance, this indicates a process failure that needs to be remedied.
+
+  Additional changes to aid in the hiding of the account layer.
+
+  Added role overrides for Job and Transaction Query.
+
+Fix release 2.b2.7.1
+
+  Added a Getting More Advanced chapter in the User's Guide that highlights
+  the explicit use of accounts and other advanced features while changing the
+  Getting Started chapter to focus on a simplified approach that ignores the
+  presence of accounts.
+
+  Modified gstatement to allow a project, user or machine to be specified
+  causing it to produced a report combining information from all accounts
+  valid toward the specified entities. A summary option has also been
+  added to allow the Credit and Debit transactions to be summarized.
+
+  Support has been added for Selection aliases. This allows a field to
+  be returned in a query to be renamed in the output as desired.
+
+  Fixed a bug where charges failed when the charge was larger than the
+  associated reservation (like when a job surpasses its wallclock limit).
+
+  Changed gdeposit and gwithdraw so that the amount field is now the
+  option that can be specified without a flag (instead of account).
+
+  Changed the Quotation Used field to Quotation Uses. This permits multiple
+  uses of a quotation and a way to make multiple charges against a single
+  job record.
+
+Maintenance release 2.b2.7.0
+
+  Ported to OS X, IRIX, HP-UX and Solaris platforms
+
+  Ported to mysql database (version 4.x)
+
+  Readded organization attribute in Project, User, Machine
+
+  Added support to partially hide the account abstraction layer for sites that
+  would like to maintain a simple one-to-one mapping of accounts and projects.
+  In support of this, an account.autogen configuration parameter was added that
+  when enabled, automatically creates a default account whenever a project is
+  created. Additionally, new flags were added to a number of
+  clients (gdeposit, gwithdraw, gtransfer, glsalloc, gstatement)
+  allowing them to be run against projects instead of accounts where a
+  one-to-one mapping is maintained.
+
+  When creating reservations, a new Replace option allows similarly named
+  reservations to be deleted before the new reservation is created. The default
+  action is to create a new reservation even if an existing reservation of the
+  same name exists. The default behavior supports systems that may reuse jobids
+  or make incremental charges. The replace option should be specified if you
+  want the new reservation to replace existing reservations of the same name
+  (associated with the same job).
+
+  Added *.show configuration parameters that allow a site to customize the
+  default output fields for the various gls* commands without directly editing
+  the command line clients. This better supports Gold upgrades while providing
+  for local customization.
+
+  Removed --detail flag from gbalance making the detailed listing the default.
+  A new --total flag is provided if you want the simple total (This can also be
+  achieved via the --show Amount or --show Available flag albeit by different
+  backend means. At a future date the --total and --available flags may be
+  removed).
+
+  Modified client commands to return the SSSRMAP return code / 10 in order to
+  fit in the 255 bit integer available in Linux for return codes.
+
+Beta release 2.b2.5.0
+
+  Added support for the SQLite embedded database. In support of this and for
+  better database portability, timestamps were internally recast as integers 
+
+  Renamed all *Date attributes to *Time (specifically StartDate and EndDate in
+  the Allocation object)
+
+  Reservations have a redesigned internal structure. Reservations are now tied
+  to a list of allocations and amounts. This change improves the handling of
+  charges that span allocation boundaries. A new strategy for charging
+  (when reservations are made) has been implemented that reserves against
+  allocations valid at the time the job starts and charges against these same
+  allocations even if they are expired at the time the job ends.
+
+  The gmkres client was removed (use greserve)
+
+  CreditLimit is now associated with Allocations instead of Accounts
+
+  Quotation and Reservation support a new StartTime attribute. This allows
+  for better support for those who want to create reservations at submit time.
+  
+  Deposits, Withdrawals, and Transfers now accept an Allocation id instead
+  of a StartTime and EndTime to make exchanges with specific allocations
+
+  Renamed the Job Class attribute to Queue per SSS Job Object specification
+
+  Added a new "mybalance" wrapper to show user's a list of projects they can
+  charge to with associated balances.
+
+  Currency precision is now a runtime config parameter
+
+  Transactions now track allocation ids
+
+  Added a new gusage report that lists a per-user charge summary for a
+  particular project over an arbitrary timeframe. 
+
+  Added support for [-h, --hours] flag for clients to treat currency as
+  specified in hours. In systems where the currency is measured in
+  resource-seconds (like processor-seconds), this option allows the amount
+  and credit limit to be specified in resource-hours.
+
+  The Usage object was removed. Likewise, the old glsusage client is gone.
+  In lieu of the Usage record, usage can be obtained from the Job Object and
+  itemized charge information can be extracted from the details field in the
+  Transaction Log.
+
+  Significant performance testing and tuning has been performed resulting in
+  about a 4x speedup for most clients.
+
+  Robustness has been improved by making server and clients check the socket
+  connections for readiness to read/write with a timeout select in non-blocking
+  read/write loops.
+
+Fix release 2.b1.0.1
+
+  Added a version flag [-V, --version] to all gold clients 
+
+  Renamed create.sql to base.sql and created new bank.sql to rapidly bootstrap
+  gold into a bank. This alleviates the need to create objects and attributes
+  through goldsh speeding up the install process and supporting SQLite which
+  does not yet have support for ALTER TABLE.
+
+  Performance improvement in balance queries
+

@@ -1,0 +1,606 @@
+  <chapter id="GettingMoreAdvanced">
+    <title>Getting More Advanced</title>
+    <para>
+In the previous chapter, a view of the system was presented that largely ignored the presence of accounts and other advanced features in Gold. This chapter will touch on the additional versatility derived from explicit use of accounts and other advanced features.
+    </para>
+
+    <important>
+      <para>
+You will need to be a Gold System Adminstrator to perform the tasks in this chapter!
+      </para>
+    </important>
+
+    <sect1 id="AdvancedProjectDefine">
+      <title>Define Projects</title>
+      <para>
+Let's assume that we have created users and machines as before in the Getting Started chapter (see <link linkend="UserDefine">Define Users</link> and <link linkend="MachineDefine">Define Machines</link>). Again we will create some projects.
+      </para>
+      <note>
+        <para>
+In these examples we assume that the account.autogen configuration parameter is NOT set to automatically create a default account for each project (see <link linkend="ServerConfig">Server Configuration</link>).
+        </para>
+      </note>
+      <example>
+        <title>Now we will define the projects. This time we will define the project members at the same time.</title>
+        <para>
+For the biology project we will define a set of users and a default set of machines for the project. The specified default machine will be honored within accounts associated with this project that specify MEMBERS in the machine list.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Biology Department" -u amy,bob -m blue biology
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+        </screen>
+        <para>
+For the chemistry projects we will just define a set of member users.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkproject -d "Chemistry Department" -u amy,bob,dave chemistry
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 Project
+        </screen>
+        <para>
+Let's see what we've got so far in terms of projects.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsproject
+          </userinput>
+        </para>
+        <screen>
+Name      Active Users        Machines Description
+--------- ------ ------------ -------- --------------------
+biology   True   amy,bob      blue     Biology Department
+chemistry True   amy,dave,bob          Chemistry Department
+        </screen>
+      </example>
+      <note>
+        <para>
+Note that accounts were not auto-generated this time because the account.autogen feature is set to false.
+        </para>
+      </note>
+    </sect1>
+
+    <sect1 id="AccountDefine">
+      <title>Define Accounts</title>
+      <para>
+Next, you can create your accounts (see <link linkend="AccountCreate">Creating Accounts</link>). Think of your accounts as bank accounts to which you can associate the users, projects and machines that can use them.
+      </para>
+      <example>
+        <title>We will create some accounts for use by the biology and chemistry projects.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p biology -u MEMBERS -m MEMBERS -n "biology"
+          </userinput>
+        </para>
+        <screen>
+Successfully created Account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p chemistry -u MEMBERS -m colony -n "chemistry on colony"
+          </userinput>
+        </para>
+        <screen>
+Successfully created Account 2
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p chemistry -u amy -n "chemistry for amy"
+          </userinput>
+        </para>
+        <screen>
+Successfully created Account 3
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gmkaccount -p chemistry -u MEMBERS,-amy -n "chemistry not amy"
+          </userinput>
+        </para>
+        <screen>
+Successfully created Account 4
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsaccount
+          </userinput>
+        </para>
+        <screen>
+Id Name                Amount Projects  Users        Machines Description    
+-- ------------------- ------ --------- ------------ -------- ----------- 
+1  biology                    biology   MEMBERS      MEMBERS  
+2  chemistry on colony        chemistry MEMBERS      colony                  
+3  chemistry for amy          chemistry amy          ANY                     
+4  chemistry not amy          chemistry MEMBERS,-amy ANY                     
+        </screen>
+        <para>
+So what we have here is:
+1) a single account for biology available to all of its defined members and able to be used only on the blue machine (since blue is its only member machine)
+2) an account usable toward the chemistry project on the colony machine only
+3) an account usable anywhere for chemistry by amy only
+4) an account usable anywhere for chemistry by any member except for amy
+        </para>
+      </example>
+    </sect1>
+
+    <sect1 id="AdvancedDeposits">
+      <title>Make Deposits</title>
+      <para>
+Now you can make some deposits (see <link linkend="AccountDeposit">Making Deposits</link>).
+      </para>
+      <example>
+        <title>Let's deposit 100 million credits for use by the biology project. We are going to establish a use-it-or-lose-it policy here in which one fourth of the credits expire each quarter. Since there is only one account for the biology project, we can specify the project name in the deposit.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2005-04-01 -z 25000000 -p biology
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 25000000 credits into account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-04-01 -e 2005-07-01 -z 25000000 -p biology
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 25000000 credits into account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-07-01 -e 2005-10-01 -z 25000000 -p biology
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 25000000 credits into account 1
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-10-01 -e 2006-01-01 -z 25000000 -p biology
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 25000000 credits into account 1
+        </screen>
+      </example>
+      <example>
+        <title>Next we will make some deposits valid toward the chemistry project for the entire year. Since there are multiple accounts for the chemistry project, we must specify the appropriate account id in the deposit.</title>
+        <para>
+First, we'll dedicate 50 million credits for use on colony.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 50000000 -a 2
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 50000000 credits into account 2
+        </screen>
+        <para>
+Then we'll give amy special access to 10 million credits that she can use anywhere &mdash; with 9 million credits prepaid, and a million credits of overdraft.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 9000000 -L 1000000 -a 3
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 9000000 credits into account 3
+        </screen>
+        <para>
+Finally, we'll give all the other members except amy access to the remaining 40 million credits.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gdeposit -s 2005-01-01 -e 2006-01-01 -z 40000000 -a 4
+          </userinput>
+        </para>
+        <screen>
+Successfully deposited 40000000 credits into account 4
+        </screen>
+      </example>
+      <example>
+        <title>We can now take a closer look at the accounts and the allocations that we have created.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsaccount
+          </userinput>
+        </para>
+        <screen>
+Id Name                Amount   Projects  Users        Machines Description 
+-- ------------------- -------- --------- ------------ -------- ----------- 
+1  biology             25000000 biology   MEMBERS      MEMBERS              
+2  chemistry on colony 50000000 chemistry MEMBERS      colony               
+3  chemistry for amy    9000000 chemistry amy          ANY                  
+4  chemistry not amy   40000000 chemistry MEMBERS,-amy ANY     
+        </screen>
+        <para>
+Let's examine the allocations we just created with the time period information.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount   CreditLimit Deposited Description 
+-- ------- ---------- ---------- -------- ----------- --------- ----------- 
+1  1       2005-01-01 2005-04-01 25000000           0  25000000             
+2  1       2005-04-01 2005-07-01 25000000           0  25000000             
+3  1       2005-07-01 2005-10-01 25000000           0  25000000             
+4  1       2005-10-01 2006-01-01 25000000           0  25000000             
+5  2       2005-01-01 2006-01-01 50000000           0  50000000             
+6  3       2005-01-01 2006-01-01  9000000     1000000   9000000             
+7  4       2005-01-01 2006-01-01 40000000           0  40000000       
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AdvancedBalance">
+      <title>Check The Balance</title>
+      <para>
+You can examine the resulting balance (see <link linkend="AccountBalance">Querying The Balance</link>).
+      </para>
+      <example>
+        <title>Let's look at amy's balance</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy
+          </userinput>
+        </para>
+        <screen>
+Id Name                Amount   Reserved Balance  CreditLimit Available 
+-- ------------------- -------- -------- -------- ----------- --------- 
+1  biology             25000000        0 25000000           0  25000000 
+2  chemistry on colony 50000000        0 50000000           0  50000000 
+3  chemistry for amy    9000000        0  9000000     1000000  10000000 
+        </screen>
+      </example>
+        <para>
+We see that amy's total balance is composed of some 25000000 credits useable toward the biology project, 50000000 for chemistry on colony and another 10000000 which can be used for chemistry on any machine. Notice that the 10000000 credits available for use in account 3 is composed of a 9000000 balance plus an overdraft limit of 1000000 (meaning your account can go negative by that amount).
+        </para>
+      <example>
+        <title>Let's just get amy's balance for chemistry on colony.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy -p chemistry -m colony &mdash;total
+          </userinput>
+        </para>
+        <screen>
+Balance  
+-------- 
+59000000
+The account balance is 60000000 credits
+        </screen>
+      </example>
+      <example>
+        <title>Now let's just get the total that can be used by amy for chemistry on colony. This includes amy's available credit.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy -p chemistry -m colony &mdash;total &mdash;available
+          </userinput>
+        </para>
+        <screen>
+Balance  
+-------- 
+60000000 
+The account balance is 60000000 credits
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="ChargeRateDefine">
+      <title>Define Charge Rates</title>
+      <para>
+Gold allows you to define how much you will charge for your resources (see <link linkend="ChargeRateCreate">Creating Charge Rates</link>).
+      </para>
+      <para>
+In the Getting Started chapter, we relied on the fact that the default Gold installation predefines a Processors charge rate for you. This means that the total charge for a job will be calculated by taking the number of processors used in the job multiplied by the Processors charge rate which is then multiplied by the wallclock limit. For example: ( ( 16 [Processors] * 1 [ChargeRate{VBR}{Processors}] ) ) * 1234 [WallDuration] = 19744.
+      </para>
+      <example>
+        <title>Let's examine the predefined charge rates.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Query
+          </userinput>
+        </para>
+        <screen>
+Type Name       Instance Rate Description 
+---- ---------- -------- ---- ----------- 
+VBR  Processors          1                        
+        </screen>
+      </example>
+      <para>
+Now let's create a few of our own.
+      </para>
+      <example>
+        <title>Let's say we want to charge for memory used</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Create Type=VBR Name=Memory Rate=0.001
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ChargeRate
+        </screen>
+      </example>
+      <example>
+        <title>We also want a quality of service multiplier</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Create Type=NBM Name=QualityOfService Instance=BottomFeeder Rate=0.5
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ChargeRate
+        </screen>
+      </example>
+      <example>
+        <title>Creating another quality-based charge multiplier</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Create Type=NBM Name=QualityOfService Instance=Premium Rate=2
+          </userinput>
+        </para>
+        <screen>
+Successfully created 1 ChargeRate
+        </screen>
+      </example>
+      <example>
+        <title>Let's take a look at the current charge rates.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Query
+          </userinput>
+        </para>
+        <screen>
+Type Name             Instance     Rate  Description 
+---- ---------------- ------------ ----- ----------- 
+VBR  Processors                    1                 
+VBR  Memory                        0.001             
+NBM  QualityOfService BottomFeeder 0.5               
+NBM  QualityOfService Premium      2          
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="GuaranteedQuote">
+      <title>Obtain A Guaranteed Job Quote</title>
+      <para>
+This time, we will use the job quote to guarantee our charge rates (this may be useful in the case of fluxuating rates like market based rates).
+      </para>
+      <example>
+        <title>Let's request a guaranteed charge quote that reflects the memory and quality of service we expect to use.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gquote -p chemistry -u amy -m colony -P 16 -M 2048 -t 3600 -Q Premium --guarantee
+          </userinput>
+        </para>
+        <screen>
+Successfully quoted 129946 credits with quote id 1
+        </screen>
+        <para>
+This time it actually created a persistent quote ...
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsquote 1
+          </userinput>
+        </para>
+        <screen>
+Id Amount Job Project   User Machine StartTime           EndTime             WallDuration CallType Used ChargeRates                                                            Description 
+-- ------ --- --------- ---- ------- ------------------- ------------------- ------------ -------- ---- ---------------------------------------------------------------------- ----------- 
+1  129946 1   chemistry amy  colony  2005-02-16 12:06:25 2005-02-23 13:06:25 3600         Normal   0    NBM:QualityOfService:Premium:2,VBR:Processors::1,VBR:Memory::0.001             
+        </screen>
+        <para>
+... and created a job entry.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob -j 1
+          </userinput>
+        </para>
+        <screen>
+Id JobId User Project   Machine Queue QualityOfService Stage Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ----- ---- --------- ------- ----- ---------------- ----- ------ ---------- ----- ------------ --------- ------- ----------- 
+1        amy  chemistry colony        Premium          Quote        16                                     
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="QuotedReserve">
+      <title>Make A Quoted Job Reservation</title>
+      <para>
+If the quote id is specified when we make the reservation, the reservation will use the quoted amounts in calculating the amount to reserve and it will connect to the existing job entry.
+      </para>
+      <example>
+        <title>Make a reservation for our job that reflects our resource and quality preferences while specifying the quote id.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+greserve -J PBS.1234.0 -p chemistry -u amy -m colony -P 16 -M 2048 -t 3600 -Q Premium -q 1
+          </userinput>
+        </para>
+        <screen>
+Successfully reserved 129946 credits for job PBS.1234.0
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsres
+          </userinput>
+        </para>
+        <screen>
+Id Name       Amount StartTime           EndTime             Job User Project   Machine Accounts Description 
+-- ---------- ------ ------------------- ------------------- --- ---- --------- ------- -------- ----------- 
+1  PBS.1234.0 129946 2005-02-16 12:35:13 2005-02-16 13:35:13 3   amy  chemistry colony  3               
+        </screen>
+        <para>
+The reservation modifies the job entry to take on the new JobId and to change its stage from Quote to Reserve.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob -j 1
+          </userinput>
+        </para>
+        <screen>
+Id JobId      User Project   Machine Queue QualityOfService Stage   Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ---------- ---- --------- ------- ----- ---------------- ------- ------ ---------- ----- ------------ --------- ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony        Premium          Reserve        16                                     
+        </screen>
+        <para>
+As before, the reservation will decrease our balance by the amount reserved.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+gbalance -u amy -p chemistry -m colony
+          </userinput>
+        </para>
+        <screen>
+Id Name                Amount   Reserved Balance  CreditLimit Available 
+-- ------------------- -------- -------- -------- ----------- --------- 
+2  chemistry on colony 50000000        0 50000000           0  50000000 
+3  chemistry for amy    8960512   129946  8830566     1000000   9830566 
+        </screen>
+        <para>
+Gold has two accounts to choose from. Gold will debit allocations in the order of earliest expiring and most specific first. Specifically, precedence is considered in the following order of highest to lowest: hierarchical relation, expiration time, generality of the project, generality of the user, and generality of the machine. Here we see that Gold considers the account that is exclusively for amy to be more specific (and of hence of higher precedence) than the account that is exclusively for the colony machine. This ordering will ensure that allocations that will expire the soonest will be used up first and that accounts with more specific access restrictions will be used in favor of accounts that have more general access (for example - amy will use up an account just for amy before the she begins using a shared account).
+        </para>
+      </example>
+    </sect1>
+
+    <sect1 id="QuotedCharge">
+      <title>Charge for a Quoted Job</title>
+      <para>
+Even if the charge rates change between submission and completion of a job, a job tied to a quote will use the quoted charge rates in a prorated manner.
+      </para>
+      <example>
+        <title>Let's change a charge rate and issue the charge for our job. We will request that the quote be honored.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+goldsh ChargeRate Modify Type==VBR Name==Memory Rate=.002
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 ChargeRate
+        </screen>
+        <para>
+          <userinput><prompt>$ </prompt>
+gcharge -J PBS.1234.0 -u amy -p chemistry -m colony -P 16 -M 2048 -t 1234 -Q Premium -X WallDuration=1234 -q 1
+          </userinput>
+        </para>
+        <screen>
+Successfully charged job PBS.1234.0 for 44542 credits
+1 reservations were removed
+        </screen>
+        <para>
+The charge modifies the job entry with the actual usage, charges and wallduration while changing its stage from Reserve to Charge.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob -j 1
+          </userinput>
+        </para>
+        <screen>
+Id JobId      User Project   Machine Queue QualityOfService Stage  Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ---------- ---- --------- ------- ----- ---------------- ------ ------ ---------- ----- ------------ --------- ------- ----------- 
+3  PBS.1234.0 amy  chemistry colony        Premium          Charge  44542 16               1234                       
+        </screen>
+        <para>
+The detail charge information for the job can be extracted from the transaction log.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glstxn -A Charge -J PBS.1234.0 --show Details
+          </userinput>
+        </para>
+        <screen>
+Details                                                                                                                                                                                                                                                                                     
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+WallDuration=1234,QuoteId=1,QualityOfService=Premium,Processors=16,ItemizedCharges:=( ( 16 [Processors] * 1 [ChargeRate{VBR}{Processors}] ) + ( 2048 [Memory] * 0.001 [ChargeRate{VBR}{Memory}] ) ) * 1234 [WallDuration] * 2 [ChargeRate{NBM}{QualityOfService}{Premium}] = 44542.464 
+        </screen>
+        <para>
+Notice from the Itemized Charges above that the quoted memory charge rate of .001 was used instead of the current rate of .002. Notice also that the amounts have been prorated according to actual resources used and actual wallclock duration.
+        </para>
+      </example>
+    </sect1>
+
+    <sect1 id="PartialRefund">
+      <title>Partially Refund a Job</title>
+      <para>
+      </para>
+      <example>
+        <title>Suppose you want to issue a partial refund.</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grefund -j 1 -z 10000
+          </userinput>
+        </para>
+        <screen>
+Successfully refunded 10000 credits for job PBS.1234.0
+        </screen>
+        <para>
+Notice that the Job Charge is now 10000 credits lower as a result. Gold will not let your refunds total more than the total charge for the job.
+        </para>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsjob 1
+          </userinput>
+        </para>
+        <screen>
+Id JobId      User Project   Machine Queue QualityOfService Stage  Charge Processors Nodes WallDuration StartTime EndTime Description 
+-- ---------- ---- --------- ------- ----- ---------------- ------ ------ ---------- ----- ------------ --------- ------- ----------- 
+3  PBS.1234.0 amy  chemistry colony        Premium          Charge  34542 16               1234                       
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AdvancedExamineStatement">
+      <title>Examine Account Statement</title>
+      <para>
+You can get request account statement for our activites as they apply to a particular account.
+      </para>
+      <example>
+        <title>We can request an itemized account statement over all time for account 3 (chemistry for amy)</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gstatement -a 3
+          </userinput>
+        </para>
+        <screen>
+################################################################################
+#
+# Statement for account 3 (chemistry for amy)
+# Generated on Wed Feb 16 15:16:04 2005.
+# Reporting account activity from -infinity to now.
+#
+################################################################################
+
+Beginning Balance:                    0
+------------------ --------------------
+Total Credits:                  9010000
+Total Debits:                    -44542
+------------------ --------------------
+Ending Balance:                 8965458
+
+############################### Credit Detail ##################################
+
+Object  Action  JobId Amount  Time                
+------- ------- ----- ------- ------------------- 
+Account Deposit       9000000 2005-02-16 15:10:44 
+Job     Refund          10000 2005-02-16 15:15:36 
+
+############################### Debit Detail ###################################
+
+Object Action JobId      Project   User Machine Amount Time                
+------ ------ ---------- --------- ---- ------- ------ ------------------- 
+Job    Charge PBS.1234.0 chemistry amy  colony  -44542 2005-02-16 15:14:39 
+
+############################### End of Report ##################################
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

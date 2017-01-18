@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>List Transactions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting Started"
+HREF="c495.htm"><LINK
+REL="PREVIOUS"
+TITLE="Refund a Job"
+HREF="x689.htm"><LINK
+REL="NEXT"
+TITLE="Examine Account Statement"
+HREF="x730.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x689.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Getting Started</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x730.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="QUERYTRANSACTIONS"
+>List Transactions</A
+></H1
+><P
+>You can now check the resulting transaction records (see <A
+HREF="c3084.htm#TRANSACTIONQUERY"
+>Querying Transactions</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN718"
+></A
+><P
+><B
+>Example 4-13. Let's list all the job transactions</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -O Job &mdash;show="RequestId,TransactionId,Object,Action,JobId,Project,User,Machine,Amount"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>RequestId TransactionId Object Action  JobId      Project   User Machine Amount 
+--------- ------------- ------ ------- ---------- --------- ---- ------- ------ 
+298       299           Job    Create                                           
+298       303           Job    Quote              chemistry amy  colony  57600  
+299       304           Job    Modify                                           
+299       307           Job    Reserve PBS.1234.0 chemistry amy  colony  57600  
+300       311           Job    Charge  PBS.1234.0 chemistry amy  colony  19744  
+300       312           Job    Modify                                           
+301       314           Job    Refund  PBS.1234.0                               
+301       315           Job    Modify                   
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN724"
+></A
+><P
+><B
+>Example 4-14. It may also be illustrative to examine what transactions actually composed our charge request...</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glstxn -R 655 &mdash;show="Id,Object,Action,Name,JobId,Amount,Account,Delta"
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id  Object      Action Name       JobId      Amount Account Delta  
+--- ----------- ------ ---------- ---------- ------ ------- ------ 
+308 Usage       Create                                             
+309 Reservation Delete PBS.1234.0                                  
+310 Allocation  Modify 2                                           
+311 Job         Charge 1          PBS.1234.0 19744  2       -19744 
+312 Job         Modify 1                                          
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x689.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x730.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Refund a Job</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c495.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Examine Account Statement</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

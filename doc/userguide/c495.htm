@@ -1,0 +1,325 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Getting Started</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Server Startup"
+HREF="x489.htm"><LINK
+REL="NEXT"
+TITLE="Define Machines"
+HREF="x523.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x489.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x523.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="GETTINGSTARTED"
+></A
+>Chapter 4. Getting Started</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c495.htm#USERDEFINE"
+>Define Users</A
+></DT
+><DT
+><A
+HREF="x523.htm"
+>Define Machines</A
+></DT
+><DT
+><A
+HREF="x541.htm"
+>Define Projects</A
+></DT
+><DT
+><A
+HREF="x562.htm"
+>Add Users to the Projects</A
+></DT
+><DT
+><A
+HREF="x580.htm"
+>Make Deposits</A
+></DT
+><DT
+><A
+HREF="x599.htm"
+>Check The Balance</A
+></DT
+><DT
+><A
+HREF="x615.htm"
+>Integrate Gold with your Resource Management System</A
+></DT
+><DT
+><A
+HREF="x624.htm"
+>Obtain A Job Quote</A
+></DT
+><DT
+><A
+HREF="x634.htm"
+>Make A Job Reservation</A
+></DT
+><DT
+><A
+HREF="x663.htm"
+>Charge for a Job</A
+></DT
+><DT
+><A
+HREF="x689.htm"
+>Refund a Job</A
+></DT
+><DT
+><A
+HREF="x714.htm"
+>List Transactions</A
+></DT
+><DT
+><A
+HREF="x730.htm"
+>Examine Account Statement</A
+></DT
+><DT
+><A
+HREF="x740.htm"
+>Examine Project Usage</A
+></DT
+></DL
+></DIV
+><P
+>In order to prepare Gold for use as an allocation and accounting manager, you will need to perform some initial steps to define users, machines and projects, make deposits, etc. This chapter proceeds by offering a number of examples in performing these steps. These steps may be used as a guide, substituting values and options appropriate for your system.
+    </P
+><P
+>It is assumed that you have already installed and bootstrapped Gold as an allocation and accounting manager and started the gold server before performing the steps suggested in this section.
+    </P
+><DIV
+CLASS="IMPORTANT"
+><BLOCKQUOTE
+CLASS="IMPORTANT"
+><P
+><B
+>Important: </B
+>You will need to be a Gold System Adminstrator to perform the tasks in this chapter!
+      </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="USERDEFINE"
+>Define Users</A
+></H1
+><P
+>First, you will need to define the users that will use, manage or administer the resources (see <A
+HREF="c1008.htm#USERCREATE"
+>Creating Users</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN505"
+></A
+><P
+><B
+>Example 4-1. Let's add the users amy, bob and dave.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkuser -n "Wilkes, Amy" -E "amy@western.edu" amy
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 User
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkuser -n "Smith, Robert F." -E "bob@western.edu" bob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 User
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkuser -n "Miller, David" -E "dave@western.edu" dave
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 User
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsuser
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name Active CommonName       PhoneNumber EmailAddress     DefaultProject Description 
+---- ------ ---------------- ----------- ---------------- -------------- ----------- 
+gold True                                                                             Gold Admin  
+amy  True   Wilkes, Amy                  amy@western.edu                                          
+bob  True   Smith, Robert F.             bob@western.edu                                          
+dave True   Miller, David                dave@western.edu
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x489.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x523.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Server Startup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Define Machines</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

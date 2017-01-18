@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Machines</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Deleting Users"
+HREF="x1148.htm"><LINK
+REL="NEXT"
+TITLE="Querying Machines"
+HREF="x1211.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1148.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1211.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="MACHINES"
+></A
+>Chapter 7. Managing Machines</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c1172.htm#MACHINECREATE"
+>Creating Machines</A
+></DT
+><DT
+><A
+HREF="x1211.htm"
+>Querying Machines</A
+></DT
+><DT
+><A
+HREF="x1241.htm"
+>Modifying Machines</A
+></DT
+><DT
+><A
+HREF="x1274.htm"
+>Deleting Machines</A
+></DT
+></DL
+></DIV
+><P
+>A machine is a resource that can run jobs such as a cluster or an SMP box. Machine properties include the description and whether it is active. A machine can be created, queried, modified and deleted.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="MACHINECREATE"
+>Creating Machines</A
+></H1
+><P
+>To create a new machine, use the command <B
+CLASS="COMMAND"
+>gmkmachine</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gmkmachine</B
+>  [-A | -I] [&mdash;arch <TT
+CLASS="REPLACEABLE"
+><I
+>architecture</I
+></TT
+>] [&mdash;opsys <TT
+CLASS="REPLACEABLE"
+><I
+>operating_system</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>description</I
+></TT
+>] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] {[-m] <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>}</P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>It is possible to have machines be created automatically when first encountered in a job function (charge, reserve or quote) by setting the machine.autogen configuration parameter to true (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>). However, bear in mind that machines must be defined in order to assign them as members of a project. It is also possible to establish a system default machine to be used in job functions (charge reserve, quote) when the machine is unspecified (machine.default parameter). 
+        </P
+></BLOCKQUOTE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1205"
+></A
+><P
+><B
+>Example 7-1. Creating a machine</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gmkmachine -d "Linux Cluster" colony
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully created 1 Machine
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1148.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1211.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deleting Users</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Machines</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

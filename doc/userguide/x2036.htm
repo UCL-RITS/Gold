@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Querying Allocations</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Allocations"
+HREF="c2027.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Allocations"
+HREF="c2027.htm"><LINK
+REL="NEXT"
+TITLE="Modifying Allocations"
+HREF="x2073.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c2027.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 10. Managing Allocations</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2073.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ALLOCATIONQUERY"
+>Querying Allocations</A
+></H1
+><P
+>To display allocation information, use the command <B
+CLASS="COMMAND"
+>glsalloc</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>glsalloc</B
+>  [-A | -I] [-a <TT
+CLASS="REPLACEABLE"
+><I
+>account_id</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [&mdash;show <TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>...]...] [&mdash;showHidden] [&mdash;raw] [-h | &mdash;hours] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [[-i] <TT
+CLASS="REPLACEABLE"
+><I
+>allocation_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2067"
+></A
+><P
+><B
+>Example 10-1. Listing allocations for account 4</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsalloc -a 4
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Account StartTime  EndTime    Amount CreditLimit Deposited Active Description
+-- ------- ---------- ---------- ------ ----------- --------- ------ -----------
+4  4       2005-01-01 2005-04-01 250000           0    250000 False             
+5  4       2005-04-01 2005-07-01 250000           0    250000 False             
+6  4       2005-07-01 2005-10-01 250000           0    250000 True              
+7  4       2005-10-01 2006-01-01 250000           0    250000 False             
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c2027.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2073.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Allocations</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2027.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Modifying Allocations</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

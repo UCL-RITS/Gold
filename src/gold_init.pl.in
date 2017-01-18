@@ -1,0 +1,273 @@
+#! /usr/bin/perl -wT
+################################################################################
+#
+# Gold post-rpm init script
+#
+# File   :  gold_init
+# History:  23 FEB 2004 [Scott Jackson] initial implementation
+#
+################################################################################
+#                                                                              #
+#                              Copyright (c) 2004                              #
+#                  Pacific Northwest National Laboratory,                      #
+#                         Battelle Memorial Institute.                         #
+#                             All rights reserved.                             #
+#                                                                              #
+################################################################################
+#                                                                              #
+#     Redistribution and use in source and binary forms, with or without       #
+#     modification, are permitted provided that the following conditions       #
+#     are met:                                                                 #
+#                                                                              #
+#     · Redistributions of source code must retain the above copyright         #
+#     notice, this list of conditions and the following disclaimer.            #
+#                                                                              #
+#     · Redistributions in binary form must reproduce the above copyright      #
+#     notice, this list of conditions and the following disclaimer in the      #
+#     documentation and/or other materials provided with the distribution.     #
+#                                                                              #
+#     · Neither the name of Battelle nor the names of its contributors         #
+#     may be used to endorse or promote products derived from this software    #
+#     without specific prior written permission.                               #
+#                                                                              #
+#     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      #
+#     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        #
+#     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS        #
+#     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE           #
+#     COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,      #
+#     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,     #
+#     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;         #
+#     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER         #
+#     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT       #
+#     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN        #
+#     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          #
+#     POSSIBILITY OF SUCH DAMAGE.                                              #
+#                                                                              #
+################################################################################
+use strict;
+use vars qw($PREFIX @ARGV);
+
+BEGIN
+{
+    # Set $PREFIX from Environment variable, Cfg File, or Hard-coded default
+    if ($ENV{GOLD_HOME})
+    {
+        $PREFIX = $ENV{GOLD_HOME};
+    }
+    elsif (-e "/etc/gold.cfg")
+    {
+        open(ENV, "/etc/gold.cfg");
+        while (<ENV>)
+        {
+            chomp;       # Remove trailing whitespace
+            s/^\s+//;    # Remove leading whitespace
+            s/\#.*//;    # Strip off comments
+            next unless my ($var, $val) = split("[= ]+", $_, 2);
+            $ENV{$var} = $val;
+        }
+        $PREFIX = $ENV{GOLD_HOME};
+    }
+    else { $PREFIX = "@prefix@"; }
+
+    # Check and untaint $PREFIX
+    if ($PREFIX =~ /^([-\/\w\.]+)$/) { $PREFIX = $1; }
+    else { die "Illegal characters were found in \$PREFIX ($PREFIX)\n"; }
+}
+
+use lib "${PREFIX}/lib";
+use Getopt::Long 2.24;
+use autouse 'Pod::Usage' => qw(pod2usage);
+
+Main:
+{
+    # Parse Command Line Arguments
+    my ($interactive, $admin, $key, $help, $man, $answer);
+    $interactive = 1;
+    GetOptions(
+        'auth-key=s'      => \$key,
+        'admin=s'         => \$admin,
+        'interactive'     => \$interactive,
+        'non-interactive' => sub { $interactive = 0 },
+        'help|?'          => \$help,
+        'man'             => \$man,
+    ) or pod2usage(2);
+
+    # Display usage if necessary
+    pod2usage(1) if $help;
+    if ($man)
+    {
+        $ENV{PATH} = "/bin:/usr/bin";    # Untaint PATH
+        delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+        if ($0 =~ /^([-\/\w\.]+)$/) { $0 = $1; }    # Untaint $0
+        else { die "Illegal characters were found in \$0 ($0)\n"; }
+        pod2usage(-exitstatus => 0, -verbose => 2);
+    }
+
+    # Set $GOLD_HOME and untaint $ENV{PATH} and $ENV{IFS}
+    my $GOLD_HOME = $PREFIX;
+    $ENV{PATH} = "/bin:/usr/bin";
+    delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+
+    # Initialize variables
+    my $me       = (getpwuid($<))[0];
+    my $hostname = `hostname`;
+    chomp $hostname;
+    $hostname =~ s/\..*//;    # Short name
+
+    # This command must be run as root
+    die "You must be root to run this command!\n" unless $me eq "root";
+
+    # Prompt for auth_key write it to the file
+    if (! defined $key)
+    {
+        $key = "RANDOM_" . sprintf("%0d", int(rand(1000000)));
+
+        if ($interactive)
+        {
+            print
+              "\nA secret key is needed to authenticate and authorize gold users. It is a string or phrase consisting of up to 80 printable characters. It is used under the covers and need not be memorized. If you are using the Maui Scheduler, it will need to configured to use this key in its communications with Gold.\n\nWhat is your authentication key? [$key] ";
+            chomp($answer = <STDIN>);
+            $key = $answer if $answer;
+        }
+    }
+    open AUTH_KEY, ">${PREFIX}/etc/auth_key";
+    print AUTH_KEY "$key\n";
+
+   # Prompt for primary gold admin and set ownership and perms of security files
+    if (! defined $admin)
+    {
+        $admin = $me;
+
+        if ($interactive)
+        {
+            print
+              "\nThe primary bank admin is the user that can start gold and owns all the authentication files. It is recommended that this user not be root.\n\nWhat user do you want to be the primary gold admin? [$admin] ";
+            chomp($answer = <STDIN>);
+            $admin = $answer if $answer;
+        }
+    }
+    my ($bank_uid, $bank_gid) = (getpwnam($admin))[2, 3];
+    if ($bank_uid =~ /^([-\w.]+)$/) { $bank_uid = $1; }
+    else { die "Illegal characters were found in \$bank_uid ($bank_uid)\n"; }
+    if ($bank_gid =~ /^([-\w.]+)$/) { $bank_gid = $1; }
+    else { die "Illegal characters were found in \$bank_gid ($bank_gid)\n"; }
+    die
+      "The bank admin could not be translated to a valid uid. Please avoid using\nthe backspace key when entering the gold admin name\n"
+      unless defined $bank_uid;
+    chown $bank_uid, $bank_gid, "${PREFIX}/etc";
+    chmod 0744, "${PREFIX}/etc";
+    chown $bank_uid, $bank_gid, "${PREFIX}/etc/auth_key";
+    chmod 0400, "${PREFIX}/etc/auth_key";
+    chown $bank_uid, $bank_gid, "${PREFIX}/sbin/goldd";
+    chmod 0700, "${PREFIX}/sbin/goldd";
+
+    foreach my $file (<${PREFIX}/bin/*>)
+    {
+        if ($file =~ /^([-\/\w.]+)$/) { $file = $1; }
+        else { die "Illegal characters were found in \$file ($file)\n"; }
+        chown $bank_uid, $bank_gid, $file;
+        chmod 04755, $file;
+    }
+
+    # Create log directory and set perms
+    mkdir "${PREFIX}/log", 0744;
+    chown $bank_uid, $bank_gid, "${PREFIX}/log";
+
+    # Modify the goldd.conf server configuration file
+    my $CONFIG = "${PREFIX}/etc/goldd.conf";
+    open(OLD, "< ${CONFIG}");
+    open(NEW, "> ${CONFIG}.mod");
+    while (<OLD>)
+    {
+        s%(super.user\s*=\s*).*%$1$admin%;
+        s%(server.host\s*=\s*).*%$1$hostname%;
+        s%(database.datasource\s*=\s*).*%$1DBI:Pg:dbname=gold;host=$hostname%;
+        print NEW $_;
+    }
+    close(OLD);
+    close(NEW);
+    rename($CONFIG,         "${CONFIG}.orig");
+    rename("${CONFIG}.mod", $CONFIG);
+
+    # Modify the gold.conf client configuration file
+    $CONFIG = "${PREFIX}/etc/gold.conf";
+    open(OLD, "< ${CONFIG}");
+    open(NEW, "> ${CONFIG}.mod");
+    while (<OLD>)
+    {
+        s%(server.host\s*=\s*).*%$1$hostname%;
+        print NEW $_;
+    }
+    close(OLD);
+    close(NEW);
+    rename($CONFIG,         "${CONFIG}.orig");
+    rename("${CONFIG}.mod", $CONFIG);
+
+}
+
+##############################################################################
+
+__END__
+
+=head1 NAME
+
+gold_init - Gold post-rpm init script
+
+=head1 SYNOPSIS
+
+B<gold_init> [B<--admin>=<bank admin>] [B<--auth-key>=<secret passphrase>] [B<--interactive> | B<--non-interactive>] [B<-?>, B<--help>] [B<--man>]
+
+=head1 DESCRIPTION
+
+B<gold_init> is an init script that can be run after Gold has been installed via an rpm. It performs the following configuration steps:
+
+=over 4
+
+=item Installs the authentication key
+
+=item Sets the primary bank administrator
+
+=item Sets ownership and permissions of security relevant files
+
+=item Creates the log directory
+
+=item Configures the database information
+
+=back
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--admin> <bank admin>
+
+Specifies the primary bank administrator that the gold server runs as and owns all the authentication files.
+
+=item B<--auth-key> <secret passphrase>
+
+A secret passphrase used by the clients to authenticate and authorize gold users to the server. It is a string or phrase consisting of up to 80 printable characters. It is used under the covers and need not be memorized. If you are using the Maui Scheduler this key will need to be the same as the Maui key.
+
+=item B<--interactive>
+
+Prompts for any parameters that are not specified on the command line. This is the default.
+
+=item B<--non-interactive>
+
+Assumes defaults for any parameters that are not specified on the command line.
+
+=item B<-? | --help>
+
+brief help message
+
+=item B<--man>
+
+full documentation
+
+=back
+
+=head1 AUTHOR
+
+Scott Jackson, Scott.Jackson@pnl.gov
+
+=cut
+

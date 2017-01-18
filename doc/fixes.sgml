@@ -1,0 +1,64 @@
+<sect1 id="Fixes">
+  <title>Problems Fixed</title>
+  <para>
+The following is a list of problems fixed in this release.
+  </para>
+  <itemizedlist>
+    <listitem>
+       <para>
+Wallclock limits were being rounded down. Now they are rounded up.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Fixed showstats issue where PHDed is miscalculated.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Rewrote support.diag.pl script to correctly find and collect logs.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Checkjob now reports a job in the Cancelling state until the job is verified to be gone.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Improved flexibility of job to reservation binding.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Fixed bug where any user could delete any job.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Fixed truncation of directory names and credential/file names when using grid
+mapping files.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Fixed JOBPREEMPTMINACTIVETIME so it now works in MASTER-SLAVE grid.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Enforce priority constraints within msub.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Fixed cancelled grid jobs that never go away.
+       </para>
+    </listitem>
+    <listitem>
+       <para>
+Dedicated reservations shouldn't overlap each other.
+       </para>
+    </listitem>
+  </itemizedlist>
+</sect1>

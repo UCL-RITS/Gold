@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Obtaining Job Quotes</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Jobs"
+HREF="c2396.htm"><LINK
+REL="PREVIOUS"
+TITLE="Deleting Jobs"
+HREF="x2585.htm"><LINK
+REL="NEXT"
+TITLE="Making Job Reservations"
+HREF="x2698.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2585.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 13. Managing Jobs</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2698.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="JOBQUOTE"
+>Obtaining Job Quotes</A
+></H1
+><P
+>Job quotes can be used to determine how much it will cost to run a job. This step verifies that the submitter has sufficient funds for, and meets all the allocation policy requirements for running the job and can be used at job submission as an early filter to prevent jobs from getting in and waiting in the job queue just to be blocked from running later. If a guaranteed quote is requested, a quote id is returned and can be used in the subsequent charge to guarantee the rates that were used to form the original quote. A guaranteed quote has the side effect of creating a quotation record and a permanent job record.
+      </P
+><P
+>To request a job quote, use the command <B
+CLASS="COMMAND"
+>gquote</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gquote</B
+>  [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-o <TT
+CLASS="REPLACEABLE"
+><I
+>organization</I
+></TT
+>] [-C <TT
+CLASS="REPLACEABLE"
+><I
+>queue_name</I
+></TT
+>] [-Q <TT
+CLASS="REPLACEABLE"
+><I
+>quality_of_service</I
+></TT
+>] [-N <TT
+CLASS="REPLACEABLE"
+><I
+>nodes</I
+></TT
+>] [-P <TT
+CLASS="REPLACEABLE"
+><I
+>processors</I
+></TT
+>] [-M <TT
+CLASS="REPLACEABLE"
+><I
+>memory</I
+></TT
+>] [-D <TT
+CLASS="REPLACEABLE"
+><I
+>disk</I
+></TT
+>] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>job_name</I
+></TT
+>] [&mdash;application <TT
+CLASS="REPLACEABLE"
+><I
+>application</I
+></TT
+>] [-t <TT
+CLASS="REPLACEABLE"
+><I
+>quote_duration</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>quote_start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>quote_end_time</I
+></TT
+>] [-T <TT
+CLASS="REPLACEABLE"
+><I
+>job_type</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>quote_description</I
+></TT
+>] [-X | &mdash;extension <TT
+CLASS="REPLACEABLE"
+><I
+>property</I
+></TT
+>=<TT
+CLASS="REPLACEABLE"
+><I
+>value</I
+></TT
+>...] [&mdash;costOnly | &mdash;guarantee] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] [-V | &mdash;version] [[-j] <TT
+CLASS="REPLACEABLE"
+><I
+>gold_job_id</I
+></TT
+>] [-J <TT
+CLASS="REPLACEABLE"
+><I
+>job_id</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2679"
+></A
+><P
+><B
+>Example 13-5. Requesting a quotation</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gquote -p chemistry -u amy -m colony -P 2 -t 3600
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully quoted 7200 credits
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2685"
+></A
+><P
+><B
+>Example 13-6. Requesting a guaranteed quote</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gquote -p chemistry -u amy -m colony -P 16 -t 3600 --guarantee
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully quoted 57600 credits with quote id 1
+        </PRE
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsquote
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Amount Job Project   User Machine StartTime           EndTime             WallDuration Type   Used ChargeRates           Description
+-- ------ --- --------- ---- ------- ------------------- ------------------- ------------ ------ ---- --------------------- -----------
+1  57600  1   chemistry amy  colony  2005-01-14 10:09:58 2005-08-10 15:27:07 3600         Normal 0    VBR:Processors:1
+        </PRE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>It is possible to establish a system default machine, project or user to be used in job functions (charge, reserve or quote) when left unspecified (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>).
+        </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2585.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2698.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Deleting Jobs</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2396.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Making Job Reservations</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

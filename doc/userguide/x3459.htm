@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Command Syntax</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Using the Gold Shell (goldsh)"
+HREF="c3410.htm"><LINK
+REL="PREVIOUS"
+TITLE="Using the Gold Shell (goldsh)"
+HREF="c3410.htm"><LINK
+REL="NEXT"
+TITLE="Valid Objects"
+HREF="x3559.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c3410.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 18. Using the Gold Shell (goldsh)</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3559.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="COMMANDSYNTAX"
+>Command Syntax</A
+></H1
+><P
+>Gold commands are of the form:
+      </P
+><P
+> <TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object&gt;</I
+></TT
+>
+           [,<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object&gt;</I
+></TT
+>...]
+           <TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Action&gt;</I
+></TT
+>  [           [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Conjunction&gt;</I
+></TT
+>]
+           [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Open_Parenthesis&gt;</I
+></TT
+>...]
+                         [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object&gt;.</I
+></TT
+>]
+            <TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Name&gt;</I
+></TT
+>
+           
+            <TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Operator&gt;</I
+></TT
+> 
+                         [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object&gt;.</I
+></TT
+>]
+            <TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Value&gt;</I
+></TT
+>
+           
+           [<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Close_Parenthesis&gt;</I
+></TT
+>...]
+        ...]</P
+><P
+>The basic form of a command is &lt;Object&gt; &lt;Action&gt; [&lt;Name&gt;&lt;Operator&gt;&lt;Value&gt;]*. When an action is performed on more than one object, such as in a multi-object query, the objects are specified in a comma-separated list. Commands may accept zero or more predicates which may function as fields to return, conditions, update values, processing options, etc. Predicates, in their simplest form, are expressed as Name, Operator, Value tuples. Predicates may be combined via conjunctions with grouping specified with parentheses. When performing multi-object queries, names and values may need to be associated with their respective objects.
+      </P
+><P
+>Valid conjunctions include:
+      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>&amp;&amp;</DT
+><DD
+><P
+>and
+            </P
+></DD
+><DT
+>||</DT
+><DD
+><P
+>or
+            </P
+></DD
+><DT
+>&amp;!</DT
+><DD
+><P
+>and not
+            </P
+></DD
+><DT
+>|!</DT
+><DD
+><P
+>or not
+            </P
+></DD
+></DL
+></DIV
+><P
+>Open parentheses may be any number of literal open parentheses '('.
+      </P
+><P
+>Name is the name of the condition, assignment, or option. When performing a multi-object query, a name may need to be prepended by its associated object separated by a period.
+      </P
+><P
+>Valid operators include:
+      </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+>==</DT
+><DD
+><P
+>equals
+            </P
+></DD
+><DT
+>&lt;</DT
+><DD
+><P
+>less than
+            </P
+></DD
+><DT
+>&gt;</DT
+><DD
+><P
+>greater than
+            </P
+></DD
+><DT
+>&lt;=</DT
+><DD
+><P
+>less than or equal to
+            </P
+></DD
+><DT
+>&gt;=</DT
+><DD
+><P
+>greater than or equal to
+            </P
+></DD
+><DT
+>!=</DT
+><DD
+><P
+>not equal to
+            </P
+></DD
+><DT
+>~</DT
+><DD
+><P
+>matches
+            </P
+></DD
+><DT
+>=</DT
+><DD
+><P
+>is assigned
+            </P
+></DD
+><DT
+>+=</DT
+><DD
+><P
+>is incremented by
+            </P
+></DD
+><DT
+>-=</DT
+><DD
+><P
+>is decremented by
+            </P
+></DD
+><DT
+>:=</DT
+><DD
+><P
+>option
+            </P
+></DD
+><DT
+>:!</DT
+><DD
+><P
+>not option
+            </P
+></DD
+></DL
+></DIV
+><P
+>Value is the value of the selection list, condition, assignment, or option. When performing a multi-object query, a value may need to be prepended by its associated object (called the subject) separated by a period.
+      </P
+><P
+>Close parentheses may be any number of literal closing parentheses ')'.
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c3410.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3559.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Using the Gold Shell (goldsh)</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3410.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Valid Objects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

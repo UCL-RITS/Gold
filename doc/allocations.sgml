@@ -1,0 +1,163 @@
+  <chapter id="Allocations">
+    <title>Managing Allocations</title>
+    <para>
+An allocation is a time-bounded pool of resource credits associated with an account. An account may have multiple allocations, each for use during a different time period. An allocation may also have a credit limit representing the amount by which it can go negative.
+    </para>
+    <para>
+Operations include querying, modifying and deleting allocations.
+    </para>
+
+    <sect1 id="AllocationCreate">
+      <title>Creating Allocations</title>
+      <para>
+Allocations are created by making account deposits via the <link linkend="AccountDeposit">gdeposit</link> command (See <link linkend="AccountDeposit">Making Deposits</link>).
+      </para>
+    </sect1>
+
+    <sect1 id="AllocationQuery">
+      <title>Querying Allocations</title>
+      <para>
+To display allocation information, use the command <command>glsalloc</command>:
+      </para>
+      <cmdsynopsis>
+        <command>glsalloc</command>
+        <group>
+          <arg>-A</arg>
+          <arg>-I</arg>
+        </group>
+        <arg>-a <replaceable>account_id</replaceable></arg>
+        <arg>-p <replaceable>project_name</replaceable></arg>
+        <arg rep="repeat">&mdash;show <replaceable>attribute_name</replaceable><arg rep="repeat">,<replaceable>attribute_name</replaceable></arg></arg>
+        <arg>&mdash;showHidden</arg>
+        <arg>&mdash;raw</arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <arg choice="opt"><arg>-i</arg> <replaceable>allocation_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Listing allocations for account 4</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+glsalloc -a 4
+          </userinput>
+        </para>
+        <screen>
+Id Account StartTime  EndTime    Amount CreditLimit Deposited Active Description
+-- ------- ---------- ---------- ------ ----------- --------- ------ -----------
+4  4       2005-01-01 2005-04-01 250000           0    250000 False             
+5  4       2005-04-01 2005-07-01 250000           0    250000 False             
+6  4       2005-07-01 2005-10-01 250000           0    250000 True              
+7  4       2005-10-01 2006-01-01 250000           0    250000 False             
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AllocationModify">
+      <title>Modifying Allocations</title>
+      <para>
+To modify an allocation, use the command <command>gchalloc</command>:
+      </para>
+      <cmdsynopsis>
+        <command>gchalloc</command>
+        <arg>-s <replaceable>start_time</replaceable></arg>
+        <arg>-e <replaceable>end_time</replaceable></arg>
+        <arg>-L <replaceable>credit_limit</replaceable></arg>
+        <arg>-d <replaceable>description</replaceable></arg>
+        <group>
+          <arg>-h</arg>
+          <arg>&mdash;hours</arg>
+        </group>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>--man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <arg choice="req"><arg>-i</arg> <replaceable>allocation_id</replaceable></arg>
+      </cmdsynopsis>
+      <example>
+        <title>Changing the end time for an allocation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchalloc -e "2005-01-01" 4
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Allocation
+        </screen>
+      </example>
+      <example>
+        <title>Changing the credit limit for an allocation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+gchalloc -L 500000000000 -i 2
+          </userinput>
+        </para>
+        <screen>
+Successfully modified 1 Allocation
+        </screen>
+      </example>
+    </sect1>
+
+    <sect1 id="AllocationDelete">
+      <title>Deleting Allocations</title>
+      <para>
+To delete an allocation, use the command <command>grmalloc</command>:
+      </para>
+      <cmdsynopsis>
+        <command>grmalloc</command>
+        <arg>&mdash;debug</arg>
+        <group>
+          <arg>-?</arg>
+          <arg>&mdash;help</arg>
+        </group>
+        <arg>&mdash;man</arg>
+        <arg>&mdash;quiet</arg>
+        <group>
+          <arg>-v</arg>
+          <arg>&mdash;verbose</arg>
+        </group>
+        <group choice="req">
+          <arg choice="plain">-I</arg>
+          <arg choice="req"><arg>-i</arg> <replaceable>allocation_id</replaceable></arg>
+        </group>
+      </cmdsynopsis>
+      <example>
+        <title>Deleting an allocation</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmalloc 4
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 1 Allocation
+        </screen>
+      </example>
+      <example>
+        <title>Purging inactive allocations</title>
+        <para>
+          <userinput><prompt>$ </prompt>
+grmalloc -I
+          </userinput>
+        </para>
+        <screen>
+Successfully deleted 2 Allocations
+        </screen>
+      </example>
+    </sect1>
+
+  </chapter>

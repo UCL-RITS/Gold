@@ -1,0 +1,155 @@
+/******************************************************************************
+ *                                                                            *
+ *                             Copyright (c) 2003                             *
+ *                 Pacific Northwest National Laboratory,                     *
+ *                        Battelle Memorial Institute.                        *
+ *                            All rights reserved.                            *
+ *                                                                            *
+ ******************************************************************************
+ *                                                                            *
+ *    Redistribution and use in source and binary forms, with or without      *
+ *    modification, are permitted provided that the following conditions      *
+ *    are met:                                                                *
+ *                                                                            *
+ *    · Redistributions of source code must retain the above copyright        *
+ *    notice, this list of conditions and the following disclaimer.           *
+ *                                                                            *
+ *    · Redistributions in binary form must reproduce the above copyright     *
+ *    notice, this list of conditions and the following disclaimer in the     *
+ *    documentation and/or other materials provided with the distribution.    *
+ *                                                                            *
+ *    · Neither the name of the Battelle nor the names of its contributors    *
+ *    may be used to endorse or promote products derived from this software   *
+ *    without specific prior written permission.                              *
+ *                                                                            *
+ *    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS     *
+ *    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT       *
+ *    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS       *
+ *    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE          *
+ *    COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,     *
+ *    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,    *
+ *    BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;        *
+ *    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER        *
+ *    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT      *
+ *    LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN       *
+ *    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE         *
+ *    POSSIBILITY OF SUCH DAMAGE.                                             *
+ *                                                                            *
+ ******************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h> 
+#include <string.h>
+#include <libgen.h>
+#include <pwd.h>
+#include <sys/stat.h>
+
+#define GOLD_HOME "@prefix@"
+#define JAVA_HOME "@JAVA_HOME@"
+#define SYSTEM_ADMIN "@USER@"
+
+main(int argc, char *argv[])
+{
+	int c, fd, matched;
+	char cmd[2048], pcmd[256], buf[256], gold_home[256], java_home[256], actor[80], *env;
+	struct passwd *passwd_s;
+	FILE *fp;
+
+  /* Determine JAVA_HOME so can pass to java environment */
+	env = getenv("JAVA_HOME");
+  if (env != NULL) { strcpy(java_home, env); }
+  else {
+		strcpy(pcmd, "which java");
+		fp = popen(pcmd, "r");
+   	fgets(buf, sizeof(buf), fp);
+		if (sizeof(buf) > 0) {
+			strcpy(java_home, dirname(buf));
+			strcat(java_home, "/..");
+		}
+		else { strcpy(java_home, JAVA_HOME); }
+   	fclose(fp);
+		setenv("JAVA_HOME", java_home, 0);
+	}
+	if (access(java_home, R_OK) < 0) {
+		fprintf(stderr, "JAVA_HOME is not set correctly: %s\n", strerror(errno));
+    exit(errno);
+	}
+
+  /* Determine GOLD_HOME so can pass to java properties */
+	env = getenv("GOLD_HOME");
+  if (env != NULL) { strcpy(gold_home, env); }
+	else if (access("/etc/gold.cfg", R_OK) == 0) {
+		fp = fopen("/etc/gold.cfg", "r");
+		matched = 0;
+		while(fgets(buf, 256, fp)) {
+			if (buf[0] == '#') { continue; }
+			if (buf[strlen(buf)-1] == '\n') { buf[strlen(buf)-1] = 0; }
+			if (sscanf(buf, "GOLD_HOME=%s"), gold_home) { matched = 1; }
+		}
+		if (! matched) {
+			fprintf(stderr, "GOLD_HOME is not properly defined in /etc/gold.cfg: %s\n", strerror(errno));
+    	exit(errno);
+		}
+	}
+  else { strcpy(gold_home, GOLD_HOME); }
+	if (access(gold_home, R_OK) < 0) {
+		fprintf(stderr, "GOLD_HOME is not set correctly: %s\n", strerror(errno));
+    exit(errno);
+	}
+
+  /* Determine ACTOR so can pass to java properties */
+  passwd_s = getpwuid(getuid());
+	strcpy(actor, passwd_s->pw_name);
+
+	/* Setuid to bank admin */
+	passwd_s = getpwnam(SYSTEM_ADMIN);
+	setuid(passwd_s->pw_uid);
+
+	/* Build Command */
+	strcpy(cmd, java_home);
+	strcat(cmd, "/bin/java");
+
+	/* Add Java Properties */
+	strcat(cmd, " -DGOLD_HOME=");
+	strcat(cmd, gold_home);
+	strcat(cmd, " -DACTOR=");
+	strcat(cmd, actor);
+	
+	/* Add Class Path */
+	strcat(cmd, " -classpath ");
+	strcat(cmd, gold_home);
+	strcat(cmd, "/classes");
+	env = getenv("CLASSPATH");
+  if (env != NULL) {
+		strcat(cmd, ":");
+		strcat(cmd, env);
+	}
+	strcpy(pcmd, "ls -1 ");
+	strcat(pcmd, gold_home);
+	strcat(pcmd, "/lib/*.jar");
+	fp = popen(pcmd, "r");
+  while(fgets(buf, sizeof(buf), fp) != NULL) {
+		strcat(cmd, ":");
+		buf[strlen(buf)-1] = '\0';
+		strcat(cmd, buf);
+	}
+
+	/* Add Client Name */
+	strcat(cmd, " GoldClient");
+
+	/* Add Client Args */
+	c = 1;
+  while (c < argc) {
+    strcat(cmd, " ");
+    strcat(cmd, argv[c]);
+    c++;
+  }
+
+	/* Invoke the command */
+	/* printf("cmd=%s\n",cmd); */
+  system(cmd);
+}
+
+

@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Making Job Reservations</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Jobs"
+HREF="c2396.htm"><LINK
+REL="PREVIOUS"
+TITLE="Obtaining Job Quotes"
+HREF="x2615.htm"><LINK
+REL="NEXT"
+TITLE="Charging Jobs"
+HREF="x2771.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2615.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 13. Managing Jobs</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2771.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="JOBRESERVE"
+>Making Job Reservations</A
+></H1
+><P
+>A job reservation can be used to place a hold on the user's account before a job starts to ensure that the credits will be there when it completes.
+      </P
+><P
+>To create a job reservation use the command <B
+CLASS="COMMAND"
+>greserve</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>greserve</B
+>  [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-o <TT
+CLASS="REPLACEABLE"
+><I
+>organization</I
+></TT
+>] [-C <TT
+CLASS="REPLACEABLE"
+><I
+>queue_name</I
+></TT
+>] [-Q <TT
+CLASS="REPLACEABLE"
+><I
+>quality_of_service</I
+></TT
+>] [-P <TT
+CLASS="REPLACEABLE"
+><I
+>processors</I
+></TT
+>] [-N <TT
+CLASS="REPLACEABLE"
+><I
+>nodes</I
+></TT
+>] [-M <TT
+CLASS="REPLACEABLE"
+><I
+>memory</I
+></TT
+>] [-D <TT
+CLASS="REPLACEABLE"
+><I
+>disk</I
+></TT
+>] [-n <TT
+CLASS="REPLACEABLE"
+><I
+>job_name</I
+></TT
+>] [&mdash;application <TT
+CLASS="REPLACEABLE"
+><I
+>application</I
+></TT
+>] [-t <TT
+CLASS="REPLACEABLE"
+><I
+>reservation_duration</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>reservation_start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>reservation_end_time</I
+></TT
+>] [-d <TT
+CLASS="REPLACEABLE"
+><I
+>reservation_description</I
+></TT
+>] [-T <TT
+CLASS="REPLACEABLE"
+><I
+>job_type</I
+></TT
+>] [-X | &mdash;extension <TT
+CLASS="REPLACEABLE"
+><I
+>property</I
+></TT
+>=<TT
+CLASS="REPLACEABLE"
+><I
+>value</I
+></TT
+>...] [&mdash;replace] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [-v | &mdash;verbose] [-V | &mdash;version] [-q <TT
+CLASS="REPLACEABLE"
+><I
+>quote_id</I
+></TT
+>] [[-j] <TT
+CLASS="REPLACEABLE"
+><I
+>gold_job_id</I
+></TT
+>] {-J <TT
+CLASS="REPLACEABLE"
+><I
+>job_id</I
+></TT
+>}</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN2762"
+></A
+><P
+><B
+>Example 13-7. Creating a reservation</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+greserve -J PBS.1234.0 -p chemistry -u amy -m colony -P 2 -t 3600
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully reserved 7200 credits for job PBS.1234.0
+        </PRE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>It is possible to establish a system default machine, project or user to be used in job functions (charge, reserve or quote) when left unspecified (see <A
+HREF="c4076.htm#SERVERCONFIG"
+>Server Configuration</A
+>).
+        </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2615.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2771.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Obtaining Job Quotes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2396.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Charging Jobs</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

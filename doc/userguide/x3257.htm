@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Adding a Role to a User</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Roles"
+HREF="c3152.htm"><LINK
+REL="PREVIOUS"
+TITLE="Associating an Action with a Role"
+HREF="x3233.htm"><LINK
+REL="NEXT"
+TITLE="Removing an Action from a Role"
+HREF="x3277.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3233.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Managing Roles</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3277.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ROLEUSERCREATE"
+>Adding a Role to a User</A
+></H1
+><P
+>To associate a user with a role, use the command <B
+CLASS="COMMAND"
+>goldsh RoleUser Create</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh RoleUser Create</B
+>   Role=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Role Name&gt;</I
+></TT
+>   Name=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;User Name&gt;</I
+></TT
+>  [ShowUsage:=True]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3268"
+></A
+><P
+><B
+>Example 16-6. Adding a user to the Manager role</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh RoleUser Create Role=Manager Name=dave
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Role    Name 
+------- ---- 
+Manager dave 
+Successfully created 1 RoleUser
+        </PRE
+></DIV
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>A user must first be defined to Gold before they can be added to a role (see <A
+HREF="c1008.htm#USERCREATE"
+>Creating Users</A
+>).
+        </P
+></BLOCKQUOTE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3233.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3277.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Associating an Action with a Role</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3152.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Removing an Action from a Role</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

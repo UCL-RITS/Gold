@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Associating an Action with a Role</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Roles"
+HREF="c3152.htm"><LINK
+REL="PREVIOUS"
+TITLE="Creating Roles"
+HREF="x3216.htm"><LINK
+REL="NEXT"
+TITLE="Adding a Role to a User"
+HREF="x3257.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3216.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 16. Managing Roles</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3257.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ROLEACTIONCREATE"
+>Associating an Action with a Role</A
+></H1
+><P
+>To add an action to a role, use the command <B
+CLASS="COMMAND"
+>goldsh RoleAction Create</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh RoleAction Create</B
+>   Role=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Role Name&gt;</I
+></TT
+>   Object=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Object Name&gt;</I
+></TT
+>   Name=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Action Name&gt;</I
+></TT
+>  [Instance=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Instance Name&gt;</I
+></TT
+>] [ShowUsage:=True]</P
+><P
+CLASS="LITERALLAYOUT"
+>The&nbsp;Instance&nbsp;indicates&nbsp;which&nbsp;specific&nbsp;instances&nbsp;of&nbsp;the&nbsp;object&nbsp;the&nbsp;action(s)&nbsp;can&nbsp;be&nbsp;performed&nbsp;on.&nbsp;Instances&nbsp;are&nbsp;interpreted&nbsp;as&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;solitary&nbsp;primary&nbsp;key&nbsp;for&nbsp;an&nbsp;object.&nbsp;Unless&nbsp;otherwise&nbsp;specified,&nbsp;the&nbsp;instance&nbsp;will&nbsp;default&nbsp;to&nbsp;a&nbsp;value&nbsp;of&nbsp;ANY.<br>
+<br>
+Valid&nbsp;values&nbsp;for&nbsp;Instance&nbsp;include:<br>
+<br>
+ANY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any&nbsp;or&nbsp;all&nbsp;of&nbsp;the&nbsp;object&nbsp;instances<br>
+NONE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;object&nbsp;instances<br>
+SELF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Only&nbsp;objects&nbsp;identified&nbsp;with&nbsp;myself&nbsp;(like&nbsp;my&nbsp;own&nbsp;username)<br>
+ADMIN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Only&nbsp;object&nbsp;instances&nbsp;that&nbsp;I&nbsp;am&nbsp;an&nbsp;admin&nbsp;for<br>
+&lt;specific&gt;&nbsp;&nbsp;A&nbsp;specific&nbsp;named&nbsp;instance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+For&nbsp;example,&nbsp;the&nbsp;Role&nbsp;Action:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><PRE
+CLASS="SCREEN"
+>Role           Object         Name    Instance 
+-------------- -------------- ------- --------- 
+ChemistryAdmin Project        Modify  Chemistry
+      </PRE
+><P
+CLASS="LITERALLAYOUT"
+>allows&nbsp;users&nbsp;having&nbsp;the&nbsp;ChemistryAdmin&nbsp;role&nbsp;to&nbsp;modify&nbsp;the&nbsp;Chemistry&nbsp;Project.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3251"
+></A
+><P
+><B
+>Example 16-5. Allow the Manager to change role responsibilities</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh RoleAction Create Role=Manager Object=RoleAction Name=ANY
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Role    Object     Name Instance 
+------- ---------- ---- ---------
+Manager RoleAction ANY  ANY      
+Successfully created 1 RoleAction
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3216.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3257.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Creating Roles</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c3152.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Adding a Role to a User</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

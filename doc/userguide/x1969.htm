@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Obtaining an Account Statement</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Accounts"
+HREF="c1548.htm"><LINK
+REL="PREVIOUS"
+TITLE="Making Transfers"
+HREF="x1922.htm"><LINK
+REL="NEXT"
+TITLE="Deleting Accounts"
+HREF="x2003.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1922.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 9. Managing Accounts</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2003.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ACCOUNTSTATEMENT"
+>Obtaining an Account Statement</A
+></H1
+><P
+>To generate an account statement, use the command <B
+CLASS="COMMAND"
+>gstatement</B
+>. For a specified time frame it displays the beginning and ending balances as well as the total credits and debits to the account over that period. This is followed by an itemized report of the debits and credits. Summaries of the debits and credits will be displayed instead of the itemized report if the &mdash;summarize option is specified. If a project, user or machine is specified instead of an account, then the statement will consist of information merged from all accounts valid toward the specified entities.
+      </P
+><P
+><B
+CLASS="COMMAND"
+>gstatement</B
+>  [[-a] <TT
+CLASS="REPLACEABLE"
+><I
+>account_id</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>project_name</I
+></TT
+>] [-u <TT
+CLASS="REPLACEABLE"
+><I
+>user_name</I
+></TT
+>] [-m <TT
+CLASS="REPLACEABLE"
+><I
+>machine_name</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>start_time</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>end_time</I
+></TT
+>] [&mdash;summarize] [-h | &mdash;hours] [&mdash;debug] [-? | &mdash;help] [&mdash;man]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1997"
+></A
+><P
+><B
+>Example 9-19. Generating an account statement for the third quarter of 2006</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gstatement -a 2 -s 2006-07-01 -e 2006-10-01
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>################################################################################
+#
+# Statement for account 2 (chemistry) generated on Tue Aug  3 16:06:15 2005.
+#
+# Reporting account activity from -infinity to now.
+#
+################################################################################
+
+Beginning Balance:                    0
+------------------ --------------------
+Total Credits:                360019744
+Total Debits:                    -19744
+------------------ --------------------
+Ending Balance:               360000000
+
+############################### Credit Detail ##################################
+
+Object  Action  JobId      Amount    Time
+------- ------- ---------- --------- ----------------------
+Account Deposit            360000000 2005-08-03 16:01:15-07
+Job     Refund  PBS.1234.0 19744     2005-08-03 16:04:02-07
+
+############################### Debit Detail ###################################
+
+Object     Action     JobId      Project   User Machine Amount Time                
+---------- ---------- ---------- --------- ---- ------- ------ ---------------------- 
+Job        Charge     PBS.1234.0 chemistry amy  colony  -19744 2005-08-03 16:03:39-07
+
+
+############################### End of Report ##################################
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1922.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2003.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Making Transfers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1548.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Deleting Accounts</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

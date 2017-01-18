@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Managing Roles</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Transactions"
+HREF="c3084.htm"><LINK
+REL="NEXT"
+TITLE="Querying Role Users"
+HREF="x3174.htm"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c3084.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x3174.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="ROLES"
+></A
+>Chapter 16. Managing Roles</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c3152.htm#ROLEQUERY"
+>Querying Roles</A
+></DT
+><DT
+><A
+HREF="x3174.htm"
+>Querying Role Users</A
+></DT
+><DT
+><A
+HREF="x3193.htm"
+>Querying Role Actions</A
+></DT
+><DT
+><A
+HREF="x3216.htm"
+>Creating Roles</A
+></DT
+><DT
+><A
+HREF="x3233.htm"
+>Associating an Action with a Role</A
+></DT
+><DT
+><A
+HREF="x3257.htm"
+>Adding a Role to a User</A
+></DT
+><DT
+><A
+HREF="x3277.htm"
+>Removing an Action from a Role</A
+></DT
+><DT
+><A
+HREF="x3300.htm"
+>Removing a Role from a User</A
+></DT
+><DT
+><A
+HREF="x3319.htm"
+>Deleting Roles</A
+></DT
+></DL
+></DIV
+><P
+>Gold uses instance-level role based access controls to determine what users can perform what functions. Named roles are created, privileges are associated with the roles, and users are assigned to these roles.
+    </P
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="ROLEQUERY"
+>Querying Roles</A
+></H1
+><P
+>To display the currently defined roles, use the command <B
+CLASS="COMMAND"
+>goldsh Role Query</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh Role Query</B
+>  [Show:=<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;"Field1,Field2,..."&gt;</I
+></TT
+>] [Name==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Role Name&gt;</I
+></TT
+>] [Description==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Description&gt;</I
+></TT
+>] [ShowUsage:=True]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3168"
+></A
+><P
+><B
+>Example 16-1. Listing all roles</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh Role Query
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name         Description                                     
+------------ -----------------------------------------------
+SystemAdmin  Can update or view any object                   
+Anonymous    Things that can be done by anybody              
+OVERRIDE     A custom authorization method will be invoked   
+ProjectAdmin Can update or view a project they are admin for 
+UserServices User Services                                   
+Scheduler    Scheduler relevant Transactions                 
+        </PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c3084.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x3174.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Transactions</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Querying Role Users</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

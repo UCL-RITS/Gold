@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Deleting Charge Rates</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Charge Rates"
+HREF="c2890.htm"><LINK
+REL="PREVIOUS"
+TITLE="Modifying Charge Rates"
+HREF="x3035.htm"><LINK
+REL="NEXT"
+TITLE="Managing Transactions"
+HREF="c3084.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x3035.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 14. Managing Charge Rates</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c3084.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CHARGERATEDELETE"
+>Deleting Charge Rates</A
+></H1
+><P
+>To delete a charge rate, use the command <B
+CLASS="COMMAND"
+>goldsh ChargeRate Delete</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>goldsh ChargeRate Delete</B
+>  [Type==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Charge Rate Type&gt;</I
+></TT
+>] [Name==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Charge Rate Name&gt;</I
+></TT
+>] [Instance==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Charge Rate Instance&gt;</I
+></TT
+>] [Rate==<TT
+CLASS="REPLACEABLE"
+><I
+>&lt;Floating Point Multiplier&gt;</I
+></TT
+>]</P
+><DIV
+CLASS="CAUTION"
+><P
+></P
+><TABLE
+CLASS="CAUTION"
+BORDER="1"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="CENTER"
+><B
+>Caution</B
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+><P
+>The goldsh control program allows you to make powerful and sweeping modifications to gold objects. Misuse of this command could result in the inadvertent deletion of all charge rates.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN3078"
+></A
+><P
+><B
+>Example 14-12. Deleting a charge rate</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+goldsh ChargeRate Delete Type==VBR Name==Memory
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully deleted 1 ChargeRate
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x3035.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c3084.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Modifying Charge Rates</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2890.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Managing Transactions</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

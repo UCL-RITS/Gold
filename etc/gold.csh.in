@@ -1,0 +1,10 @@
+# Setup GOLD PATH
+if ( "$PATH" !~  */gold/sbin* ) then
+        setenv PATH "${PATH}:@prefix@/sbin"
+endif
+if ( "$PATH" !~  */gold/bin* ) then
+        setenv PATH "${PATH}:@prefix@/bin"
+endif
+
+# Setup GOLD HOME
+setenv GOLD_HOME @prefix@

@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Querying Projects</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Managing Projects"
+HREF="c1298.htm"><LINK
+REL="PREVIOUS"
+TITLE="Managing Projects"
+HREF="c1298.htm"><LINK
+REL="NEXT"
+TITLE="Modifying Projects"
+HREF="x1412.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1298.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 8. Managing Projects</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1412.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PROJECTQUERY"
+>Querying Projects</A
+></H1
+><P
+>To display project information, use the command <B
+CLASS="COMMAND"
+>glsproject</B
+>:
+      </P
+><P
+><B
+CLASS="COMMAND"
+>glsproject</B
+>  [-A | -I] [&mdash;show <TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+> [,<TT
+CLASS="REPLACEABLE"
+><I
+>attribute_name</I
+></TT
+>...]...] [&mdash;showHidden] [&mdash;showSpecial] [-l | &mdash;long] [-w | &mdash;wide] [&mdash;raw] [&mdash;debug] [-? | &mdash;help] [&mdash;man] [&mdash;quiet] [[-p] <TT
+CLASS="REPLACEABLE"
+><I
+>project_pattern</I
+></TT
+>]</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1394"
+></A
+><P
+><B
+>Example 8-3. Listing all info about all projects</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsproject
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name      Active Users        Machines Description          
+--------- ------ ------------ -----------------------------
+biology   True   amy,bob      colony   Biology Department   
+chemistry True   amy,dave,bob          Chemistry Department 
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1400"
+></A
+><P
+><B
+>Example 8-4. Displaying the name and user members of a project in long format</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsproject &mdash;show Name,Users -l chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Name      Users 
+--------- -----
+chemistry bob   
+          dave  
+          amy   
+        </PRE
+></DIV
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN1406"
+></A
+><P
+><B
+>Example 8-5. Listing all project names</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsproject &mdash;show Name &mdash;quiet
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>biology
+chemistry
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1298.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1412.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Managing Projects</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1298.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Modifying Projects</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

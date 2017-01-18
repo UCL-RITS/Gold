@@ -1,0 +1,714 @@
+#! /usr/bin/perl -wT
+################################################################################
+#
+# Interactive shell for Gold
+#
+# File   :  goldsh
+# History:  17 JUN 2003 [Scott Jackson] first implementation
+#           29 JUL 2004 [Scott Jackson] perl alpha
+#           25 OCT 2004 [Scott Jackson] beta mods
+#           16 NOV 2004 [Scott Jackson] general release
+#
+################################################################################
+#                                                                              #
+#                           Copyright (c) 2003, 2004                           #
+#                  Pacific Northwest National Laboratory,                      #
+#                         Battelle Memorial Institute.                         #
+#                             All rights reserved.                             #
+#                                                                              #
+################################################################################
+#                                                                              #
+#     Redistribution and use in source and binary forms, with or without       #
+#     modification, are permitted provided that the following conditions       #
+#     are met:                                                                 #
+#                                                                              #
+#     · Redistributions of source code must retain the above copyright         #
+#     notice, this list of conditions and the following disclaimer.            #
+#                                                                              #
+#     · Redistributions in binary form must reproduce the above copyright      #
+#     notice, this list of conditions and the following disclaimer in the      #
+#     documentation and/or other materials provided with the distribution.     #
+#                                                                              #
+#     · Neither the name of Battelle nor the names of its contributors         #
+#     may be used to endorse or promote products derived from this software    #
+#     without specific prior written permission.                               #
+#                                                                              #
+#     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS      #
+#     "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT        #
+#     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS        #
+#     FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE           #
+#     COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,      #
+#     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,     #
+#     BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;         #
+#     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER         #
+#     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT       #
+#     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN        #
+#     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE          #
+#     POSSIBILITY OF SUCH DAMAGE.                                              #
+#                                                                              #
+################################################################################
+
+use strict;
+use vars
+  qw($code $prompt $term $histfile $log $action $raw $verbose @ARGV $quiet $VERSION);
+use lib qw (/opt/gold/lib /opt/gold/lib/perl5);
+use Getopt::Long 2.24 qw(:config no_ignore_case);
+use autouse 'Pod::Usage' => qw(pod2usage);
+use Error qw(:try);
+use XML::LibXML;
+use Term::ReadLine;
+use Gold;
+
+Main:
+{
+    if ($log->is_info())
+    {
+        $log->info("invoked with arguments: (", join(', ', @ARGV), ")");
+    }
+
+    # Parse Command Line Arguments
+    my ($help, $man, $version);
+    GetOptions(
+        'debug'     => \&Gold::Client::enableDebug,
+        'help|?'    => \$help,
+        'man'       => \$man,
+        'quiet'     => \$quiet,
+        'verbose|v' => \$verbose,
+        'raw'       => \$raw,
+        'get'       => \&Gold::Client::parseSupplement,
+        'set'       => \&Gold::Client::parseSupplement,
+        'where'     => \&Gold::Client::parseSupplement,
+        'option'    => \&Gold::Client::parseSupplement,
+        'job'       => \&Gold::Client::parseSupplement,
+        'version|V' => \$version,
+    ) or pod2usage(2);
+
+    # Display usage if necessary
+    pod2usage(2) if $help;
+    if ($man)
+    {
+        if ($< == 0)    # Cannot invoke perldoc as root
+        {
+            my $id = eval { getpwnam("nobody") };
+            $id = eval { getpwnam("nouser") } unless defined $id;
+            $id = -2                          unless defined $id;
+            $<  = $id;
+        }
+        $> = $<;                         # Disengage setuid
+        $ENV{PATH} = "/bin:/usr/bin";    # Untaint PATH
+        delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+        if ($0 =~ /^([-\/\w\.]+)$/) { $0 = $1; }    # Untaint $0
+        else { die "Illegal characters were found in \$0 ($0)\n"; }
+        pod2usage(-exitstatus => 0, -verbose => 2);
+    }
+
+    # Display version if requested
+    if ($version)
+    {
+        print "Gold version $VERSION\n";
+        exit 0;
+    }
+
+    my $command = join(' ', @ARGV);
+
+    # Service command line command if provided in arguments
+    if ($command)
+    {
+        if ($log->is_info())
+        {
+            $log->info("invoked with arguments: (", join(' ', @ARGV), ")");
+        }
+        $code = &serviceCommand($command);
+    }
+
+    # Otherwise read commands from STDIN
+    else
+    {
+        # Use Gnu Readline if reading from terminal
+        $prompt = 1;
+        $term = 'Term::ReadLine'->new('gold', *STDIN, *STDOUT);
+        $term->ornaments('md,me,,');    # Bold the prompt
+        if (-t && $term->ReadLine eq "Term::ReadLine::Gnu")
+        {
+            $histfile = "@LOG_DIR@/.gold_history." . (getpwuid($<))[0];
+            if ($histfile =~ /^([-\/\w.]+)$/) { $histfile = $1; }
+            else
+            {
+                die "Illegal characters were found in \$histfile ($histfile)\n";
+            }
+            if (-r $histfile and open(HIST, "<$histfile"))
+            {
+                while (<HIST>)
+                {
+                    chomp $_;
+                    $term->addhistory($_)
+                      if $term->ReadLine eq "Term::ReadLine::Gnu";
+                }
+                close HIST;
+            }
+        }
+
+        $| = 1;    # Flush output buffer
+        while (defined($_ = $term->readline("gold> ")))
+        {
+            chomp;       # Remove trailing whitespace
+            s/^\s+//;    # Remove leading whitespace
+            s/\#.*//;    # Strip off comments
+            next unless $_;
+            last if /^q|exit/;
+
+            @ARGV = split;
+            if ($log->is_info())
+            {
+                $log->info("invoked with arguments: (", join(' ', @ARGV), ")");
+            }
+            GetOptions(
+                'get'    => \&Gold::Client::parseSupplement,
+                'set'    => \&Gold::Client::parseSupplement,
+                'where'  => \&Gold::Client::parseSupplement,
+                'option' => \&Gold::Client::parseSupplement,
+            );
+            $code = &serviceCommand(join(' ', @ARGV));
+        }
+    }
+
+    # End Logging
+    $log->info("$0 (PID $$) Exited normally");
+    if   ($code =~ /^0/) { exit 0; }
+    else                 { exit $code / 4; }
+}
+
+END
+{
+    # Save ReadLine History
+    if (-t && $prompt && $term->ReadLine eq "Term::ReadLine::Gnu")
+    {
+        my $features = $term->Features;
+        if (exists $features->{getHistory} && $features->{getHistory})
+        {
+            my @a = $term->GetHistory();
+            $#a-- if $a[-1] =~ /^q/;    # chop off the quit command
+            @a = @a[($#a - 50) .. ($#a)] if $#a > 50;
+
+            if (open HIST, ">$histfile")
+            {
+                print HIST join("\n", @a), "\n";
+                close HIST;
+            }
+            else
+            {
+                print "Error: Unable to open history to '$histfile'\n";
+            }
+        }
+        else
+        {
+            print $term->ReadLine, " does not support history recording";
+        }
+    }
+}
+
+# ----------------------------------------------------------------------------
+# &logAndDie( $message )
+# ----------------------------------------------------------------------------
+
+sub logAndDie
+{
+    my ($message) = @_;
+    $log->fatal($message);
+    die("$message\n");
+}
+
+# ----------------------------------------------------------------------------
+# &logAndWarn( $message )
+# ----------------------------------------------------------------------------
+
+sub logAndWarn
+{
+    my ($message) = @_;
+    $log->error($message);
+    print STDERR "$message\n";
+}
+
+# ----------------------------------------------------------------------------
+# &serviceCommand( $command )
+# ----------------------------------------------------------------------------
+
+sub serviceCommand
+{
+    my ($command) = @_;
+    my ($pattern, $request, $response);
+    $code = 800;
+    $log->info("Servicing command: $command");
+
+    # Instantiate a new request
+    $request = new Gold::Request();
+
+    # Add the object to the request
+    if ($command =~ s/^\s*([\w,:]+)\s*//) { $pattern = $1; }
+    else
+    {
+        &logAndWarn("An object must be specified.");
+        return 311;
+    }
+    if ($pattern =~ /^([A-Z][\w,:]+)$/)
+    {
+        foreach my $obj (split /,/, $1)
+        {
+            $obj =~ /^(\w+)(:(\w+))?/;
+            my ($name, $alias) = ($1, $3);
+            my $object = new Gold::Object(name => $name);
+            if ($alias)
+            {
+                $object->setAlias($alias);
+            }
+            if ($log->is_trace())
+            {
+                $log->trace(
+                    "Adding object to request (" . $object->toString() . ").");
+            }
+            $request->setObject($object);
+        }
+    }
+    else
+    {
+        &logAndWarn("The object is malformed ($pattern).");
+        return 311;
+    }
+
+    # Add the action to the request
+    if ($command =~ s/^\s*((\w*::)?\w+)\s*//) { $pattern = $1; }
+    else
+    {
+        &logAndWarn("An action must be specified.");
+        return 312;
+    }
+    if ($pattern =~ /^((\w*::)?[A-Z]\w+)$/)
+    {
+        if ($log->is_trace())
+        {
+            $log->trace("Adding action to request ($1).");
+        }
+        $request->setAction($1);
+    }
+    else
+    {
+        &logAndWarn("The action is malformed ($pattern).");
+        return 312;
+    }
+    $action = $1;
+    if ($action eq "Query") { $verbose = 1; }    # Always display query results
+
+    # Specify that we want chunking
+    $request->setChunking(1);
+
+    # Process the supplement options
+    Gold::Client::buildSupplements($request);
+
+    # Process the remaining options
+    while (1)
+    {
+        my $quoted = 0;
+        my $conj   = "";
+        my $group  = 0;
+        my $name   = "";
+        my $op     = "";
+        my $value  = "";
+
+        # Bail if we are at the end
+        if ($command =~ s/^\s*$//) { last; }
+
+        # Peel off any conjunction
+        if ($command =~ s/^\s*(([\|&!]+\s*)+)\s*//)
+        {
+            $pattern = $1;
+            if ($pattern =~ /^((&&)|(\|\|))?\s*(!)?\s*$/)
+            {
+                if    ($2 && ! $4) { $conj = "And"; }
+                elsif ($3 && ! $4) { $conj = "Or"; }
+                elsif ($2 && $4)   { $conj = "AndNot"; }
+                elsif ($3 && $4)   { $conj = "OrNot"; }
+                else               { $conj = "AndNot"; }
+                if ($log->is_trace())
+                {
+                    $log->trace("Located conjunction ($conj).");
+                }
+            }
+            else
+            {
+                &logAndWarn("The conjunction is malformed ($pattern).");
+                return 310;
+            }
+        }
+
+        # Peel off any open grouping
+        if ($command =~ s/^\s*(([\(\)]+\s*)+)\s*//)
+        {
+            $pattern = $1;
+            if ($pattern =~ /^((\(\s*)+)$/)
+            {
+                my $parens = $1;
+                $parens =~ s/\s//;    # Remove white space
+                $group += length($parens);
+                if ($log->is_trace())
+                {
+                    $log->trace("Located open grouping ($parens).");
+                }
+            }
+            else
+            {
+                &logAndWarn("The open grouping is malformed ($pattern).");
+                return 310;
+            }
+        }
+
+        # Peel off the name
+        if ($command =~ s/^\s*([\w\.]+)\s*//) { $pattern = $1; }
+        else
+        {
+            &logAndWarn("An option name was expected ($command).");
+            return 310;
+        }
+        if ($pattern =~ /^([A-Za-z]\w*(\.[A-Za-z]\w*)?)$/)
+        {
+            $name = $1;
+            if ($log->is_trace())
+            {
+                $log->trace("Located name ($name).");
+            }
+        }
+        else
+        {
+            &logAndWarn("The name is malformed ($pattern).");
+            return 310;
+        }
+
+        # Peel off the operator
+        if ($command =~ s/^\s*([-+<>!~:=]+)\s*//) { $pattern = $1; }
+        else
+        {
+            &logAndWarn("An operator was expected ($command).");
+            return 310;
+        }
+        if ($pattern =~ /^(:!|[-+=<>!~:]=?)$/)
+        {
+            if    ($1 eq "=")  { $op = "Assign"; }
+            elsif ($1 eq "==") { $op = "EQ"; }
+            elsif ($1 eq ">")  { $op = "GT"; }
+            elsif ($1 eq "<")  { $op = "LT"; }
+            elsif ($1 eq ">=") { $op = "GE"; }
+            elsif ($1 eq "<=") { $op = "LE"; }
+            elsif ($1 eq "!=") { $op = "NE"; }
+            elsif ($1 eq "~")  { $op = "Match"; }
+            elsif ($1 eq "+=") { $op = "Inc"; }
+            elsif ($1 eq "-=") { $op = "Dec"; }
+            elsif ($1 eq ":=") { $op = "Option"; }
+            elsif ($1 eq ":!") { $op = "NotOption"; }
+            else
+            {
+                &logAndWarn("Invalid opertor ($1).");
+                return 310;
+            }
+            if ($log->is_trace())
+            {
+                $log->trace("Located operator ($op).");
+            }
+        }
+        else
+        {
+            &logAndWarn("The operator is malformed ($pattern).");
+            return 310;
+        }
+
+        # Peel off the value
+        if ($command =~ s/^\s*(([^\"\(\)\|& ]+)|\"([^\"]*)\")\s*//)
+        {
+            $pattern = $1;
+        }
+        else
+        {
+            &logAndWarn("A value was expected ($command).");
+            return 310;
+        }
+        if   (defined $2) { $value = $2; }
+        else              { $value = $3; $quoted = 1; }
+        if ($log->is_trace())
+        {
+            $log->trace("Located value ($value).");
+        }
+
+        # Peel off any close grouping
+        if ($command =~ s/^\s*((\(*\)+\s*)+)\s*//)
+        {
+            $pattern = $1;
+            if ($pattern =~ /^((\)\s*)+)$/)
+            {
+                my $parens = $1;
+                $parens =~ s/\s//;    # Remove white space
+                $group -= length($parens);
+                if ($log->is_trace())
+                {
+                    $log->trace("Located close grouping ($parens).");
+                }
+            }
+            else
+            {
+                &logAndWarn("The close grouping is malformed ($pattern).");
+                return 310;
+            }
+        }
+
+        # Update option
+        if ($op eq "Option" || $op eq "NotOption")
+        {
+            # Update selections
+            if ($name eq "Show")
+            {
+                # Populate Selections
+                foreach my $select (split(/,/, $value))
+                {
+                    if ($select =~ /([\w\.]+$)|(\w+)\(([\w\.]+)\)/)
+                    {
+                        my $complexName = $1 ? $1 : $3;
+                        my $op = $2;
+                        $complexName =~ /^((\w+)\.)?(\w+)/;
+                        my ($object, $name) = ($2, $3);
+                        my $selection = new Gold::Selection(name => $name);
+                        if ($object)
+                        {
+                            $selection->setObject($object);
+                        }
+                        if ($op)
+                        {
+                            $selection->setOperator($op);
+                        }
+                        if ($log->is_trace())
+                        {
+                            $log->trace("Adding selection to request ("
+                                  . $selection->toString()
+                                  . ").");
+                        }
+                        $request->setSelection($selection);
+                    }
+                    else
+                    {
+                        &logAndWarn("The selection is malformed ($select).");
+                        return 310;
+                    }
+                }
+            }
+
+            # Update Data
+            elsif ($name eq "Data")
+            {
+                # Populate Data
+                if ($log->is_trace())
+                {
+                    $log->trace("Adding data to request ($value).");
+                }
+                my $parser = XML::LibXML->new();
+                my $doc  = $parser->parse_string("<Data>" . $value . "</Data>");
+                my $data = $doc->getDocumentElement();
+                $request->setDataElement($data);
+            }
+
+            # Update not options
+            elsif ($op eq "NotOption")
+            {
+                if ($log->is_trace())
+                {
+                    $log->trace(
+                        "Adding option to request ($name, $value, not).");
+                }
+                $request->setOption($name, $value, "Not");
+            }
+
+            # Update options
+            else
+            {
+                if ($log->is_trace())
+                {
+                    $log->trace("Adding option to request ($name, $value).");
+                }
+                $request->setOption($name, $value);
+            }
+        }
+
+        # Update assignment
+        elsif ($op eq "Assign" || $op eq "Inc" || $op eq "Dec")
+        {
+            if ($log->is_trace())
+            {
+                $log->trace(
+                    "Adding assignment to request ($name, $value, $op).");
+            }
+            $request->setAssignment($name, $value, $op);
+        }
+
+        # Update condition
+        else
+        {
+            $name =~ /^(([A-Z]\w*)\.)?([A-Z]\w*)$/;
+            my ($nameObject, $nameName) = ($2, $3);
+            my $condition = new Gold::Condition(name => $nameName);
+            if ($nameObject)
+            {
+                $condition->setObject($nameObject);
+            }
+            if ($quoted)
+            {
+                $condition->setValue($value);
+            }
+            else
+            {
+                $value =~ /^(([^\.]+)\.)?([^\.]+)$/;
+                my ($valueObject, $valueName) = ($2, $3);
+                $condition->setValue($valueName);
+                if ($valueObject)
+                {
+                    $condition->setSubject($valueObject);
+                }
+            }
+            if ($op)
+            {
+                $condition->setOperator($op);
+            }
+            if ($conj)
+            {
+                $condition->setConjunction($conj);
+            }
+            if ($group)
+            {
+                $condition->setGroup($group);
+            }
+            if ($log->is_trace())
+            {
+                $log->trace("Adding condition to request ("
+                      . $condition->toString()
+                      . ").");
+            }
+            $request->setCondition($condition);
+        }
+    }
+
+    $log->info("Built request: ", $request->toString());
+
+    # Obtain Response
+    try
+    {
+        #$actor = (getpwuid($<))[0];
+        #$response = $request->getResponse();
+        my $messageChunk = new Gold::Chunk()->setRequest($request);
+        my $message      = new Gold::Message();
+        $message->sendChunk($messageChunk);
+        my $reply = $message->getReply();
+        while (1)
+        {
+            my $replyChunk = $reply->receiveChunk();
+            $response = $replyChunk->getResponse();
+            $code     = $response->getCode();
+            my $chunkNum = $response->getChunkNum();
+            my $chunkMax = $response->getChunkMax();
+            &Gold::Client::displayResponse($response);
+            last if ($chunkMax != -1 && $chunkNum >= $chunkMax);
+        }
+    }
+    catch Gold::Exception with
+    {
+        my $E = shift;
+        &logAndWarn("Error detected while obtaining response ("
+              . $E->{'-value'} . "): "
+              . $E->{'-text'});
+    };
+    return $code;
+}
+
+##############################################################################
+
+__END__
+
+=head1 NAME
+
+goldsh - interactive shell for gold
+
+=head1 SYNOPSIS
+
+B<goldsh> [B<--debug>] [B<-?>, B<--help>] [B<--man>] [B<--raw>] [B<--quiet>] [B<-v>, B<--verbose>] [B<-V>, B<--version>] [<command>]
+
+=head1 DESCRIPTION
+
+B<goldsh> is an interactive control program that can access all funtionality available in Gold. Commands can be invoked directly from the command line, or an interpreter can parse commands from stdin.
+
+B<Commands> are of the form:
+  B<Object>[,B<Object>]* B<Action> [Predicate]*
+
+B<Predicates> are of the form:
+  [B<Conjunction>] [B<OpenParentheses>] [B<Object>.]B<Name> B<Operator> [B<Subject>.]B<Value> [B<CloseParentheses>]
+
+B<Conjunctions> default to "And" and include:
+  &&  and
+  ||  or
+  &!  and not
+  |!  or not
+
+B<OpenParentheses> may be any number of literal open parentheses '('.
+
+The B<Name> is the name of the condition, assignment or option.
+
+The B<Operator> may be one of:
+  ==  equals
+  <   less than
+  >   greater than
+  <=  less than or equal to
+  >=  greater than or equal to
+  !=  not equal to
+  ~   matches
+  =   assignment
+  +=  increment
+  -=  decrement
+  :=  option
+  :!  not option
+  
+The B<Value> is the value of the condition, assignment, or option and may be enclosed in double quotes to enclose spaces or special characters.  
+
+B<CloseParentheses> may be any number of literal close parentheses ')'.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<--debug>
+
+log debug info to screen.
+
+=item B<-? | --help>
+
+brief help message
+
+=item B<--man>
+
+full documentation
+
+=item B<--quiet>
+
+suppress messages and headers
+
+=item B<--raw>
+
+raw data output format. Data will be displayed with pipe-delimited fields without headers for automated parsing.
+
+=item B<-v | --verbose>
+
+display modified objects
+
+=item B<-V | --version>
+
+display Gold package version
+
+=back
+
+=head1 AUTHOR
+
+Scott Jackson, Scott.Jackson@pnl.gov
+
+=cut
+

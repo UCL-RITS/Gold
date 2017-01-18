@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Charge for a Job</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Getting Started"
+HREF="c495.htm"><LINK
+REL="PREVIOUS"
+TITLE="Make A Job Reservation"
+HREF="x634.htm"><LINK
+REL="NEXT"
+TITLE="Refund a Job"
+HREF="x689.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x634.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 4. Getting Started</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x689.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CHARGE"
+>Charge for a Job</A
+></H1
+><P
+>After a job completes, any associated reservations are removed and a charge is issued against the appropriate allocations based on the actual wallclock time used by the job (see <A
+HREF="x2771.htm"
+>Charging Jobs</A
+>).
+      </P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN667"
+></A
+><P
+><B
+>Example 4-11. Issue the charge for our job.</B
+></P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gcharge -J PBS.1234.0 -u amy -p chemistry -m colony -P 16 -t 1234 -X WallDuration=1234
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Successfully charged job PBS.1234.0 for 19744 credits
+1 reservations were removed
+        </PRE
+><P
+>Your allocation will now have gone down by the amount of the charge.
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsalloc -p chemistry
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id Account StartTime  EndTime    Amount    CreditLimit Deposited Description 
+-- ------- ---------- ---------- --------- ----------- --------- -----------
+2  2       2005-01-01 2006-01-01 359980256           0 360000000
+        </PRE
+><P
+>However, your balance actually goes up (because the reservation that was removed was larger than the actual charge).
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+gbalance -p chemistry &mdash;total
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Balance   
+---------
+359980256 
+The account balance is 359980256 credits
+        </PRE
+><P
+>A job record was created for the job as a side-effect of the charge (see <A
+HREF="x2468.htm"
+>Querying Jobs</A
+>).
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>$ </SAMP
+>
+glsjob
+          </KBD
+>
+        </P
+><PRE
+CLASS="SCREEN"
+>Id JobId      User Project   Machine Charge Class Type   Stage  QualityOfService Nodes Processors Executable Application StartTime EndTime WallDuration QuoteId Description 
+-- ---------- ---- --------- ------- ------ ----- ------ ------ ---------------- ----- ---------- ---------- ----------- --------- ------- ------------ ------- ----------- 
+1  PBS.1234.0 amy  chemistry colony  19744        Normal Charge                        16                                                  1234         1                  
+        </PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x634.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x689.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Make A Job Reservation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c495.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Refund a Job</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

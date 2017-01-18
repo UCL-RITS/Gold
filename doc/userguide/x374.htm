@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Web Server Setup</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="PREVIOUS"
+TITLE="Database Setup"
+HREF="x329.htm"><LINK
+REL="NEXT"
+TITLE="Bootstrap"
+HREF="x403.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x329.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x403.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="HTTPDSETUP"
+>Web Server Setup</A
+></H1
+><P
+>If you want to use the Gold web GUI, you will need to configure your Httpd server to use SSL. For RedHat Linux systems, a good guide on this is "Buiding a Secure RedHat Apache Server HOWTO" at &lt;http://www.faqs.org/docs/Linux-HOWTO/SSL-RedHat-HOWTO.html&gt;.
+      </P
+><P
+>The following shows an example configuration that involves making some modifications to the httpd configuration to support the use of cgi-bin and SSL connections as well as the creation of a private key and a
+self-signed certificate.
+      </P
+><P
+>Edit the httpd configuration file:
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+cd /etc/apache2
+        </KBD
+>
+        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+vi sites-enabled/000-default
+        </KBD
+>
+      </P
+><P
+>Add a virtual host definition and edit as appropriate for your environment:
+        <PRE
+CLASS="SCREEN"
+>&lt;VirtualHost *:443&gt;
+  DocumentRoot /var/www/cgi-bin/gold
+  ServerName mygoldserver.mysite.org
+  ServerAdmin my.email@mysite.org
+  ErrorLog /var/log/apache2/gold-error_log
+  TransferLog /var/log/apache2/gold-access_log
+  SSLEngine on
+  SSLCertificateFile /etc/apache2/ssl.crt/gold-server.crt
+  SSLCertificateKeyFile /etc/apache2/ssl.key/gold-server.key
+  SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+
+  # Configure your cgi-bin directory
+  &lt;Directory "/var/www/cgi-bin"&gt;
+    Options ExecCGI
+    AddHandler cgi-script .cgi .pl
+  &lt;/Directory&gt;
+
+  # Create an Alias for /cgi-bin pointing to your cgi-bin directory
+  # You may also have to comment out any comparable ScriptAlias definition
+  #ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  Alias /cgi-bin/ /var/www/cgi-bin/
+
+  # Add index.cgi to the DirectoryIndex so you can use the shorter dir name
+  DirectoryIndex index.cgi
+&lt;/VirtualHost&gt;
+        </PRE
+>
+      </P
+><DIV
+CLASS="NOTE"
+><BLOCKQUOTE
+CLASS="NOTE"
+><P
+><B
+>Note: </B
+>As further explanation, if you are installing your cgi-bin files directly under /var/www/cgi-bin, just use /var/www/cgi-bin as your DocumentRoot. If you are installing your cgi-bin files under a subdirectory such as /var/www/cgi-bin/gold, you may want to use /var/www/cgi-bin/gold as your DocumentRoot. You could specify /var/www/cgi-bin here, but then you would need to use an extra gold subdirectory in your URL when accessing the Gold GUI from your browser.
+        </P
+></BLOCKQUOTE
+></DIV
+><P
+>Create a Private Key for Gold
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+mkdir ssl.key
+        </KBD
+>
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+openssl genrsa -out ssl.key/gold-server.key 1024
+        </KBD
+>
+      </P
+><P
+>Create a Self-Signed Certificate
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+openssl req -new -key ssl.key/gold-server.key -x509 -out ssl.crt/gold-server.crt
+        </KBD
+>
+      </P
+><P
+>Startup or restart httpd.
+      </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+service apache2 restart
+        </KBD
+>
+      </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x329.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x403.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Database Setup</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Bootstrap</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,488 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Install Prerequisites</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="PREVIOUS"
+TITLE="Installation"
+HREF="c137.htm"><LINK
+REL="NEXT"
+TITLE="Preparation"
+HREF="x253.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c137.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x253.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="PREREQUISITES"
+>Install Prerequisites</A
+></H1
+><P
+>You will first need to build, test and install the following prerequisites:
+      </P
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN162"
+>Perl 5.8 or higher (with suidperl) [REQUIRED]</A
+></H2
+><P
+>The Gold server and clients are written in Perl. Perl 5.8 or higher is required. The Perl installation must include suidperl for proper client authentication. Use 'perl -v' to see what level of Perl is installed and 'suidperl -v' to see if suidperl is installed.
+Perl is available at: &lt;http://www.perl.com/&gt;
+        </P
+><P
+>For RedHat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install perl perl-suidperl
+          </KBD
+>
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install perl perl-suid
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN173"
+>PostgreSQL database 7.2 or higher (or other tested database) [OPTIONAL]</A
+></H2
+><P
+>If you intend to use the PostgreSQL, the MySQL or other external database, you will need to install it. PostgreSQL is recommended since it is an excellent database supporting all necessary features and has been more thoroughly tested than the others. The only thing needed for SQLite is the sqlite3 client for bootstrapping.
+PostgreSQL is available at: &lt;http://www.postgresql.org/&gt;
+        </P
+><P
+>For PostgreSQL on Redhat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install postgresql postgresql-libs postgresql-server postgresql-devel
+          </KBD
+>
+        </P
+><P
+>For PostgreSQL on Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install postgresql postgresql-common postgresql-client postgresql-server-dev-8.4
+          </KBD
+>
+        </P
+><P
+>For MySQL on Redhat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install mysql mysql-server
+          </KBD
+>
+        </P
+><P
+>For MySQL on Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install mysql-common mysql-server libmysqlclient-dev
+          </KBD
+>
+        </P
+><P
+>For SQLite on Redhat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install sqlite
+          </KBD
+>
+        </P
+><P
+>For SQLite on Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install sqlite3
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN200"
+>libxml2 2.4.25 or higher [REQUIRED]</A
+></H2
+><P
+>LibXML2 is needed by the XML::LibXML perl module to communicate via the SSSRMAP message format. The libxml2 development package is needed for the XML::LibXML perl module to install properly.
+LibXML2 is available at: &lt;http://www.xmlsoft.org/&gt;
+        </P
+><P
+>For RedHat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install libxml2 libxml2-devel
+          </KBD
+>
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install libxml2 libxml2-dev
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN211"
+>gnu readline 2.0 or higher [OPTIONAL]</A
+></H2
+><P
+>The interactive control program (goldsh) can support command-line-editing capabilities if readline support is enabled. Most recent linux distributions come with the appropriate readline support.
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install ncurses-dev libreadline-dev
+          </KBD
+>
+          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+cpan Term::ReadLine::Gnu
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN220"
+>Apache Httpd Server 2.0 or higher [OPTIONAL]</A
+></H2
+><P
+>Gold provides a web-based gui so that managers, users and administrators can interact with the accounting and allocation system. The web interface utilizes Perl CGI and SSL and needs to have an httpd server (preferably apache) installed.
+Apache httpd is available at: &lt;http://httpd.apache.org/&gt;
+        </P
+><P
+>For RedHat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install httpd
+          </KBD
+>
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install apache2
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN231"
+>OpenSSL 0.9.5a or higher [OPTIONAL]</A
+></H2
+><P
+>Gold provides a web-based gui so that managers, users and administrators can interact with the accounting and allocation system. The web interface utilizes Perl CGI and SSL and needs an httpd server (preferably apache).
+Apache httpd is available at: &lt;http://www.apache.org/&gt;
+        </P
+><P
+>For RedHat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install openssl
+          </KBD
+>
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+apt-get install openssl
+          </KBD
+>
+        </P
+></DIV
+><DIV
+CLASS="SECT2"
+><H2
+CLASS="SECT2"
+><A
+NAME="AEN242"
+>mod_ssl 2.26 or higher [OPTIONAL]</A
+></H2
+><P
+>If you are installing the gui you will need an apache interface to OpenSSL (preferably mod_ssl). There are other alternatives to mod_ssl (one of which is apache-ssl from which the mod_ssl code was forked), however mod_ssl has become the defacto standard and is the most widely adopted. mod_ssl is
+    often bundled as part of the httpd server (such as in Ubuntu).
+mod_ssl is available at: &lt;http://www.modssl.org/&gt;
+        </P
+><P
+>For RedHat-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+yum install mod_ssl
+          </KBD
+>
+        </P
+><P
+>For Debian-based systems:
+        </P
+><P
+>          <KBD
+CLASS="USERINPUT"
+><SAMP
+CLASS="PROMPT"
+>[root]# </SAMP
+>
+a2enmod ssl
+          </KBD
+>
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x253.htm"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c137.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Preparation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

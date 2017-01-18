@@ -1,0 +1,731 @@
+  <chapter id="Installation">
+    <title>Installation</title>
+    <para>
+Gold uses the standard configure, make and make install steps for installation. However, there are a number of preparation, prerequisite, setup and customization steps that need to be performed. This document provides general installation guidance and provides a number of sample steps referenced to a particular installation on a Linux platform using the bash shell. These steps indicate the userid in brackets performing the step. The exact commands to be performed and the user that issues them will vary based on the platform, shell, installation preferences, etc.
+    </para>
+
+    <sect1 id="SelectDatabase">
+      <title>Select a Database</title>
+      <para>
+Gold makes use of a database for transactions and data persistence. Three databases have been tested for use with Gold thus far: PostgreSQL, MySQL and SQLite. Postgres and MySQL are external databases which run in a distinct (possibly remote) process and communicate over sockets. These databases must be separately installed, configured and started. SQLite is an embedded database bundled with the Gold source code with SQL queries being performed within the goldd process itself through library calls. The following information may help you make a choice of databases to use.
+      </para>
+      <para>
+        <itemizedlist>
+          <listitem>
+            <para>
+<guilabel>PostgreSQL</guilabel> --
+PostgreSQL is an open source database. Gold requires Postgres 7.2 or higher. The PostgreSQL database has been thoroughly tested in production with Gold and all Gold functionality is available since it was developed using the PostgreSQL database. Postgres supports multiple connections so Gold is configured to be a forking server when using PostgreSQL.
+            </para>
+            <para>
+PostgreSQL is recommended since it is an excellent database, has been more thoroughly tested than the others, and supports all Gold features.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+<guilabel>MySQL</guilabel> --
+MySQL is an open source database. Gold requires MySQL 4.0.6 or higher. (Prior versions did not support UNION which is used by Gold in time travel. It is possible to use 4.0 with a minor code tweak to the OFFSET line in Database.pm).
+            </para>
+            <para>
+MySQL 4.1 is required in order to have support for the (undocumented) Transaction Undo and Redo functionality since subqueries were not supported until this version.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+<guilabel>SQLite</guilabel> --
+SQLite is an open source embedded database bundled with Gold. It does not require any configuration and reads and writes from a file. Initial testing has shown Gold to perform at least as fast as PostgreSQL for small databases.
+            </para>
+            <para>
+Due to the lack of "ALTER TABLE" functionality, Gold objects cannot be customized after installation. It appears that this functionality is likely to be forthcoming in a future release of SQLite.
+            </para>
+            <para>
+Since SQLite supports only a single connection, Gold is not configured to be a forking server when using SQLite. This should probably not be an issue for small to medium sized clusters.
+            </para>
+            <para>
+Due to a lack of support for multi-column IN clauses, the (undocumented) Transaction Undo and Redo functions are not available.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </sect1>
+
+    <sect1 id="Prerequisites">
+      <title>Install Prerequisites</title>
+      <para>
+You will first need to build, test and install the following prerequisites:
+      </para>
+
+      <sect2>
+        <title>Perl 5.8 or higher (with suidperl) [REQUIRED]</title>
+        <para>
+The Gold server and clients are written in Perl. Perl 5.8 or higher is required. The Perl installation must include suidperl for proper client authentication. Use 'perl -v' to see what level of Perl is installed and 'suidperl -v' to see if suidperl is installed.
+Perl is available at: &lt;http://www.perl.com/&gt;
+        </para>
+        <para>
+For RedHat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install perl perl-suidperl
+          </userinput>
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install perl perl-suid
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>PostgreSQL database 7.2 or higher (or other tested database) [OPTIONAL]</title>
+        <para>
+If you intend to use the PostgreSQL, the MySQL or other external database, you will need to install it. PostgreSQL is recommended since it is an excellent database supporting all necessary features and has been more thoroughly tested than the others. The only thing needed for SQLite is the sqlite3 client for bootstrapping.
+PostgreSQL is available at: &lt;http://www.postgresql.org/&gt;
+        </para>
+        <para>
+For PostgreSQL on Redhat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install postgresql postgresql-libs postgresql-server postgresql-devel
+          </userinput>
+        </para>
+        <para>
+For PostgreSQL on Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install postgresql postgresql-common postgresql-client postgresql-server-dev-8.4
+          </userinput>
+        </para>
+        <para>
+For MySQL on Redhat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install mysql mysql-server
+          </userinput>
+        </para>
+        <para>
+For MySQL on Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install mysql-common mysql-server libmysqlclient-dev
+          </userinput>
+        </para>
+        <para>
+For SQLite on Redhat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install sqlite
+          </userinput>
+        </para>
+        <para>
+For SQLite on Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install sqlite3
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>libxml2 2.4.25 or higher [REQUIRED]</title>
+        <para>
+LibXML2 is needed by the XML::LibXML perl module to communicate via the SSSRMAP message format. The libxml2 development package is needed for the XML::LibXML perl module to install properly.
+LibXML2 is available at: &lt;http://www.xmlsoft.org/&gt;
+        </para>
+        <para>
+For RedHat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install libxml2 libxml2-devel
+          </userinput>
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install libxml2 libxml2-dev
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>gnu readline 2.0 or higher [OPTIONAL]</title>
+        <para>
+The interactive control program (goldsh) can support command-line-editing capabilities if readline support is enabled. Most recent linux distributions come with the appropriate readline support.
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install ncurses-dev libreadline-dev
+          </userinput>
+          <userinput><prompt>[root]# </prompt>
+cpan Term::ReadLine::Gnu
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>Apache Httpd Server 2.0 or higher [OPTIONAL]</title>
+        <para>
+Gold provides a web-based gui so that managers, users and administrators can interact with the accounting and allocation system. The web interface utilizes Perl CGI and SSL and needs to have an httpd server (preferably apache) installed.
+Apache httpd is available at: &lt;http://httpd.apache.org/&gt;
+        </para>
+        <para>
+For RedHat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install httpd
+          </userinput>
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install apache2
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>OpenSSL 0.9.5a or higher [OPTIONAL]</title>
+        <para>
+Gold provides a web-based gui so that managers, users and administrators can interact with the accounting and allocation system. The web interface utilizes Perl CGI and SSL and needs an httpd server (preferably apache).
+Apache httpd is available at: &lt;http://www.apache.org/&gt;
+        </para>
+        <para>
+For RedHat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install openssl
+          </userinput>
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+apt-get install openssl
+          </userinput>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>mod_ssl 2.26 or higher [OPTIONAL]</title>
+        <para>
+If you are installing the gui you will need an apache interface to OpenSSL (preferably mod_ssl). There are other alternatives to mod_ssl (one of which is apache-ssl from which the mod_ssl code was forked), however mod_ssl has become the defacto standard and is the most widely adopted. mod_ssl is
+    often bundled as part of the httpd server (such as in Ubuntu).
+mod_ssl is available at: &lt;http://www.modssl.org/&gt;
+        </para>
+        <para>
+For RedHat-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+yum install mod_ssl
+          </userinput>
+        </para>
+        <para>
+For Debian-based systems:
+        </para>
+        <para>
+          <userinput><prompt>[root]# </prompt>
+a2enmod ssl
+          </userinput>
+        </para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="Preparation">
+      <title>Preparation</title>
+      <para>
+To build and install Gold, you first need to unpack the tar archive and change directory into the top directory of the distribution.  For maximum security, it is recommended that you install and run Gold under its own non-root userid.
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+useradd -m gold
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+passwd gold
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+mkdir ~/src
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+cd ~/src
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+gzip -cd @PACKAGE_TARNAME@-@PACKAGE_VERSION@.tar.gz | tar xvf -
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+cd @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Configure">
+      <title>Configuration</title>
+      <para>
+To configure Gold, run the "configure" script provided with the distribution.
+      </para>
+
+      <literallayout>
+To see the list of options:
+    
+  -h, --help              display the list of options
+
+Use prefix to tell it where Gold should be installed (defaults to /opt/gold):
+
+  --prefix=PREFIX         install architecture-independent files in PREFIX [/opt/moab]
+
+Use with-db to specify the database you intend to use with Gold. Currently only PostgreSQL (Pg), MySQL (mysql) and SQLite (SQLite) have been tested for use with Gold. Postgres and MySQL are external databases which runs in a distinct (possibly remote) process and communicates over sockets while SQLite is an embedded database bundled with Gold with SQL queries being performed within the goldd process itself through library calls. Initial testing has shown SQLite to be at least as fast as PostgreSQL for small installations. The default is to use PostgreSQL.
+
+  --with-db=DATABASE      database to be used { Pg, mysql, SQLite } [Pg]
+
+Use with-user to specify the userid that gold will run under (defaults to the
+user running the configure command).
+
+  --with-user=USER        user id under which the gold server will run
+
+Use with-perl-libs to indicate whether you want to install the required perl modules in a local gold directory (PREFIX/lib) or in the default system site-perl directory (triggered by running make deps).
+
+  --with-perl-libs=local|site       install policy for prerequisite perl libs [local]
+
+Use with-gold-libs to indicate whether you want to install the Gold modules in a local gold directory (PREFIX/lib) or in the default system site-perl directory (defaults to local).
+
+  --with-gold-libs=local|site  install policy for Gold perl libs [local]
+
+If you will intend to use the Gold web GUI, use with-cgi-bin to specify the directory where you want the gold CGI files to reside (defaults to /var/www/cgi-bin/gold).
+
+  --with-cgi-bin=DIR      directory to install cgi-bin files if using web gui [/var/www/cgi-bin/gold]
+
+The PERL environment variable helps the install process find the desired (5.6) perl interpreter if it is not in your path or not found first in a path search.
+
+  PERL        full pathname of the Perl interpreter
+      </literallayout>
+      <para>
+To assume the defaults, just run configure.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+cd @PACKAGE_TARNAME@-@PACKAGE_VERSION@
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+./configure
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Compilation">
+      <title>Compilation</title>
+      <para>
+To compile the program, type make:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+make
+        </userinput>
+      </para>
+      <para>
+If you would like to install the web gui, type make gui:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+make gui
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Dependencies">
+      <title>Perl Module Dependencies</title>
+      <para>
+Gold requires the use of a number of Perl modules. These modules are included
+in tarball form in the Gold distribution and they can be installed by typing
+'make deps':
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make deps
+        </userinput>
+      </para>
+      <para>
+This will install the following Perl modules as necessary. By default, these will be installed under gold's lib/perl5 directory. To install these in the system site-perl directory, use the configure parameter with-perl-libs as described in the configuration section.
+      </para>
+      <literallayout>
+    CGI.pm
+    CGI::Session
+    Compress::Zlib
+    Crypt::CBC
+    Crypt::DES
+    Crypt::DES_EDE3
+    Data::Properties
+    Date::Manip
+    DBI
+    DBD::Pg or DBD::SQLite
+    Digest
+    Digest::HMAC
+    Digest::MD5
+    Digest::SHA1
+    Error
+    Log::Dispatch
+    Log::Dispatch::FileRotate
+    Log::Log4perl
+    MIME::Base64
+    Module::Build
+    Params::Validate
+    SOAP
+    Term::ReadLine::Gnu
+    Time::HiRes
+    XML::SAX
+    XML::LibXML::Common
+    XML::LibXML
+    XML::NamespaceSupport
+      </literallayout>
+      <para>
+If you would prefer to do so, you could install these modules via other sources, such as from rpm, or from CPAN using 'cpan'.
+      </para>
+    </sect1>
+
+    <sect1 id="Install">
+      <title>Installation</title>
+      <para>
+Use `make install' to install Gold. You may need to do this as root if any of the installation or log directories do not already have write permission as the gold admin user.
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make install
+        </userinput>
+      </para>
+      <para>
+If you would like to install the web gui, type make install-gui (as root).
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make install-gui
+        </userinput>
+      </para>
+      <para>
+To delete the files created by the Gold installation, you can use 'make uninstall'.
+      </para>
+      <para>
+You will also need to generate a secret key which enables secure communication
+between clients and server. This key is a pass-phrase consisting of up to 80
+characters and can include spaces and the regular visible ASCII characters.
+Note that if you are using Gold with Moab or the Maui Scheduler, they will need both need to use a shared secret key.
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+make auth_key
+        </userinput>
+      </para>
+      <screen>
+Enter your secret key (up to 80 characters and can include spaces): mysecret
+      </screen>
+    </sect1>
+
+    <sect1 id="GeneralSetup">
+      <title>General Setup</title>
+      <para>
+Edit the Gold configuration files.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+vi /opt/gold/etc/goldd.conf
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+vi /opt/gold/etc/gold.conf
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="DatabaseSetup">
+      <title>Database Setup</title>
+      <para>
+If you have chosen to use PostgreSQL or MySQL you will need to define a database user, create the gold database, and configure the database server to support transactions and connections from the Gold server host. No setup is needed if you are using SQLite.
+      </para>
+      <sect2 id="ConfigureTrustedConnections">
+        <title>Configure trusted connections</title>
+        <para>
+For PostgreSQL, add the IP ADDRESS of the host where the Gold server will run (even if it is the same host as the database server).
+        </para>
+        <para>
+          <userinput><prompt>[postgres]$ </prompt>
+vi /etc/postgresql/8.4/main/pg_hba.conf
+          </userinput>
+          <screen>
+host    all         all         192.168.1.99/16       trust
+          </screen>
+        </para>
+        <para>
+For PostgreSQL, configure postgres to accept connections from your host.
+        </para>
+        <para>
+          <userinput><prompt>[postgres]$ </prompt>
+vi /etc/postgresql/8.4/main/postgresql.conf
+          </userinput>
+          <screen>
+listen_addresses = 'mygoldserver,localhost' # what IP address(es) to listen on;
+          </screen>
+        </para>
+      </sect2>
+      <sect2 id="EnableTransactions">
+        <title>Enable support for transactions</title>
+        <para>
+If you are using the MySQL database you will need to configure the server to
+support transactions (MySQL 5.5.5 and later supports transactions by default).
+        </para>
+        <para>
+          <userinput><prompt>[root]$ </prompt>
+vi /etc/mysql/my.cnf
+          </userinput>
+          <screen>
+default-storage-engine = INNODB   # Place under the [mysqld] section
+          </screen>
+        </para>
+      </sect2>
+      <sect2 id="CreateGoldAdmin">
+        <title>Add the "gold" user as a database administrator</title>
+        <para>
+For PostgreSQL database:
+        </para>
+        <para>
+          <userinput><prompt>[postgres]$ </prompt>
+createuser gold
+          </userinput>
+          <screen>
+Shall the new role be a superuser? (y/n) y
+          </screen>
+        </para>
+        <para>
+For MySQL database:
+        </para>
+        <para>
+          <userinput><prompt>[mysql]$ </prompt>
+mysql
+          </userinput>
+          <screen>
+create user gold;
+grant all on *.* to 'gold'@'localhost';
+          </screen>
+        </para>
+      </sect2>
+      <sect2 id="CreateGoldDatabase">
+        <title>Create the gold database (as the gold user)</title>
+        <para>
+For PostgreSQL database:
+        </para>
+        <para>
+          <userinput><prompt>[gold]$ </prompt>
+createdb gold
+          </userinput>
+        </para>
+        <para>
+For MySQL database:
+        </para>
+        <para>
+          <userinput><prompt>[gold]$ </prompt>
+mysql
+          </userinput>
+          <screen>
+create database gold;
+          </screen>
+        </para>
+      </sect2>
+
+    </sect1>
+
+    <sect1 id="HttpdSetup">
+      <title>Web Server Setup</title>
+      <para>
+If you want to use the Gold web GUI, you will need to configure your Httpd server to use SSL. For RedHat Linux systems, a good guide on this is "Buiding a Secure RedHat Apache Server HOWTO" at &lt;http://www.faqs.org/docs/Linux-HOWTO/SSL-RedHat-HOWTO.html&gt;.
+      </para>
+      <para>
+The following shows an example configuration that involves making some modifications to the httpd configuration to support the use of cgi-bin and SSL connections as well as the creation of a private key and a
+self-signed certificate.
+      </para>
+      <para>
+Edit the httpd configuration file:
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+cd /etc/apache2
+        </userinput>
+        <userinput><prompt>[root]# </prompt>
+vi sites-enabled/000-default
+        </userinput>
+      </para>
+      <para>
+Add a virtual host definition and edit as appropriate for your environment:
+        <screen>
+&lt;VirtualHost *:443&gt;
+  DocumentRoot /var/www/cgi-bin/gold
+  ServerName mygoldserver.mysite.org
+  ServerAdmin my.email@mysite.org
+  ErrorLog /var/log/apache2/gold-error_log
+  TransferLog /var/log/apache2/gold-access_log
+  SSLEngine on
+  SSLCertificateFile /etc/apache2/ssl.crt/gold-server.crt
+  SSLCertificateKeyFile /etc/apache2/ssl.key/gold-server.key
+  SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+
+  # Configure your cgi-bin directory
+  &lt;Directory "/var/www/cgi-bin"&gt;
+    Options ExecCGI
+    AddHandler cgi-script .cgi .pl
+  &lt;/Directory&gt;
+
+  # Create an Alias for /cgi-bin pointing to your cgi-bin directory
+  # You may also have to comment out any comparable ScriptAlias definition
+  #ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+  Alias /cgi-bin/ /var/www/cgi-bin/
+
+  # Add index.cgi to the DirectoryIndex so you can use the shorter dir name
+  DirectoryIndex index.cgi
+&lt;/VirtualHost&gt;
+        </screen>
+      </para>
+      <note>
+        <para>
+As further explanation, if you are installing your cgi-bin files directly under /var/www/cgi-bin, just use /var/www/cgi-bin as your DocumentRoot. If you are installing your cgi-bin files under a subdirectory such as /var/www/cgi-bin/gold, you may want to use /var/www/cgi-bin/gold as your DocumentRoot. You could specify /var/www/cgi-bin here, but then you would need to use an extra gold subdirectory in your URL when accessing the Gold GUI from your browser.
+        </para>
+      </note>
+      <para>
+Create a Private Key for Gold
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+mkdir ssl.key
+        </userinput>
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+openssl genrsa -out ssl.key/gold-server.key 1024
+        </userinput>
+      </para>
+      <para>
+Create a Self-Signed Certificate
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+openssl req -new -key ssl.key/gold-server.key -x509 -out ssl.crt/gold-server.crt
+        </userinput>
+      </para>
+      <para>
+Startup or restart httpd.
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+service apache2 restart
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Bootstrap">
+      <title>Bootstrap</title>
+      <para>
+You will need to populate the gold database with an sql dump that defines the objects, actions and attributes necessary to function as an Accounting and Allocation Manager.
+      </para>
+      <para>
+For PostgreSQL database:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+psql gold &lt; bank.sql
+        </userinput>
+      </para>
+      <para>
+For MySQL database:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+mysql gold &lt; bank.sql
+        </userinput>
+      </para>
+      <para>
+For SQLite database:
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+sqlite3 /opt/gold/data/gold.db &lt; bank.sql
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Startup">
+      <title>Startup</title>
+      <para>
+Start the gold server daemon. It is located in the PREFIX/sbin directory.
+      </para>
+      <para>
+        <userinput><prompt>[gold]$ </prompt>
+goldd
+        </userinput>
+      </para>
+      <para>
+Alternatively, if you are on a linux system that supports init.d scripts, you can create a system startup service for Gold. Sample scripts are provided in contrib/init.d/ that can be edited for your distribution and installed into /etc/init.d. After adding execute permissions, Gold can then be started by issuing:
+      </para>
+      <para>
+        <userinput><prompt>[root]# </prompt>
+service gold start
+        </userinput>
+      </para>
+    </sect1>
+
+    <sect1 id="Initialization">
+      <title>Initialization</title>
+      <para>
+You are now ready to define users, projects, machines, accounts etc. as necessary for your site. The next chapter (Getting Started) provides a useful primer for this phase of the Gold setup.
+      </para>
+    </sect1>
+
+    <sect1 id="GUIAccess">
+      <title>Accessing the GUI</title>
+      <para>
+To access the web gui, open a browser with url: https://mygoldserver/gold.
+      </para>
+      <para>
+        <userinput><prompt>[gold]# </prompt>
+mozilla https://mygoldserver/gold
+        </userinput>
+      </para>
+      <note>
+        <para>
+In order to use the web gui, users will have to generate passwords for themselves using the gchpasswd client command. Gold may have to be restarted in order for role privileges to be reflected in the GUI.
+        </para>
+        <para>
+          <userinput><prompt>[gold]# </prompt>
+gchpasswd
+          </userinput>
+        </para>
+      </note>
+    </sect1>
+
+</chapter>

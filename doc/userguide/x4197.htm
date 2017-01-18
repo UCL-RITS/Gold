@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Client Configuration</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Gold User's Guide"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Configuration Files"
+HREF="c4076.htm"><LINK
+REL="PREVIOUS"
+TITLE="Configuration Files"
+HREF="c4076.htm"></HEAD
+><BODY
+CLASS="SECT1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><SPAN
+CLASS="PRODUCTNAME"
+>Gold</SPAN
+> User's Guide</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c4076.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 21. Configuration Files</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECT1"
+><H1
+CLASS="SECT1"
+><A
+NAME="CLIENTCONFIG"
+>Client Configuration</A
+></H1
+><P
+>The following configuration parameters may be set in the client configuration file (gold.conf).
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>log4perl.appender.Log.filename</SPAN
+> &mdash;
+Used by log4perl to set the base name of the log file.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>log4perl.appender.Log.max</SPAN
+> &mdash;
+Used by log4perl to set the number of rolling backup logs.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>log4perl.appender.Log.size</SPAN
+> &mdash;
+Used by log4perl to set the size the log will grow to before it is rotated.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>log4perl.appender.Log.Threshold</SPAN
+> &mdash;
+Used by log4perl to set the debug level written to the log. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>log4perl.appender.Screen.Threshold</SPAN
+> &mdash;
+Used by log4perl to set the debug level written to the screen. The logging threshold can be one of TRACE, DEBUG, INFO, WARN, ERROR and FATAL.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>response.chunking</SPAN
+> [true] &mdash;
+Indicates whether large responses should be chunked (segmented). If set to false, large responses will be truncated.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>response.chunksize</SPAN
+> [0] &mdash;
+Indicates the line length in the data response that will trigger message segmentation (or truncation). A value of 0 (zero) means unlimited, i.e. that the client will accept the chunksize set by the server. The response chunksize will be taken to be the smaller of the client and server chunksize settings.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>currency.precision</SPAN
+> [0] &mdash;
+Indicates the number of decimal places in the resource credit currency. For example, if you are will be dealing with processor-seconds of an integer resource unit, use 0 (which is the default). If you will be charging dollars and cents, then use 2. This parameter should be the same in the goldd.conf and gold.conf files.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>security.authentication</SPAN
+> [true] &mdash;
+Indicates whether outgoing message are signed.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>security.encryption</SPAN
+> [false] &mdash;
+Indicates whether outgoing messages are encrypted.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>security.token.type</SPAN
+> [Symmetric] &mdash;
+Indicates the default security token type to be used in both authentication and encryption.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>server.host</SPAN
+> [localhost] &mdash;
+The hostname on which the gold server runs.
+          </P
+></LI
+></UL
+>
+    </P
+><P
+>      <P
+></P
+><UL
+><LI
+><P
+><SPAN
+CLASS="GUILABEL"
+>server.port</SPAN
+> [7112] &mdash;
+The port the gold server listens on.
+          </P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c4076.htm"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Configuration Files</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c4076.htm"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
