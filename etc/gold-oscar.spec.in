@@ -24,7 +24,7 @@ Prefix: %{prefix}
 #Requires: j2sdk >= 1.4
 #Requires: postgresql >= 7.1
 Requires: perl >= 5.6
-Requires: perl-suidperl >= 5.6
+Requires: sudo
 Requires: libxml2 >= 2.4.25
 
 #BuildPreReq: openssl-devel

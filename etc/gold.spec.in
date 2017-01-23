@@ -23,7 +23,7 @@ BuildRoot: %{_tmppath}/%{name}-%{ver}-root
 Prefix: %{prefix}
 
 Requires: perl >= 5.6.1
-Requires: perl-suidperl >= 5.6.1
+Requires: sudo
 Requires: libxml2 >= 2.4.25
 
 #BuildPreReq: openssl-devel
