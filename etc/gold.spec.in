@@ -140,7 +140,7 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 %config %{prefix}/etc/goldd.conf
 %attr(0755,root,root) /etc/init.d/gold
 %doc doc/userguide.pdf README INSTALL LICENSE CHANGES
-#%dir %{prefix}/doc/userguide
+%doc doc/userguide/*
 %ghost %{prefix}/etc/auth_key
 
 %files profiled
