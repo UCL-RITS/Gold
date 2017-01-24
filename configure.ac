@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT(Gold, [2.2.0.5], [gold-support@adaptivecomputing.com])
+AC_INIT(Gold, [2.2.0.6], [legion-admin@ucl.ac.uk])
 AC_CONFIG_SRCDIR([src/goldd.pl.in])
 #AC_CONFIG_HEADER([config.h])
 
