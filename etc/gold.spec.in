@@ -140,7 +140,7 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 %config %{prefix}/etc/goldd.conf
 %attr(0755,root,root) /etc/init.d/gold
 %doc doc/userguide.pdf README INSTALL LICENSE CHANGES
-%dir doc/userguide
+%dir %{prefix}/doc/userguide
 %ghost %{prefix}/etc/auth_key
 
 %files profiled
@@ -152,6 +152,8 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 # ChangeLog section
 #---------------------------------------------------------------------
 %changelog
+* Tue Jan 24 2016  02:19:00PM    William Hay <w.hay@ucl.ac.uk>
+- Updated RPM for Use on RHEL7
 * Thu Feb 17 2005  12:11:55AM    Scott Jackson <Scott.Jackson@pnl.gov>
 - Updated RPM for Gold Second Beta Release
 * Wed Sep 22 2004  12:01:22AM    Scott Jackson <Scott.Jackson@pnl.gov>
