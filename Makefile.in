@@ -116,7 +116,7 @@ $(CGIBINS): Makefile
 	sed '1s%#!.*%#! $(PERL) -wT%' src/$${basename} | sed "s%use lib .*%use lib qw(@libdir@ @libdir@/perl5);%" | sed "s%/cgi-bin/gold%$${cgiroot}%" >$@
 
 $(JAVASCRIPTS): Makefile
-	-mkdir -p $(CGI-BIN)/scripts
+	-mkdir -p $(CGI_BIN)/scripts
 	basename=`echo $@ | sed -e 's#^.*/##'`; \
 	cgiroot=`echo $(CGI_BIN) | sed -e 's#.*\(/cgi.*\)#\1#'`; \
 	sed "s%/cgi-bin/gold%$${cgiroot}%" src/$${basename} >$@
