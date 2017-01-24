@@ -152,7 +152,7 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 # ChangeLog section
 #---------------------------------------------------------------------
 %changelog
-* Tue Jan 24 2016  02:19:00PM    William Hay <w.hay@ucl.ac.uk>
+* Tue Jan 24 2017  02:19:00PM    William Hay <w.hay@ucl.ac.uk>
 - Updated RPM for Use on RHEL7
 * Thu Feb 17 2005  12:11:55AM    Scott Jackson <Scott.Jackson@pnl.gov>
 - Updated RPM for Gold Second Beta Release
