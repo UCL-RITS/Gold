@@ -196,6 +196,8 @@ install-gui:
 		cp -R cgi-bin/* $(CGI_BIN); \
 		chown -R $(USER) $(CGI_BIN)/*; \
 		chmod +x $(CGI_BIN)/*.cgi; \
+		mkdir $(CGI_BIN)/scripts; \
+		cp src/*.js $(CGI_BIN)/scripts; \
 	fi
 
 deps:

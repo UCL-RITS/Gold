@@ -2,7 +2,7 @@
 
 %define  name     @PACKAGE_TARNAME@
 %define  ver      @PACKAGE_VERSION@
-%define  rel      1
+%define  rel      2
 %define  basedir   %{name}-%{ver}
 %define  prefix    @prefix@
 %define  profiled  /etc/profile.d
@@ -15,16 +15,42 @@ Release: %{rel}
 License: BSD Open Source License. See LICENSE file.
 Group: Applications
 Source0: %{name}-%{ver}.tar.gz
-URL: http://sss.scl.ameslab.gov/gold.shtml
+URL: https://github.com/UCL-RITS/Gold/
 Distribution: SSS
-Vendor: PNNL
-Packager: PNNL
+Vendor: UCL-RITS
+Packager: UCL-RITS
 BuildRoot: %{_tmppath}/%{name}-%{ver}-root
 Prefix: %{prefix}
 
 Requires: perl >= 5.6.1
 Requires: sudo
 Requires: libxml2 >= 2.4.25
+Requires: perl(CGI::Session) >= 3.95
+Requires: perl(CGI) >= 3.10
+Requires: perl(Compress::Zlib) >= 1.33
+Requires: perl(Crypt::CBC) >= 2.24
+Requires: perl(Crypt::DES) >= 2.05
+Requires: perl(Crypt::DES_EDE3) >= 0.01
+Requires: perl(DBI) >= 1.53
+Requires: perl(Data::Properties) >= 0.02
+Requires: perl(Date::Manip) >= 5.48
+Requires: perl(Digest) >= 1.05
+Requires: perl(Digest::HMAC) >= 1.01
+Requires: perl(Digest::MD5) >= 2.36
+Requires: perl(Digest::SHA1) >= 2.07
+Requires: perl(Error) >= 0.15
+Requires: perl(Log::Dispatch) >= 2.21
+Requires: perl(Log::Dispatch::FileRotate) >= 1.16
+Requires: perl(Log::Log4perl) >= 1.14
+Requires: perl(MIME::Base64) >= 3.01
+Requires: perl(Module::Build) >= 0.2808
+Requires: perl(Params::Validate) >= 0.89
+Requires: perl(Term::ReadLine::GNU) >= 1.15
+Requires: perl(Time::HiRes) >=1.65
+Requires: perl(XML::LibXML) >= 1.58
+Requires: perl(XML::LibXML::Common) >= 0.13
+Requires: perl(XML::NamespaceSupport) >= 1.08
+Requires: perl(XML::Sax) >= 0.12
 
 #BuildPreReq: openssl-devel
 AutoReqProv: no
