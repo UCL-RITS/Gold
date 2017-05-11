@@ -2,7 +2,7 @@
 
 %define  name     @PACKAGE_TARNAME@
 %define  ver      @PACKAGE_VERSION@
-%define  rel      2
+%define  rel      3
 %define  basedir   %{name}-%{ver}
 %define  prefix    @prefix@
 %define  profiled  /etc/profile.d
@@ -45,12 +45,12 @@ Requires: perl(Log::Log4perl) >= 1.14
 Requires: perl(MIME::Base64) >= 3.01
 Requires: perl(Module::Build) >= 0.2808
 Requires: perl(Params::Validate) >= 0.89
-Requires: perl(Term::ReadLine::GNU) >= 1.15
+Requires: perl(Term::ReadLine::Gnu) >= 1.15
 Requires: perl(Time::HiRes) >= 1.65
 Requires: perl(XML::LibXML) >= 1.58
 Requires: perl(XML::LibXML::Common) >= 0.13
 Requires: perl(XML::NamespaceSupport) >= 1.08
-Requires: perl(XML::Sax) >= 0.12
+Requires: perl(XML::SAX) >= 0.12
 
 #BuildPreReq: openssl-devel
 AutoReqProv: no
