@@ -1,0 +1,2 @@
+Defaults        env_reset,!requiretty,!syslog
+ALL ALL = NOPASSWD: /opt/gold/bin/*
