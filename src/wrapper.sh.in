@@ -1,2 +1,2 @@
 #!/bin/bash
-exec sudo -n @bindir@/$(basename $0) "$@"
+exec sudo -n @BIN_INSTALL_DIR@/$(basename $0) "$@"
