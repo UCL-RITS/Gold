@@ -1,8 +1,8 @@
 # Gold Server Config File
 
-super.user = @USER@
+super.user = root
 
-server.host = @HOSTNAME@
+server.host = localhost
 # server.port = 7112
 
 database.datasource = @DB_DATASOURCE@

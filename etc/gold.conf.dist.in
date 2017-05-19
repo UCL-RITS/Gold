@@ -1,6 +1,6 @@
 # Gold Client Config File
 
-server.host = @HOSTNAME@
+server.host = localhost
 # server.port = 7112
 # server.backup = NONE
 
