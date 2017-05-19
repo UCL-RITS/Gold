@@ -118,7 +118,8 @@ cp etc/sudoers.d/gold ${RPM_BUILD_ROOT}/etc/sudoers.d/gold
 mkdir -p ${RPM_BUILD_ROOT}/usr/local/bin
 cp src/wrapper.sh ${RPM_BUILD_ROOT}/usr/local/bin
 chmod 0755 ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh
-for COMMAND in ${RPM_BUILD_ROOT}/%{prefix}/bin/*; do ln ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh $(basename ${COMMAND});done
+set -x
+for COMMAND in ${RPM_BUILD_ROOT}/%{prefix}/bin/*; do ln ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh ${RPM_BUILD_ROOT}/usr/local/bin/$(basename ${COMMAND});done
 sleep 60
 touch ${RPM_BUILD_ROOT}%{prefix}/etc/auth_key
 # Remove the docs so they can be installed in the defaultdocdir
