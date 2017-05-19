@@ -159,7 +159,7 @@ sub new
 {
     my ($class, %arg) = @_;
     my $self = {
-        _actor   => $arg{actor}   || (getpwuid($<))[0],    # SCALAR
+        _actor   => $arg{actor}   || $ENV{SUDO_USER} || (getpwuid($<))[0],    # SCALAR
         _status  => $arg{status}  || "Failure",            # SCALAR
         _code    => $arg{code}    || "999",                # SCALAR
         _message => $arg{message} || "",                   # SCALAR

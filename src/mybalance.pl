@@ -34,7 +34,7 @@ if ($man)
 }
 
 # Find out who is running this command
-my $user = (getpwuid($<))[0];
+my $user = $ENV{SUDO_USER} || (getpwuid($<))[0];
 
 # The following is done for security reasons
 if ($user =~ /^([-\w]+)$/) { $user = $1; }

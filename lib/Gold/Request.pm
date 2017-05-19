@@ -218,7 +218,7 @@ sub new
 
     my $self = {
         _action => $arg{action} || "",                   # SCALAR
-        _actor  => $arg{actor}  || (getpwuid($<))[0],    # SCALAR
+        _actor  => $arg{actor}  || $ENV{SUDO_USER} || (getpwuid($<))[0],    # SCALAR
         _objects => $arg{object} ? [new Gold::Object(name => $arg{object})]
         : $arg{objects} ? $arg{objects}
         : [],                                            # ARRAY REF of Objects

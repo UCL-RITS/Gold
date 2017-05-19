@@ -96,8 +96,9 @@ Main:
     # Determine who the target user is
     if (! defined $user)
     {
-        if   ($#ARGV == 0) { $user = $ARGV[0]; }
-        else               { $user = (getpwuid($<))[0]; }
+        if   ($#ARGV == 0)              { $user = $ARGV[0]; }
+        elsif (defined $ENV{SUDO_USER}) { $user = $ENV{SUDO_USER}; }
+        else                            { $user = (getpwuid($<))[0]; }
     }
 
     # Determine if user already has a password set
