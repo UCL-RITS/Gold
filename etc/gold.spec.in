@@ -113,6 +113,11 @@ cp src/gold_init.pl ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
 chmod +x ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp etc/gold.d ${RPM_BUILD_ROOT}/etc/init.d/gold
+mkdir -p ${RPM_BUILD_ROOT}/etc/sudoers.d/gold
+cp etc/sudoers.d/gold ${RPM_BUILD_ROOT}/etc/sudoers.d/gold
+cp src/wrapper.sh ${RPM_BUILD_ROOT}/usr/local/bin
+chmod 0755 ${RPM_BUILD_ROOT}/usr/local/bin
+for COMMAND in ${RPM_BUILD_ROOT}/%{prefix}/bin/*; do ln ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh $(basename ${COMMAND});done
 touch ${RPM_BUILD_ROOT}%{prefix}/etc/auth_key
 # Remove the docs so they can be installed in the defaultdocdir
 rm -rf ${RPM_BUILD_ROOT}%{prefix}/doc
@@ -161,10 +166,12 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 %{prefix}/bank.sql
 %{prefix}/sssrmap3.xsd
 %{cgi_bin}
+/usr/local/bin
 %config %{prefix}/etc/gold.conf
 %config %{prefix}/etc/goldg.conf
 %config %{prefix}/etc/goldd.conf
 %attr(0755,root,root) /etc/init.d/gold
+%attr(0600,root,root) /etc/sudoers.d/gold
 %doc doc/userguide.pdf README INSTALL LICENSE CHANGES
 %doc doc/userguide
 %ghost %{prefix}/etc/auth_key

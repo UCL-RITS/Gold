@@ -1,0 +1,2 @@
+#!/bin/bash
+exec sudo -n @bindir@/$(basename $0) "$@"
