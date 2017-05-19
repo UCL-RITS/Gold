@@ -182,12 +182,14 @@ AC_CONFIG_FILES([
   etc/gold.d
   etc/gold.sh
   etc/gold.csh
+  etc/sudoers.d/gold
   INSTALL
   lib/Gold.pm
   lib/Gold/Global.pm
   lib/Gold/CGI.pm
   Makefile
   README
+  src/wrapper.sh
   src/goldsh.pl
   src/goldd.pl
   src/gold_init.pl])

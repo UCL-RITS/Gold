@@ -3965,7 +3965,7 @@ NOW=`$PERL -e 'print time'`
 
 
 # Configure the output files, and generate them.
-ac_config_files="$ac_config_files base.sql bank.gold bank.sql doc/installation.sgml doc/migration.sgml doc/upgrade.sgml doc/upgradefile.sgml doc/userguide.sgml etc/gold.conf.dist etc/goldd.conf.dist etc/goldg.conf.dist etc/gold.spec etc/gold.d etc/gold.sh etc/gold.csh INSTALL lib/Gold.pm lib/Gold/Global.pm lib/Gold/CGI.pm Makefile README src/goldsh.pl src/goldd.pl src/gold_init.pl"
+ac_config_files="$ac_config_files base.sql bank.gold bank.sql doc/installation.sgml doc/migration.sgml doc/upgrade.sgml doc/upgradefile.sgml doc/userguide.sgml etc/gold.conf.dist etc/goldd.conf.dist etc/goldg.conf.dist etc/gold.spec etc/gold.d etc/gold.sh etc/gold.csh etc/sudoers.d/gold INSTALL lib/Gold.pm lib/Gold/Global.pm lib/Gold/CGI.pm Makefile README src/wrapper.sh src/goldsh.pl src/goldd.pl src/gold_init.pl"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4687,12 +4687,14 @@ do
     "etc/gold.d") CONFIG_FILES="$CONFIG_FILES etc/gold.d" ;;
     "etc/gold.sh") CONFIG_FILES="$CONFIG_FILES etc/gold.sh" ;;
     "etc/gold.csh") CONFIG_FILES="$CONFIG_FILES etc/gold.csh" ;;
+    "etc/sudoers.d/gold") CONFIG_FILES="$CONFIG_FILES etc/sudoers.d/gold" ;;
     "INSTALL") CONFIG_FILES="$CONFIG_FILES INSTALL" ;;
     "lib/Gold.pm") CONFIG_FILES="$CONFIG_FILES lib/Gold.pm" ;;
     "lib/Gold/Global.pm") CONFIG_FILES="$CONFIG_FILES lib/Gold/Global.pm" ;;
     "lib/Gold/CGI.pm") CONFIG_FILES="$CONFIG_FILES lib/Gold/CGI.pm" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "README") CONFIG_FILES="$CONFIG_FILES README" ;;
+    "src/wrapper.sh") CONFIG_FILES="$CONFIG_FILES src/wrapper.sh" ;;
     "src/goldsh.pl") CONFIG_FILES="$CONFIG_FILES src/goldsh.pl" ;;
     "src/goldd.pl") CONFIG_FILES="$CONFIG_FILES src/goldd.pl" ;;
     "src/gold_init.pl") CONFIG_FILES="$CONFIG_FILES src/gold_init.pl" ;;
