@@ -632,6 +632,7 @@ LIB_INSTALL_DIR
 MAKEPL_ARG
 SITE_PERL_LIB_DIR
 DOC_DIR
+BIN_DIR
 LOG_DIR
 USER
 SQL_INDEX_COMMENT
@@ -704,6 +705,7 @@ with_readline
 with_db
 with_user
 with_log_dir
+with_bin_dir
 with_doc_dir
 with_perl_libs
 with_gold_libs
@@ -1331,6 +1333,7 @@ Optional Packages:
   --with-db=DATABASE        database to be used { Pg, mysql, SQLite } [Pg]
   --with-user=USER        user id under which the gold server will run [defaults to user running configure]
   --with-log-dir=PATH     directory for log files [PREFIX/log]
+  --with-bin-dir=PATH     directory for bin files [PREFIX/bin]
   --with-doc-dir=PATH     directory for documentation [PREFIX/doc]
   --with-perl-libs=local|site  install policy for prerequisite perl libs [local]
   --with-gold-libs=local|site  install policy for Gold perl libs [local]
@@ -3744,6 +3747,17 @@ if test "${with_log_dir+set}" = set; then :
   withval=$with_log_dir; LOG_DIR=$withval
 else
   LOG_DIR=${prefix}/log
+fi
+
+
+
+# Check for bin dir
+
+# Check whether --with-bin_dir was given.
+if test "${with_bin_dir+set}" = set; then :
+  withval=$with_bin_dir; BIN_DIR=$withval
+else
+  BIN_DIR=${prefix}/bin
 fi
 
 

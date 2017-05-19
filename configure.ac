@@ -101,6 +101,13 @@ AC_ARG_WITH(log_dir,
   [LOG_DIR=${prefix}/log])
 AC_SUBST(LOG_DIR)
 
+# Check for bin dir
+AC_ARG_WITH(bin_dir,
+  [  --with-bin-dir=PATH     directory for bin files [[PREFIX/bin]]],
+  [BIN_DIR=$withval],
+  [BIN_DIR=${prefix}/bin])
+AC_SUBST(BIN_DIR)
+
 # Check for doc dir
 AC_ARG_WITH(doc_dir,
   [  --with-doc-dir=PATH     directory for documentation [[PREFIX/doc]]],
