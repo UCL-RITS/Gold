@@ -119,6 +119,7 @@ mkdir -p ${RPM_BUILD_ROOT}/usr/local/bin
 cp src/wrapper.sh ${RPM_BUILD_ROOT}/usr/local/bin
 chmod 0755 ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh
 for COMMAND in ${RPM_BUILD_ROOT}/%{prefix}/bin/*; do ln ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh $(basename ${COMMAND});done
+sleep 60
 touch ${RPM_BUILD_ROOT}%{prefix}/etc/auth_key
 # Remove the docs so they can be installed in the defaultdocdir
 rm -rf ${RPM_BUILD_ROOT}%{prefix}/doc
@@ -167,7 +168,7 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 %{prefix}/bank.sql
 %{prefix}/sssrmap3.xsd
 %{cgi_bin}
-/usr/local/bin
+/usr/local/bin/*
 %config %{prefix}/etc/gold.conf
 %config %{prefix}/etc/goldg.conf
 %config %{prefix}/etc/goldd.conf
