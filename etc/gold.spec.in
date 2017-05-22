@@ -2,7 +2,7 @@
 
 %define  name     @PACKAGE_TARNAME@
 %define  ver      @PACKAGE_VERSION@
-%define  rel      6
+%define  rel      7
 %define  basedir   %{name}-%{ver}
 %define  prefix    @prefix@
 %define  profiled  /etc/profile.d
@@ -168,9 +168,9 @@ mkdir -p $RPM_BUILD_ROOT/%{profiled}
 %{prefix}/sssrmap3.xsd
 %{cgi_bin}
 /usr/local/bin/*
-%config %{prefix}/etc/gold.conf
-%config %{prefix}/etc/goldg.conf
-%config %{prefix}/etc/goldd.conf
+%config(noreplace) %{prefix}/etc/gold.conf
+%config(noreplace) %{prefix}/etc/goldg.conf
+%config(noreplace) %{prefix}/etc/goldd.conf
 %attr(0755,root,root) /etc/init.d/gold
 %attr(0600,root,root) /etc/sudoers.d/gold
 %doc doc/userguide.pdf README INSTALL LICENSE CHANGES
