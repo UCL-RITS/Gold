@@ -267,26 +267,23 @@ sub insert
         my $dataType = $attributeRow->[1];
         $dataTypes{$name} = $dataType;
     }
-
+    # Build  SQL ARGS
+    my @sqlargs=();
     # Build SQL string
-    my $sql = "INSERT INTO ";
+    my $sql = "INSERT INTO ? (";
 
     # Add object to SQL
-    $sql .= toDBC($object);
+    push @sqlargs toDBC($object);
 
-    # Add column list
-    $sql .= " (";
-    $firstTime = 1;
-
+    $sql .= "g_creation_time,g_modification_time,g_request_id,g_transaction_id";
     # Handle auto-generated name if one exists
     foreach my $attribute (keys %dataTypes)
     {
         if ($dataTypes{$attribute} eq "AutoGen")
         {
             # Add the name
-            if ($firstTime) { $firstTime = 0; }
-            else            { $sql .= ","; }
-            $sql .= toDBC($attribute);
+            $sql .= ",?"; 
+	    push @sqlargs toDBC($attribute);
         }
     }
 
@@ -294,30 +291,22 @@ sub insert
     foreach my $assignment (@assignments)
     {
         # Add the name
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
-        my $name = $assignment->getName();
-        $sql .= toDBC($name);
+        $sql .= ",?"; 
+        push @sqlargs toDBC($assignment->getName());
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .=
-      "g_creation_time,g_modification_time,g_request_id,g_transaction_id)";
 
     # Add insert items
-    $sql .= " VALUES (";
-    $firstTime = 1;
-
+    $sql .= ") VALUES (?,?,?,?"; 
+    push @sqlargs ($now,$now,$requestId,$txnId);
     # Handle auto-generated values
     foreach my $attribute (keys %dataTypes)
     {
         if ($dataTypes{$attribute} eq "AutoGen")
         {
             # Add the value
-            if ($firstTime) { $firstTime = 0; }
-            else            { $sql .= ","; }
+            $sql .= ",?"; 
             # Get the next key generated value and assign it to the attribute
-            $sql .= $self->nextId($object);
+            push @sqlargs $self->nextId($object);
         }
     }
 
@@ -325,22 +314,16 @@ sub insert
     foreach my $assignment (@assignments)
     {
         # Add the value
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
-        my $name  = $assignment->getName();
-        my $value = $assignment->getValue();
-        $sql .= "'$value'";
+        $sql .= ",?"; 
+        push @sqlargs  $assignment->getValue();
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .= "'$now','$now','$requestId','$txnId')";
-
+    $sql .= ")";
     # Perform the insert
     if ($log->is_debug())
     {
         $log->debug("SQL Update: $sql");
     }
-    my $count = $dbh->do($sql);
+    my $count = $dbh->do($sql,@sqlargs);
 
     # Log the transaction
     $self->logTransaction(
