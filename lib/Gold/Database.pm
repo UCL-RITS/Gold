@@ -1,4 +1,4 @@
-#! /usr/bin/perl -wT
+#!/usr/bin/perl -wT
 ################################################################################
 #
 # Gold Database object
@@ -92,7 +92,7 @@ The B<Gold::Database> module obtains a handle and carries out database queries
 
 =item $count = $database->addColumn(request => $request, object => $object, attribute => $attribute, requestId => $requestId, txnId => $txnId);
 
-=item $where = $database->buildWhere(object => $object || objects => \@objects, conditions => \@conditions);
+=item @where = $database->buildWhere(object => $object || objects => \@objects, conditions => \@conditions);
 
 =item $database->logTransaction(object => $object, action => $action, actor => $actor, assignments => \@assignments, conditions => \@conditions, options => \@options, data => \@data, count => $count, requestId => $requestId, txnId => $txnId);
 
@@ -365,7 +365,7 @@ sub select
     # Declare and Initialize variables
     my $dbh = $self->{_handle};
     my $sth;
-    my $sql               = "";
+    my $sql               = "SELECT ";
     my $time              = "";
     my $unique            = "";
     my $limit             = "";
@@ -386,7 +386,7 @@ sub select
     my $chunkNum   = defined $arg{chunkNum}   ? $arg{chunkNum}      : 0;
 
     # Build Select Command
-    $sql .= "SELECT ";
+    my @sqlargs=();
     my $firstTime;
     my $tmpSQL = "";
 
@@ -418,6 +418,9 @@ sub select
         }
     }
 
+    # Handle requests for unique results
+    $sql .= "DISTINCT " if (defined $unique && $unique =~ /True/i)
+	
     # Build selection item list
     # If joined object, we expect all names to be object qualified
     if (@selections)
@@ -430,7 +433,7 @@ sub select
             my $object = $selection->getObject();
             my $alias  = $selection->getAlias();
             if ($firstTime) { $firstTime = 0; }
-            else            { $tmpSQL .= ","; }
+            else            { $sql .= ","; }
 
             # Fix selection name
             $dbname = toDBC($name);
@@ -443,23 +446,23 @@ sub select
             {
                 if ($op eq "Count")
                 {
-                    $tmpSQL .= "COUNT(";
+                    $sql .= "COUNT(";
                 }
                 elsif ($op eq "Sum")
                 {
-                    $tmpSQL .= "SUM(";
+                    $sql .= "SUM(";
                 }
                 elsif ($op eq "Average")
                 {
-                    $tmpSQL .= "AVG(";
+                    $sql .= "AVG(";
                 }
                 elsif ($op eq "Min")
                 {
-                    $tmpSQL .= "MIN(";
+                    $sql .= "MIN(";
                 }
                 elsif ($op eq "Max")
                 {
-                    $tmpSQL .= "MAX(";
+                    $sql .= "MAX(";
                 }
                 elsif ($op eq "Sort")
                 {
@@ -478,9 +481,10 @@ sub select
 
             if ($time ne "")
             {
-                $tmpSQL .= "a.";
+                $sql .= "a.";
             }
-            $tmpSQL .= $dbname;
+            $sql .= "? "
+	    push @sqlargs $dbname;
 
             # Close aggregating operators
             if (
@@ -494,34 +498,30 @@ sub select
             {
                 if ($alias)
                 {
-                    $tmpSQL .= ") AS " . toDBC($alias);
+                    $sql .= ") AS ?";
+		    push @sqlargs toDBC($alias);
                 }
                 else
                 {
-                    $tmpSQL .= ") AS " . toDBC($name);
+                    $sql .= ") AS ?";
+		    push @sqlargs toDBC($name);
                 }
             }
             else
             {
                 if ($alias)
                 {
-                    $tmpSQL .= " AS " . toDBC($alias);
+                    $sql .= " AS ?";
+		    push @sqlargs toDBC($alias);
                 }
                 elsif ($object)
                 {
-                    $tmpSQL .= " AS " . toDBC($name);
+                    $sql .= " AS ?";
+		    push @sqlargs toDBC($name);
                 }
             }
         }
 
-        # Handle requests for unique results
-        if (defined $unique && $unique =~ /True/i)
-        {
-            $sql .= "DISTINCT ";
-        }
-
-        # Add selection item list to SQL
-        $sql .= $tmpSQL;
     }
 
     # Default to * if selections are empty
@@ -543,14 +543,17 @@ sub select
             my $join  = $object->getJoin();
             my $alias = $object->getAlias();
             if ($firstTime) { $firstTime = 0; }
-            else            { $sql .= $join ? " $join " : ", "; }
-            $sql .= toDBC($name);
-            $sql .= " $alias" if $alias;
+            elsif ($join)   { $sql .= "?"; push @sqlargs $join;}
+	    else { $sql .=", "; }		  
+            $sql .= "?";
+	    push @sqlarga toDBC($name);
+	    if ($alias) {$sql .= " ?" push @sqlargs $alias;}
         }
 
         # Add search conditions
-        $sql .=
-          $self->buildWhere(objects => \@objects, conditions => \@conditions);
+        my  @where = $self->buildWhere(objects => \@objects, conditions => \@conditions);
+        $sql .= shift @where;
+	push @sqlargs @where;
     }
 
     # Time travel requested (time travel not supported for joined objects)
@@ -566,8 +569,9 @@ sub select
         my $name   = $objects[0]->getName();
         my $dbname = toDBC($name);
         $sql .=
-          "( SELECT * FROM $dbname UNION SELECT * FROM ${dbname}_log) AS a, ";
-
+          "( SELECT * FROM ? UNION SELECT * FROM ?_log) AS a, ";
+	push @sqlargs $dbname;
+	push @sqlargs "${dbname}_log";
         my $firstOne    = 1;
         my $primaryKeys = "";
         my @primaryKeys = ();
@@ -581,7 +585,7 @@ sub select
             {
                 if ($firstOne) { $firstOne = 0; }
                 else           { $primaryKeys .= ","; }
-                $primaryKeys .= toDBC($attribute);
+                $primaryKeys .="?";
                 push @primaryKeys, toDBC($attribute);
             }
         }
@@ -597,44 +601,60 @@ sub select
         }
 
         $sql .=
-          "( SELECT $primaryKeys,MAX(g_transaction_id) AS g_transaction_id FROM ( SELECT $primaryKeys,g_transaction_id FROM $dbname WHERE g_modification_time<=$time UNION SELECT $primaryKeys,g_transaction_id FROM ${dbname}_log WHERE g_modification_time<=$time) as c GROUP BY $primaryKeys) AS b ";
+	    "( SELECT $primaryKeys,MAX(g_transaction_id) AS g_transaction_id FROM ( SELECT $primaryKeys,g_transaction_id FROM ? WHERE g_modification_time<=? UNION SELECT $primaryKeys,g_transaction_id FROM ? WHERE g_modification_time<=?) as c GROUP BY ?) AS b ";
+	push @sqlargs @primarykeys;
+	push @sqlargs @primarykeys;
+	push @sqlargs $dbname;
+	push @sqlargs $time;
+	push @sqlargs @primarykeys;
+	push @sqlargs "${dname}_log";
+	push @sqlargs $time;
+	push @sqlargs @primarykeys;
 
         # Add search conditions
-        $sql .= $self->buildWhere(
+	my @where= $self->buildWhere(
             objects    => \@objects,
             conditions => \@conditions,
             options    => \@options
-        );
+	    );
+	$sql .= shift @where;
+	push @sqlargs @where;
 
         # Add join conditions
         $sql .= " AND a.g_transaction_id=b.g_transaction_id";
         foreach my $key (@primaryKeys)
         {
-            $sql .= " AND a.$key=b.$key";
+            $sql .= " AND a.?=b.?";
+	    push @sqlargs $key;
+	    push @sqlargs $key;
         }
     }
 
     # Handle groupby requests
     if (@groupbySelections)
     {
-        $sql .= " GROUP BY " . join(',', @groupbySelections);
+        $sql .= " GROUP BY " . join(',', ("?") x @groupbySelections);
+	push @sqlargs @groupbySelections;
     }
 
     # Handle sort requests
     if ($sortBySequence) { push @sortSelections, "Sequence"; }
     if (@sortSelections)
     {
-        $sql .= " ORDER BY " . join(',', map { toDBC($_) } @sortSelections);
+        $sql .= " ORDER BY " . join(',',("?") x @sortSelections);
+	push @sqlargs map { toDBC($_) } @sortSelections;
         if ($desc) { $sql .= " DESC"; }
     }
 
     # Handle limit (An express Limit overrides chunking)
     if ($limit)
     {
-        $sql .= " LIMIT $limit";
+        $sql .= " LIMIT ?";
+	push @sqlargs $limit;
         if ($offset)
         {
-            $sql .= " OFFSET $offset";
+            $sql .= " OFFSET ?";
+	    push @sqlargs $limit;
         }
     }
     # Implement chunking unless chunkNum is set to zero
@@ -644,7 +664,9 @@ sub select
             $arg{chunkSize}
           ? $arg{chunkSize}
           : $config->get_property("response.chunksize", 1000000000);
-        $sql .= " LIMIT $chunkSize OFFSET " . ($chunkNum - 1) * $chunkSize;
+        $sql .= " LIMIT ? OFFSET ?";
+	push @sqlargs $chunkSize;
+	push @sqlargs ($chunkNum - 1) * $chunkSize;
         # Exchange for the line below for mysql versions prior to 4.0.6
         #$sql .= " LIMIT " . ($chunkNum - 1) * $chunkSize . "," . $chunkSize;
     }
@@ -655,7 +677,7 @@ sub select
         $log->debug("SQL Query: $sql");
     }
     $sth = $dbh->prepare($sql);
-    $sth->execute();
+    $sth->execute(@sqlargs);
 
     my %results = ();
     $results{cols}  = $sth->{NUM_OF_FIELDS};
@@ -711,19 +733,19 @@ sub update
     my $now         = time;
 
     # Build SQL string
-    my $sql = "UPDATE ";
+    my $sql = "UPDATE ? SET ";
+    my @sqlargs=();
 
     # Add table to SQL
-    $sql .= toDBC($object);
+    push @sqlargs toDBC($object);
 
     # Add assignment list
-    $sql .= " SET ";
+    $sql .= " SET g_modification_time=?,g_request_id=?,g_transaction_id=?";
+    push @sqlargs ($now,$requestId,$txnId);
     foreach my $assignment (@assignments)
     {
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
+        $sql .= ","; 
         my $name   = $assignment->getName();
-        my $dbname = toDBC($name);
         if (Gold::Cache->getAttributeProperty($object, $name, "Fixed") eq
             "True")
         {
@@ -731,24 +753,16 @@ sub update
             throw Gold::Exception("740",
                 "$name is a fixed field and cannot be modified");
         }
+	$name=toDBC($name);
         my $value = $assignment->getValue();
         my $op    = $assignment->getOperator();
-        $sql .= "$dbname=";
-        if    ($op eq "Inc") { $sql .= "$dbname+"; }
-        elsif ($op eq "Dec") { $sql .= "$dbname-"; }
-        if ($value ne "NULL")
-        {
-            $sql .= "'$value'";
-        }
-        else
-        {
-            $sql .= $value;
-        }
+        $sql .= "$?=";
+	push @sqlargs $name;
+        if    ($op eq "Inc") { $sql .= "?+"; push @sqlargs $name;}
+        elsif ($op eq "Dec") { $sql .= "?-"; push @sqlargs $name;}
+	$sql .="?";
+	push @sqlargs $value;
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .=
-      "g_modification_time=$now,g_request_id=$requestId,g_transaction_id=$txnId";
 
     # Add search conditions
     $sql .= $self->buildWhere(object => $object, conditions => \@conditions);
@@ -761,7 +775,7 @@ sub update
     {
         $log->debug("SQL Update: $sql");
     }
-    my $count = $dbh->do($sql);
+    my $count = $dbh->do($sql,@sqlargs);
     $count = $count eq "0E0" ? 0 : $count;
     if ($log->is_debug())
     {
@@ -1209,6 +1223,7 @@ sub buildWhere
     my @conditions = defined $arg{conditions} ? @{$arg{conditions}} : ();
     my @options    = defined $arg{options}    ? @{$arg{options}}    : ();
     my $where      = "";
+    my @whereargs  = ();
     my $firstTime  = 1;
     my $deleted    = 0;
     my $dbname;
@@ -1284,7 +1299,8 @@ sub buildWhere
             if   ($object) { $dbname = toDBC($object) . "." . $dbname; }
             else           { $object = $objects[0]->getName(); }
 
-            $where .= $dbname;
+            $where .= "?"
+	    push @whereargs $dbname;
 
             # Add the operator
             if ($value eq "NULL" && (! $op || $op eq "EQ"))
@@ -1309,20 +1325,23 @@ sub buildWhere
             # If this is a NULL comparison
             if ($value eq "NULL")
             {
-                $where .= "$value";
+                $where .= "?";
+		push @whereargs "$value";
             }
 
             # If this is not a joined value
             elsif (! $subject)
             {
-                $where .= "'$value'";
+                $where .= "?"
+		push @whereargs $value;
             }
 
             # Else it is a joined value
             else
             {
                 # Fix attribute name
-                $where .= toDBC($subject) . "." . toDBC($value);
+                $where .= "?.?";
+		push @whereargs (toDBC($subject),  toDBC($value));
             }
 
             # Add ungrouping
@@ -1361,7 +1380,8 @@ sub buildWhere
 
                 $dbname = toDBC($object->getAlias());
                 $dbname = toDBC($object->getName()) unless $dbname;
-                $where .= "$dbname.g_deleted!='True'";
+                $where .= "?.g_deleted!='True'";
+		push @whereargs $dbname;
             }
         }
     }
@@ -1370,7 +1390,8 @@ sub buildWhere
         if (! $firstTime) { $where .= " )"; }
     }
 
-    return $where;
+    unshift @whereargs $where;
+    return @whereargs;
 }
 
 # ----------------------------------------------------------------------------
