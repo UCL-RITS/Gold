@@ -219,6 +219,30 @@ sub toString
 
     return $string;
 }
+#------------------------------------------------------------------------------
+# %datatypes=initDataTypes($object);
+#------------------------------------------------------------------------------
+
+sub initDataTypes
+{
+    my $object=shift;
+    my %dataTypes=();
+    my $results   = $self->select(
+        object     => "Attribute",
+        selections => [
+            new Gold::Selection(name => "Name"),
+            new Gold::Selection(name => "DataType")
+        ],
+        conditions => [new Gold::Condition(name => "Object", value => $object)]
+    );
+    foreach my $attributeRow (@{$results->{data}})
+    {
+        my $name     = $attributeRow->[0];
+        my $dataType = $attributeRow->[1];
+        $dataTypes{$name} = $dataType;
+    }
+    return %dataTypes;
+}
 
 # ----------------------------------------------------------------------------
 # $count = insert(object => $object,
@@ -243,22 +267,7 @@ sub insert
     #Get txnId if not provided
     $txnId       =  $self->nextId("Transaction") if($txnId);
     # Obtain attribute datatypes
-    my %dataTypes = ();
-    my $results   = $self->select(
-        object     => "Attribute",
-        selections => [
-            new Gold::Selection(name => "Name"),
-            new Gold::Selection(name => "DataType")
-        ],
-        conditions => [new Gold::Condition(name => "Object", value => $object)]
-    );
-    foreach my $attributeRow (@{$results->{data}})
-    {
-        my $name     = $attributeRow->[0];
-        my $dataType = $attributeRow->[1];
-        $dataTypes{$name} = $dataType;
-    }
-
+    my %dataTypes = initDataTypes($object);
     # Build SQL string
     my $sql = "INSERT INTO ";
 
