@@ -233,24 +233,15 @@ sub toString
 sub insert
 {
     my ($self, %arg) = @_;
-
-    if ($log->is_trace())
-    {
-        $log->trace("invoked with arguments: (",
-            join(', ', map {"$_ => $arg{$_}"} keys %arg), ")");
-    }
-
+    $log->trace("invoked with arguments: (", join(', ', map {"$_ => $arg{$_}"} keys %arg), ")") if($log->is_trace());
     # Declare and Initialize variables
-    my $dbh = $self->{_handle};
+    my ($dbh,$now) = ($self->{_handle},time);
     my $firstTime;
-    my $object      = $arg{object};
-    my $actor       = $arg{actor};
+    my ($object,$actor,$requestID,$txnId) = map {$arg{$_}} ("object","actor","requestId","txnId");
     my @assignments = $arg{assignments} ? @{$arg{assignments}} : ();
     my @options     = $arg{options} ? @{$arg{options}} : ();
-    my $requestId   = $arg{requestId};
-    my $txnId       = $arg{txnId} ? $arg{txnId} : $self->nextId("Transaction");
-    my $now         = time;
-
+    #Get txnId if not provided
+    $txnId       =  $self->nextId("Transaction") if($txnId);
     # Obtain attribute datatypes
     my %dataTypes = ();
     my $results   = $self->select(
