@@ -649,96 +649,44 @@ sub select
 sub update
 {
     my ($self, %arg) = @_;
-
-    if ($log->is_trace())
-    {
-        $log->trace("invoked with arguments: (",
-            join(', ', map {"$_ => $arg{$_}"} keys %arg), ")");
-    }
-
-    # Declare and Initialize variables
+    $log->trace("invoked with arguments: (", join(', ', map {"$_ => $arg{$_}"} keys %arg), ")") if ($log->is_trace())
     my $dbh         = $self->{_handle};
-    my $firstTime   = 1;
-    my $object      = $arg{object};
-    my $actor       = $arg{actor};
-    my @assignments = $arg{assignments} ? @{$arg{assignments}} : ();
-    my @conditions  = $arg{conditions} ? @{$arg{conditions}} : ();
-    my @options     = $arg{options} ? @{$arg{options}} : ();
-    my $requestId   = $arg{requestId};
-    my $txnId       = $arg{txnId} ? $arg{txnId} : $self->nextId("Transaction");
+    my ($object,$actor,$requestId,$txnId) map {$arg{$_}} ("object","actor","requestId","txnId");
+    my @assignments=getarray($arg{assignments}),@conditions=getarray($arg{conditions}),@options=getarray($arg{options});
+    my @changes,@values;
+    $txnId= $self->nextId("Transaction") unless $txnId;
     my $now         = time;
-
-    # Build SQL string
-    my $sql = "UPDATE ";
-
-    # Add table to SQL
-    $sql .= toDBC($object);
-
-    # Add assignment list
-    $sql .= " SET ";
     foreach my $assignment (@assignments)
     {
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
         my $name   = $assignment->getName();
-        my $dbname = toDBC($name);
+        my $dbname = qidbc($dbh,$name);
         if (Gold::Cache->getAttributeProperty($object, $name, "Fixed") eq
             "True")
         {
             $log->error("$name is a fixed field and cannot be modified");
-            throw Gold::Exception("740",
-                "$name is a fixed field and cannot be modified");
+            throw Gold::Exception("740","$name is a fixed field and cannot be modified");
         }
-        my $value = $assignment->getValue();
-        my $op    = $assignment->getOperator();
-        $sql .= "$dbname=";
-        if    ($op eq "Inc") { $sql .= "$dbname+"; }
-        elsif ($op eq "Dec") { $sql .= "$dbname-"; }
-        if ($value ne "NULL")
-        {
-            $sql .= "'$value'";
-        }
-        else
-        {
-            $sql .= $value;
-        }
+	given($assignment->getOperator())
+	{
+	    when ("Inc") { push @changes "$dbname=$dbname+". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    when ("Dec") { push @changes "$dbname=$dbname-". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    default      { push @changes "$dbname="        . ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	}
+	push @values $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .=
-      "g_modification_time=$now,g_request_id=$requestId,g_transaction_id=$txnId";
+    push @changes ("g_modification_time=?","g_requestId=?","g_transactionId=?");
+    push @values ($now,$requestId,$txnId);
 
-    # Add search conditions
-    $sql .= $self->buildWhere(object => $object, conditions => \@conditions);
-
-    # Perform checkpoint
-    $self->checkpoint($object, \@conditions);
-
+    my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join('?',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
+    $self->checkpoint($object, \@conditions); # Perform checkpoint
     # Perform SQL Update
-    if ($log->is_debug())
-    {
-        $log->debug("SQL Update: $sql");
-    }
-    my $count = $dbh->do($sql);
+    $log->debug("SQL Update: $sql") if ($log->is_debug());
+    my $count = $dbh->do($sql,@values);
     $count = $count eq "0E0" ? 0 : $count;
-    if ($log->is_debug())
-    {
-        $log->debug("SQL Rows: $count");
-    }
-
+    $log->debug("SQL Rows: $count") if ($log->is_debug());
     # Log the transaction
-    $self->logTransaction(
-        requestId   => $requestId,
-        txnId       => $txnId,
-        object      => $object,
-        action      => "Modify",
-        actor       => $actor,
-        assignments => \@assignments,
-        conditions  => \@conditions,
-        options     => \@options,
-        count       => $count
-    );
-
+    $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Modify",actor=> $actor,
+        assignments=>\@assignments,conditions=>\@conditions,options=>\@options,count=>$count);
     # Return the number of objects/associations updated
     return $count;
 }
