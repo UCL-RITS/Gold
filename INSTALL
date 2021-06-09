@@ -156,8 +156,8 @@ under its own non-root userid.
 
   [gold]  mkdir ~/src
   [gold]  cd ~/src
-  [gold]  gzip -cd gold-2.2.0.5.tar.gz | tar xvf -
-  [gold]  cd gold-2.2.0.5
+  [gold]  gzip -cd gold-2.2.0.7.tar.gz | tar xvf -
+  [gold]  cd gold-2.2.0.7
 
 Configuration:
 ==============
@@ -200,7 +200,7 @@ The PERL environment variable helps the install process find the desired (5.6) p
 
 To assume the defaults, just run configure.
 
-  [gold]  cd gold-2.2.0.5
+  [gold]  cd gold-2.2.0.7
   [gold]  ./configure
 
 Compilation:
