@@ -114,8 +114,8 @@ cp src/gold_init.pl ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
 chmod +x ${RPM_BUILD_ROOT}%{prefix}/sbin/gold_init
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 cp etc/gold.d ${RPM_BUILD_ROOT}/etc/init.d/gold
-mkdir -p ${RPM_BUILD_ROOT}/etc/sudoers.d/gold
-cp etc/sudoers.d/gold ${RPM_BUILD_ROOT}/etc/sudoers.d/gold
+mkdir -p ${RPM_BUILD_ROOT}/etc/sudoers.d/
+cp etc/sudoers.d/gold ${RPM_BUILD_ROOT}/etc/sudoers.d/
 mkdir -p ${RPM_BUILD_ROOT}/usr/local/bin
 cp src/wrapper.sh ${RPM_BUILD_ROOT}/usr/local/bin
 chmod 0755 ${RPM_BUILD_ROOT}/usr/local/bin/wrapper.sh
