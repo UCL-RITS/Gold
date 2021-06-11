@@ -274,7 +274,9 @@ sub insert
     my ($self, %arg) = @_;
     $log->trace("invoked with arguments: (", join(',', map {"$_ => $arg{$_}"} keys %arg), ")") if($log->is_trace());
     my ($dbh,$now) = ($self->{_handle},time);
-    my @columns,@values,@assignments=getarray($arg{assignments}),@options=getarray($arg{options});
+    my (@columns,@values);
+    my @assignments=getarray($arg{assignments});
+    my @options=getarray($arg{options});
     my ($object,$actor,$requestId,$txnId) = map {$arg{$_}} ("object","actor","requestId","txnId");
     my %dataTypes = initDataTypes($object);
     $txnId=$self->nextId("Transaction") unless($txnId); #Get txnId if not provided
