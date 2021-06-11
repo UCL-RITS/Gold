@@ -93,7 +93,7 @@ rm -rf $RPM_BUILD_ROOT
 #---------------------------------------------------------------------
    
 %build
-./configure --prefix %{prefix} --with-db=SQLite
+./configure --prefix %{prefix} --with-db=SQLite --with-user=root
 mkdir -p scripts
 make build_root=$RPM_BUILD_ROOT
 make build_root=$RPM_BUILD_ROOT gui
