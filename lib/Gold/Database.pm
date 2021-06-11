@@ -225,7 +225,7 @@ sub toString
 
 sub initDataTypes
 {
-    my $object=shift;
+    my ($self,$object)=@_;
     my %dataTypes=();
     my $results   = $self->select(
         object     => "Attribute",
@@ -278,7 +278,7 @@ sub insert
     my @assignments=getarray($arg{assignments});
     my @options=getarray($arg{options});
     my ($object,$actor,$requestId,$txnId) = map {$arg{$_}} ("object","actor","requestId","txnId");
-    my %dataTypes = initDataTypes($object);
+    my %dataTypes = initDataTypes($self,$object);
     $txnId=$self->nextId("Transaction") unless($txnId); #Get txnId if not provided
     foreach my $attribute (keys %dataTypes)
     {
