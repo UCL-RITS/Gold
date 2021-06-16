@@ -679,8 +679,8 @@ sub update
 	}
 	push @values, $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
-    push @changes ("g_modification_time=?","g_requestId=?","g_transactionId=?");
-    push @values ($now,$requestId,$txnId);
+    push @changes, ("g_modification_time=?","g_requestId=?","g_transactionId=?");
+    push @values, ($now,$requestId,$txnId);
 
     my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join('?',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
     $self->checkpoint($object, \@conditions); # Perform checkpoint
