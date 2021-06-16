@@ -294,7 +294,7 @@ sub insert
     push @values, $now,$now,$requestId,$txnId;
     my $sql = "INSERT INTO " . qidbc($dbh,$object)."(" . join(',', @columns) .
 	      ") VALUES (" . join(',', map {"?"} @values). ");";
-    $log->debug("SQL Update: $sql") if ($log->is_debug())
+    $log->debug("SQL Update: $sql") if ($log->is_debug());
     my $count = $dbh->do($sql,@values);
     $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Create", actor=>$actor,
 			  assignments => \@assignments,options=>\@options,count=>$count); # Log transaction
