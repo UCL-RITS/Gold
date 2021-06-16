@@ -44,7 +44,7 @@
 #                                                                              #
 ################################################################################
 use strict;
-
+use feature "switch";
 =head1 NAME
 
 Gold::Database - performs database operations

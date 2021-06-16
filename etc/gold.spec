@@ -2,7 +2,7 @@
 
 %define  name     gold
 %define  ver      2.2.0.7
-%define  rel      14
+%define  rel      15
 %define  basedir   %{name}-%{ver}
 %define  prefix    /opt/gold
 %define  profiled  /etc/profile.d
@@ -22,7 +22,7 @@ Packager: UCL-RITS
 BuildRoot: %{_tmppath}/%{name}-%{ver}-root
 Prefix: %{prefix}
 
-Requires: perl >= 5.6.1
+Requires: perl >= 5.10
 Requires: sudo
 Requires: libxml2 >= 2.4.25
 Requires: perl(CGI::Session) >= 3.95
