@@ -293,7 +293,7 @@ sub insert
     push @columns, "g_creation_time","g_modification_time","g_request_id","g_transaction_id";
     push @values, $now,$now,$requestId,$txnId;
     my $sql = "INSERT INTO " . qidbc($dbh,$object)."(" . join(',', @columns) .
-	      ") VALUES (" . join(',', map {"?"}, @values). ");";
+	      ") VALUES (" . join(',', map {"?"} @values). ");";
     $log->debug("SQL Update: $sql") if ($log->is_debug())
     my $count = $dbh->do($sql,@values);
     $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Create", actor=>$actor,
