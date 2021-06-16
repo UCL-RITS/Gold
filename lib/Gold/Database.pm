@@ -654,8 +654,10 @@ sub update
     $log->trace("invoked with arguments: (", join(', ', map {"$_ => $arg{$_}"} keys %arg), ")") if ($log->is_trace());
     my $dbh         = $self->{_handle};
     my ($object,$actor,$requestId,$txnId)= map {$arg{$_}} ("object","actor","requestId","txnId");
-    my @assignments=getarray($arg{assignments}),@conditions=getarray($arg{conditions}),@options=getarray($arg{options});
-    my @changes,@values;
+    my @assignments=getarray($arg{assignments});
+    my @conditions=getarray($arg{conditions});
+    my @options=getarray($arg{options});
+    my (@changes,@values);
     $txnId= $self->nextId("Transaction") unless $txnId;
     my $now         = time;
     foreach my $assignment (@assignments)
