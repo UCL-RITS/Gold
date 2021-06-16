@@ -657,7 +657,8 @@ sub update
     my @assignments=getarray($arg{assignments});
     my @conditions=getarray($arg{conditions});
     my @options=getarray($arg{options});
-    my (@changes,@values);
+    my @changes;
+    my @values;
     $txnId= $self->nextId("Transaction") unless $txnId;
     my $now         = time;
     foreach my $assignment (@assignments)
@@ -672,11 +673,11 @@ sub update
         }
 	given($assignment->getOperator())
 	{
-	    when ("Inc") { push @changes "$dbname=$dbname+". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
-	    when ("Dec") { push @changes "$dbname=$dbname-". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
-	    default      { push @changes "$dbname="        . ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    when ("Inc") { push @changes, "$dbname=$dbname+". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    when ("Dec") { push @changes, "$dbname=$dbname-". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    default      { push @changes, "$dbname="        . ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
 	}
-	push @values $assignment->getValue unless ($assignment->getValue() eq "NULL");
+	push @values, $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
     push @changes ("g_modification_time=?","g_requestId=?","g_transactionId=?");
     push @values ($now,$requestId,$txnId);
