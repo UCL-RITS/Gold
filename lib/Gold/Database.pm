@@ -666,7 +666,7 @@ sub update
     {
         my $name   = $assignment->getName();
         my $dbname = qidbc($dbh,$name);
-	$log->debug("ASSIGNMENT:$name,".$assignment->getOperator().",".$assignment->getValue) if($log->is_debug());
+	$log->debug("ASSIGNMENT:$dbname,".$assignment->getOperator().",".$assignment->getValue) if($log->is_debug());
         if (Gold::Cache->getAttributeProperty($object, $name, "Fixed") eq
             "True")
         {
@@ -675,9 +675,9 @@ sub update
         }
 	given($assignment->getOperator())
 	{
-	    when ("Inc") { push @changes, "$dbname=$dbname+". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
-	    when ("Dec") { push @changes, "$dbname=$dbname-". ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
-	    default      { push @changes, "$dbname="        . ($assignment->getValue() eq "NULL")?"NULL":"?" ;}
+	    when ("Inc") { push @changes, "$dbname=$dbname+". (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
+	    when ("Dec") { push @changes, "$dbname=$dbname-". (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
+	    default      { push @changes, "$dbname="        . (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
 	}
 	push @values, $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
