@@ -2,7 +2,7 @@
 
 %define  name     gold
 %define  ver      2.2.0.7
-%define  rel      21
+%define  rel      22
 %define  basedir   %{name}-%{ver}
 %define  prefix    /opt/gold
 %define  profiled  /etc/profile.d

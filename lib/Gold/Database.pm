@@ -681,7 +681,7 @@ sub update
 	}
 	push @values, $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
-    push @changes, ("g_modification_time=?","g_requestId=?","g_transactionId=?");
+    push @changes, ("g_modification_time=?","g_request_id=?","g_transaction_id=?");
     push @values, ($now,$requestId,$txnId);
 
     my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join(',',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
