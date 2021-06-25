@@ -666,6 +666,7 @@ sub update
     {
         my $name   = $assignment->getName();
         my $dbname = qidbc($dbh,$name);
+	$log->debug("ASSIGNMENT:$name,".$assignment->getOperator().",".$assignment->getValue) if($log->is_debug());
         if (Gold::Cache->getAttributeProperty($object, $name, "Fixed") eq
             "True")
         {
