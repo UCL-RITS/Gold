@@ -295,7 +295,8 @@ sub insert
     my $sql = "INSERT INTO " . qidbc($dbh,$object)."(" . join(',', @columns) .
 	      ") VALUES (" . join(',', map {"?"} @values). ");";
     $log->debug("SQL Update: $sql") if ($log->is_debug());
-    my $count = $dbh->do($sql,@values);
+    my $sth=$dbh->prepare($sql);
+    my $count = $sth->execute(@values);
     $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Create", actor=>$actor,
 			  assignments => \@assignments,options=>\@options,count=>$count); # Log transaction
     return $count;# Return the number of objects/associations updated
@@ -686,7 +687,8 @@ sub update
     $self->checkpoint($object, \@conditions); # Perform checkpoint
     # Perform SQL Update
     $log->debug("SQL Update: $sql") if ($log->is_debug());
-    my $count = $dbh->do($sql,@values);
+    my $sth=$dbh->prepare($sql);
+    my $count = $sth->execute(@values);
     $count = $count eq "0E0" ? 0 : $count;
     $log->debug("SQL Rows: $count") if ($log->is_debug());
     # Log the transaction
