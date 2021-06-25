@@ -683,7 +683,7 @@ sub update
     push @changes, ("g_modification_time=?","g_requestId=?","g_transactionId=?");
     push @values, ($now,$requestId,$txnId);
 
-    my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join('?',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
+    my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join(',',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
     $self->checkpoint($object, \@conditions); # Perform checkpoint
     # Perform SQL Update
     $log->debug("SQL Update: $sql") if ($log->is_debug());
