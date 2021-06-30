@@ -2,7 +2,7 @@
 
 %define  name     @PACKAGE_TARNAME@
 %define  ver      @PACKAGE_VERSION@
-%define  rel      22
+%define  rel      23
 %define  basedir   %{name}-%{ver}
 %define  prefix    @prefix@
 %define  profiled  /etc/profile.d
