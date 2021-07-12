@@ -1,10 +1,10 @@
 # RPM Spec file for Gold
 
-%define  name     @PACKAGE_TARNAME@
-%define  ver      @PACKAGE_VERSION@
+%define  name     gold
+%define  ver      2.2.0.7
 %define  rel      23
 %define  basedir   %{name}-%{ver}
-%define  prefix    @prefix@
+%define  prefix    /opt/gold
 %define  profiled  /etc/profile.d
 %define  cgi_bin   /var/www/cgi-bin/gold
 

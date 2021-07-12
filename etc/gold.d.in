@@ -19,8 +19,9 @@ export GOLD_HOME=@prefix@
 
 PIDFILE=$GOLD_HOME/etc/$prog.pid
 LOCKFILE=/var/lock/subsys/$prog
-source /etc/sysconfig/goldd
-source /etc/default/goldd
+
+[ -r /etc/sysconfig/goldd ] && source /etc/sysconfig/goldd
+[ -r /etc/default/goldd   ] && source /etc/default/goldd
 
 #
 # The pathname substitution in daemon command assumes prefix and

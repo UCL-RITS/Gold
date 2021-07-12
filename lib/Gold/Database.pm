@@ -44,7 +44,7 @@
 #                                                                              #
 ################################################################################
 use strict;
-
+use feature "switch";
 =head1 NAME
 
 Gold::Database - performs database operations
@@ -219,40 +219,14 @@ sub toString
 
     return $string;
 }
+#------------------------------------------------------------------------------
+# %datatypes=initDataTypes($object);
+#------------------------------------------------------------------------------
 
-# ----------------------------------------------------------------------------
-# $count = insert(object => $object,
-#                   actor => $actor,
-#                   assignments => \@assignments,
-#                   requestId => $requestId,
-#                   txnId => $txnId
-#                   );
-# ----------------------------------------------------------------------------
-
-# perform insert
-sub insert
+sub initDataTypes
 {
-    my ($self, %arg) = @_;
-
-    if ($log->is_trace())
-    {
-        $log->trace("invoked with arguments: (",
-            join(', ', map {"$_ => $arg{$_}"} keys %arg), ")");
-    }
-
-    # Declare and Initialize variables
-    my $dbh = $self->{_handle};
-    my $firstTime;
-    my $object      = $arg{object};
-    my $actor       = $arg{actor};
-    my @assignments = $arg{assignments} ? @{$arg{assignments}} : ();
-    my @options     = $arg{options} ? @{$arg{options}} : ();
-    my $requestId   = $arg{requestId};
-    my $txnId       = $arg{txnId} ? $arg{txnId} : $self->nextId("Transaction");
-    my $now         = time;
-
-    # Obtain attribute datatypes
-    my %dataTypes = ();
+    my ($self,$object)=@_;
+    my %dataTypes=();
     my $results   = $self->select(
         object     => "Attribute",
         selections => [
@@ -267,95 +241,65 @@ sub insert
         my $dataType = $attributeRow->[1];
         $dataTypes{$name} = $dataType;
     }
+    return %dataTypes;
+}
+sub getarray
+{
+    my $array=shift;
+    return $array?@{$array}:();
+}
 
-    # Build SQL string
-    my $sql = "INSERT INTO ";
+#-----------------------------------------------------------------------------
+#$normalised=qidbc($dbh,$string)
+#-----------------------------------------------------------------------------
 
-    # Add object to SQL
-    $sql .= toDBC($object);
+#Take an identifier convert it to database case then escape for the database
+sub qidbc
+{
+    my ($dbh,$string)=@_;
+    return $dbh->quote_identifier(toDBC($string));
+}
+# ----------------------------------------------------------------------------
+# $count = insert(object => $object,
+#                   actor => $actor,
+#                   assignments => \@assignments,
+#                   requestId => $requestId,
+#                   txnId => $txnId
+#                   );
+# ----------------------------------------------------------------------------
 
-    # Add column list
-    $sql .= " (";
-    $firstTime = 1;
-
-    # Handle auto-generated name if one exists
+# perform insert
+sub insert
+{
+    my ($self, %arg) = @_;
+    $log->trace("invoked with arguments: (", join(',', map {"$_ => $arg{$_}"} keys %arg), ")") if($log->is_trace());
+    my ($dbh,$now) = ($self->{_handle},time);
+    my (@columns,@values);
+    my @assignments=getarray($arg{assignments});
+    my @options=getarray($arg{options});
+    my ($object,$actor,$requestId,$txnId) = map {$arg{$_}} ("object","actor","requestId","txnId");
+    my %dataTypes = initDataTypes($self,$object);
+    $txnId=$self->nextId("Transaction") unless($txnId); #Get txnId if not provided
     foreach my $attribute (keys %dataTypes)
     {
-        if ($dataTypes{$attribute} eq "AutoGen")
-        {
-            # Add the name
-            if ($firstTime) { $firstTime = 0; }
-            else            { $sql .= ","; }
-            $sql .= toDBC($attribute);
-        }
+	push @columns ,qidbc($dbh,$attribute) if ($dataTypes{$attribute} eq "AutoGen");
+	push @values  ,$self->nextId($object) if ($dataTypes{$attribute} eq "AutoGen");
     }
-
-    # Handle other specified names
     foreach my $assignment (@assignments)
     {
-        # Add the name
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
-        my $name = $assignment->getName();
-        $sql .= toDBC($name);
+        push @columns, qidbc($dbh,$assignment->getName());
+	push @values, $assignment->getValue();
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .=
-      "g_creation_time,g_modification_time,g_request_id,g_transaction_id)";
-
-    # Add insert items
-    $sql .= " VALUES (";
-    $firstTime = 1;
-
-    # Handle auto-generated values
-    foreach my $attribute (keys %dataTypes)
-    {
-        if ($dataTypes{$attribute} eq "AutoGen")
-        {
-            # Add the value
-            if ($firstTime) { $firstTime = 0; }
-            else            { $sql .= ","; }
-            # Get the next key generated value and assign it to the attribute
-            $sql .= $self->nextId($object);
-        }
-    }
-
-    # Handle other specified values
-    foreach my $assignment (@assignments)
-    {
-        # Add the value
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
-        my $name  = $assignment->getName();
-        my $value = $assignment->getValue();
-        $sql .= "'$value'";
-    }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .= "'$now','$now','$requestId','$txnId')";
-
-    # Perform the insert
-    if ($log->is_debug())
-    {
-        $log->debug("SQL Update: $sql");
-    }
-    my $count = $dbh->do($sql);
-
-    # Log the transaction
-    $self->logTransaction(
-        requestId   => $requestId,
-        txnId       => $txnId,
-        object      => $object,
-        action      => "Create",
-        actor       => $actor,
-        assignments => \@assignments,
-        options     => \@options,
-        count       => $count
-    );
-
-    # Return the number of objects/associations updated
-    return $count;
+    push @columns, "g_creation_time","g_modification_time","g_request_id","g_transaction_id";
+    push @values, $now,$now,$requestId,$txnId;
+    my $sql = "INSERT INTO " . qidbc($dbh,$object)."(" . join(',', @columns) .
+	      ") VALUES (" . join(',', map {"?"} @values). ");";
+    $log->debug("SQL Update: $sql") if ($log->is_debug());
+    my $sth=$dbh->prepare($sql);
+    my $count = $sth->execute(@values);
+    $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Create", actor=>$actor,
+			  assignments => \@assignments,options=>\@options,count=>$count); # Log transaction
+    return $count;# Return the number of objects/associations updated
 }
 
 # ----------------------------------------------------------------------------
@@ -708,96 +652,48 @@ sub select
 sub update
 {
     my ($self, %arg) = @_;
-
-    if ($log->is_trace())
-    {
-        $log->trace("invoked with arguments: (",
-            join(', ', map {"$_ => $arg{$_}"} keys %arg), ")");
-    }
-
-    # Declare and Initialize variables
+    $log->trace("invoked with arguments: (", join(', ', map {"$_ => $arg{$_}"} keys %arg), ")") if ($log->is_trace());
     my $dbh         = $self->{_handle};
-    my $firstTime   = 1;
-    my $object      = $arg{object};
-    my $actor       = $arg{actor};
-    my @assignments = $arg{assignments} ? @{$arg{assignments}} : ();
-    my @conditions  = $arg{conditions} ? @{$arg{conditions}} : ();
-    my @options     = $arg{options} ? @{$arg{options}} : ();
-    my $requestId   = $arg{requestId};
-    my $txnId       = $arg{txnId} ? $arg{txnId} : $self->nextId("Transaction");
+    my ($object,$actor,$requestId,$txnId)= map {$arg{$_}} ("object","actor","requestId","txnId");
+    my @assignments=getarray($arg{assignments});
+    my @conditions=getarray($arg{conditions});
+    my @options=getarray($arg{options});
+    my @changes;
+    my @values;
+    $txnId= $self->nextId("Transaction") unless $txnId;
     my $now         = time;
-
-    # Build SQL string
-    my $sql = "UPDATE ";
-
-    # Add table to SQL
-    $sql .= toDBC($object);
-
-    # Add assignment list
-    $sql .= " SET ";
     foreach my $assignment (@assignments)
     {
-        if ($firstTime) { $firstTime = 0; }
-        else            { $sql .= ","; }
         my $name   = $assignment->getName();
-        my $dbname = toDBC($name);
+        my $dbname = qidbc($dbh,$name);
         if (Gold::Cache->getAttributeProperty($object, $name, "Fixed") eq
             "True")
         {
             $log->error("$name is a fixed field and cannot be modified");
-            throw Gold::Exception("740",
-                "$name is a fixed field and cannot be modified");
+            throw Gold::Exception("740","$name is a fixed field and cannot be modified");
         }
-        my $value = $assignment->getValue();
-        my $op    = $assignment->getOperator();
-        $sql .= "$dbname=";
-        if    ($op eq "Inc") { $sql .= "$dbname+"; }
-        elsif ($op eq "Dec") { $sql .= "$dbname-"; }
-        if ($value ne "NULL")
-        {
-            $sql .= "'$value'";
-        }
-        else
-        {
-            $sql .= $value;
-        }
+	given($assignment->getOperator())
+	{
+	    when ("Inc") { push @changes, "$dbname=$dbname+". (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
+	    when ("Dec") { push @changes, "$dbname=$dbname-". (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
+	    default      { push @changes, "$dbname="        . (($assignment->getValue() eq "NULL")?"NULL":"?") ;}
+	}
+	push @values, $assignment->getValue unless ($assignment->getValue() eq "NULL");
     }
-    if ($firstTime) { $firstTime = 0; }
-    else            { $sql .= ","; }
-    $sql .=
-      "g_modification_time=$now,g_request_id=$requestId,g_transaction_id=$txnId";
+    push @changes, ("g_modification_time=?","g_request_id=?","g_transaction_id=?");
+    push @values, ($now,$requestId,$txnId);
 
-    # Add search conditions
-    $sql .= $self->buildWhere(object => $object, conditions => \@conditions);
-
-    # Perform checkpoint
-    $self->checkpoint($object, \@conditions);
-
+    my $sql = "UPDATE ".qidbc($dbh,$object)." SET ".join(',',@changes).$self->buildWhere(object => $object, conditions => \@conditions);
+    $self->checkpoint($object, \@conditions); # Perform checkpoint
     # Perform SQL Update
-    if ($log->is_debug())
-    {
-        $log->debug("SQL Update: $sql");
-    }
-    my $count = $dbh->do($sql);
+    $log->debug("SQL Update: $sql") if ($log->is_debug());
+    my $sth=$dbh->prepare($sql);
+    my $count = $sth->execute(@values);
     $count = $count eq "0E0" ? 0 : $count;
-    if ($log->is_debug())
-    {
-        $log->debug("SQL Rows: $count");
-    }
-
+    $log->debug("SQL Rows: $count") if ($log->is_debug());
     # Log the transaction
-    $self->logTransaction(
-        requestId   => $requestId,
-        txnId       => $txnId,
-        object      => $object,
-        action      => "Modify",
-        actor       => $actor,
-        assignments => \@assignments,
-        conditions  => \@conditions,
-        options     => \@options,
-        count       => $count
-    );
-
+    $self->logTransaction(requestId=>$requestId,txnId=>$txnId,object=>$object,action=>"Modify",actor=> $actor,
+        assignments=>\@assignments,conditions=>\@conditions,options=>\@options,count=>$count);
     # Return the number of objects/associations updated
     return $count;
 }
